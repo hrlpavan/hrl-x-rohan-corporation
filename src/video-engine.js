@@ -477,12 +477,12 @@ class CinematicVideoEngine {
     ];
 
     ctx.textAlign = 'center';
-    ctx.font = '700 46px "Outfit"';
+    ctx.font = '600 46px var(--apple-font, -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif)';
     ctx.fillStyle = '#ffffff';
     ctx.fillText('Iconic Rohan Corporation Landmarks', 960, 220);
 
-    ctx.font = '400 22px "Plus Jakarta Sans"';
-    ctx.fillStyle = '#9ca3af';
+    ctx.font = '400 20px var(--apple-font, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif)';
+    ctx.fillStyle = '#86868b';
     ctx.fillText('Engineered for generational permanence, augmented with real-time digital twins.', 960, 265);
 
     // 4 Landmark Cards
@@ -493,46 +493,46 @@ class CinematicVideoEngine {
       const cardH = 460;
 
       // Card Background Glass
-      ctx.fillStyle = 'rgba(15, 17, 24, 0.85)';
-      this.roundRect(ctx, cardX, cardY, cardW, cardH, 18);
+      ctx.fillStyle = '#161617';
+      this.roundRect(ctx, cardX, cardY, cardW, cardH, 24);
       ctx.fill();
-      ctx.strokeStyle = item.color;
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1;
       ctx.stroke();
 
       // Card Visual Banner
       const bannerGrad = ctx.createLinearGradient(cardX, cardY, cardX, cardY + 160);
-      bannerGrad.addColorStop(0, 'rgba(30, 41, 59, 0.8)');
-      bannerGrad.addColorStop(1, 'rgba(15, 23, 42, 0.95)');
+      bannerGrad.addColorStop(0, '#1c1c1e');
+      bannerGrad.addColorStop(1, '#0e0e10');
       ctx.fillStyle = bannerGrad;
-      this.roundRect(ctx, cardX, cardY, cardW, 160, 18);
+      this.roundRect(ctx, cardX, cardY, cardW, 160, 24);
       ctx.fill();
 
       // Card Title & Badges
       ctx.textAlign = 'left';
-      ctx.font = '700 28px "Outfit"';
+      ctx.font = '600 26px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
       ctx.fillStyle = '#ffffff';
       ctx.fillText(item.name, cardX + 24, cardY + 220);
 
-      ctx.font = '600 14px "Plus Jakarta Sans"';
+      ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
       ctx.fillStyle = item.color;
       ctx.fillText(item.cat.toUpperCase(), cardX + 24, cardY + 250);
 
-      ctx.font = '400 16px "Plus Jakarta Sans"';
-      ctx.fillStyle = '#9ca3af';
-      ctx.fillText(`📍 ${item.loc}`, cardX + 24, cardY + 290);
-      ctx.fillText(`⭐ ${item.spec}`, cardX + 24, cardY + 330);
+      ctx.font = '400 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = '#86868b';
+      ctx.fillText(item.loc, cardX + 24, cardY + 290);
+      ctx.fillText(item.spec, cardX + 24, cardY + 330);
 
       // RERA Badge
-      ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
-      this.roundRect(ctx, cardX + 24, cardY + 380, 180, 36, 6);
+      ctx.fillStyle = 'rgba(48, 209, 88, 0.15)';
+      this.roundRect(ctx, cardX + 24, cardY + 380, 180, 34, 17);
       ctx.fill();
-      ctx.strokeStyle = '#10b981';
+      ctx.strokeStyle = 'rgba(48, 209, 88, 0.3)';
       ctx.stroke();
 
-      ctx.font = '700 13px "Plus Jakarta Sans"';
-      ctx.fillStyle = '#10b981';
-      ctx.fillText('✓ RERA SANCTIONED', cardX + 42, cardY + 403);
+      ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = '#30d158';
+      ctx.fillText('RERA SANCTIONED', cardX + 38, cardY + 402);
     });
   }
 
@@ -629,9 +629,9 @@ class CinematicVideoEngine {
 
     // 3 Central Hardware Pillars
     const nodes = [
-      { title: 'NVIDIA Jetson Edge Neural Nodes', desc: 'Real-time vehicle recognition, gate flow & HVAC load balancing.', icon: '🧠', color: '#10b981' },
-      { title: 'Industrial DIN-Rail Modbus PLCs', desc: 'Subsoil moisture sensors at Rohan Estate & 3-phase microgrid telemetry.', icon: '⚡', color: '#38bdf8' },
-      { title: 'Zero-Cloud Encrypted Edge Storage', desc: 'Complete resident data sovereignty compliant with DPDP Act 2023.', icon: '🔒', color: '#d4af37' }
+      { title: 'NVIDIA Jetson Edge Nodes', desc: 'Real-time vehicle flow, parking occupancy, and HVAC demand response.', tag: 'NEURAL ACCELERATION', color: '#30d158' },
+      { title: 'Industrial DIN-Rail PLCs', desc: 'Subsoil moisture telemetry at Rohan Estate and 3-phase microgrid metering.', tag: 'MODBUS / BACNET', color: '#2997ff' },
+      { title: 'Encrypted Edge Storage', desc: 'On-premise resident data sovereignty fully compliant with DPDP Act 2023.', tag: 'ZERO-CLOUD PRIVACY', color: '#e2d5c3' }
     ];
 
     nodes.forEach((node, idx) => {
@@ -640,31 +640,33 @@ class CinematicVideoEngine {
       const nw = 440;
       const nh = 420;
 
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
-      this.roundRect(ctx, nx, ny, nw, nh, 16);
+      ctx.fillStyle = '#161617';
+      this.roundRect(ctx, nx, ny, nw, nh, 24);
       ctx.fill();
-      ctx.strokeStyle = node.color;
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1;
       ctx.stroke();
 
-      ctx.font = '54px "Outfit"';
-      ctx.fillText(node.icon, nx + 220, ny + 100);
+      // Eyebrow tag
+      ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = node.color;
+      ctx.fillText(node.tag, nx + 220, ny + 90);
 
-      ctx.font = '700 24px "Outfit"';
+      ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(node.title, nx + 220, ny + 180);
+      ctx.fillText(node.title, nx + 220, ny + 150);
 
-      ctx.font = '400 17px "Plus Jakarta Sans"';
-      ctx.fillStyle = '#9ca3af';
-      this.wrapText(ctx, node.desc, nx + 220, ny + 240, 360, 28);
+      ctx.font = '400 16px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = '#86868b';
+      this.wrapText(ctx, node.desc, nx + 220, ny + 210, 360, 26);
 
       // Status Pill
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-      this.roundRect(ctx, nx + 120, ny + 340, 200, 36, 18);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+      this.roundRect(ctx, nx + 120, ny + 340, 200, 34, 17);
       ctx.fill();
-      ctx.font = '600 14px "Plus Jakarta Sans"';
+      ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
       ctx.fillStyle = node.color;
-      ctx.fillText('● HARDWARE ACTIVE', nx + 220, ny + 363);
+      ctx.fillText('HARDWARE ACTIVE', nx + 220, ny + 362);
     });
   }
 
