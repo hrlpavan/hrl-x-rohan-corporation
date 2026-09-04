@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initVentureSimulator();
   initVentureTabs();
+  initProjectFinanceVisualizers();
 });
 
 /* -------------------------------------------------------------------------- */
@@ -41,13 +42,34 @@ function initPropertyFilters() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 2. Smart ROI & Mortgage Calculator                                        */
+/* Helper: Retina Canvas DPI Setup                                            */
+/* -------------------------------------------------------------------------- */
+function setupCanvasDPI(canvas) {
+  if (!canvas) return null;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const width = rect.width || canvas.width || 300;
+  const height = rect.height || canvas.height || 180;
+
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, width, height, dpr };
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. Smart ROI & Mortgage Calculator with Live Apple Financial Graph        */
 /* -------------------------------------------------------------------------- */
 function initCalculator() {
   const priceRange = document.getElementById('priceRange');
   const downRange = document.getElementById('downRange');
   const tenureRange = document.getElementById('tenureRange');
   const rateRange = document.getElementById('rateRange');
+
+  if (!priceRange || !downRange || !tenureRange || !rateRange) return;
 
   const priceVal = document.getElementById('priceVal');
   const downVal = document.getElementById('downVal');
@@ -60,25 +82,54 @@ function initCalculator() {
   const yieldOutput = document.getElementById('yieldOutput');
   const appreciationOutput = document.getElementById('appreciationOutput');
 
+  // Chart UI Elements
+  const chartCanvas = document.getElementById('mortgageChartCanvas');
+  const chartTitle = document.getElementById('mortgageChartTitle');
+  const btnAmort = document.getElementById('chartViewAmort');
+  const btnWealth = document.getElementById('chartViewWealth');
+  const splitPrincipalBar = document.getElementById('splitPrincipalBar');
+  const splitInterestBar = document.getElementById('splitInterestBar');
+  const splitPrincipalPercent = document.getElementById('splitPrincipalPercent');
+  const splitInterestPercent = document.getElementById('splitInterestPercent');
+
+  let currentMode = 'amort'; // 'amort' or 'wealth'
+
+  if (btnAmort && btnWealth) {
+    btnAmort.addEventListener('click', () => {
+      currentMode = 'amort';
+      btnAmort.classList.add('active');
+      btnWealth.classList.remove('active');
+      if (chartTitle) chartTitle.textContent = 'Equity Amortization Curve';
+      calculate();
+    });
+    btnWealth.addEventListener('click', () => {
+      currentMode = 'wealth';
+      btnWealth.classList.add('active');
+      btnAmort.classList.remove('active');
+      if (chartTitle) chartTitle.textContent = '5-Year Wealth Trajectory';
+      calculate();
+    });
+  }
+
   function calculate() {
     const priceLakhs = parseFloat(priceRange.value);
     const downPercent = parseFloat(downRange.value);
     const tenureYears = parseInt(tenureRange.value, 10);
     const rateAnnual = parseFloat(rateRange.value);
 
-    // Update labels
-    priceVal.textContent = formatCurrency(priceLakhs * 100000);
-    const downAmount = (priceLakhs * 100000) * (downPercent / 100);
-    downVal.textContent = `${downPercent}% (${formatCurrency(downAmount)})`;
-    tenureVal.textContent = `${tenureYears} Years`;
-    rateVal.textContent = `${rateAnnual.toFixed(1)}%`;
+    const propertyPrice = priceLakhs * 100000;
+    const downAmount = propertyPrice * (downPercent / 100);
+    const principal = propertyPrice - downAmount;
 
-    // Loan Amount
-    const principal = (priceLakhs * 100000) - downAmount;
+    // Update labels
+    if (priceVal) priceVal.textContent = formatCurrency(propertyPrice);
+    if (downVal) downVal.textContent = `${downPercent}% (${formatCurrency(downAmount)})`;
+    if (tenureVal) tenureVal.textContent = `${tenureYears} Years`;
+    if (rateVal) rateVal.textContent = `${rateAnnual.toFixed(1)}%`;
+
     const monthlyRate = (rateAnnual / 12) / 100;
     const totalMonths = tenureYears * 12;
 
-    // EMI Formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
     let emi = 0;
     if (monthlyRate > 0) {
       emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
@@ -87,19 +138,238 @@ function initCalculator() {
     }
 
     const totalRepayable = emi * totalMonths;
-    const totalInterest = totalRepayable - principal;
+    const totalInterest = Math.max(0, totalRepayable - principal);
 
-    // PropTech Metrics:
-    // Avg coastal commercial/luxury rental yield ~ 4.5% - 5.5%
-    const annualRentalYield = (priceLakhs * 100000) * 0.05;
-    // Projected 5-year capital appreciation at 8% CAGR
-    const fiveYearAppreciation = (priceLakhs * 100000) * Math.pow(1.08, 5);
+    const annualRentalYield = propertyPrice * 0.05;
+    const fiveYearAppreciation = propertyPrice * Math.pow(1.08, 5);
 
-    emiOutput.textContent = `₹ ${Math.round(emi).toLocaleString('en-IN')}`;
-    loanOutput.textContent = formatCurrency(principal);
-    interestOutput.textContent = formatCurrency(totalInterest);
-    yieldOutput.textContent = formatCurrency(annualRentalYield);
-    appreciationOutput.textContent = formatCurrency(fiveYearAppreciation);
+    if (emiOutput) emiOutput.textContent = `₹ ${Math.round(emi).toLocaleString('en-IN')}`;
+    if (loanOutput) loanOutput.textContent = formatCurrency(principal);
+    if (interestOutput) interestOutput.textContent = formatCurrency(totalInterest);
+    if (yieldOutput) yieldOutput.textContent = formatCurrency(annualRentalYield);
+    if (appreciationOutput) appreciationOutput.textContent = formatCurrency(fiveYearAppreciation);
+
+    // Update Principal vs Interest Split Bar
+    const totalOutflow = principal + totalInterest;
+    if (totalOutflow > 0 && splitPrincipalBar && splitInterestBar) {
+      const pPct = Math.round((principal / totalOutflow) * 100);
+      const iPct = 100 - pPct;
+      splitPrincipalBar.style.width = `${pPct}%`;
+      splitInterestBar.style.width = `${iPct}%`;
+      if (splitPrincipalPercent) splitPrincipalPercent.textContent = `${pPct}% (${formatCurrency(principal)})`;
+      if (splitInterestPercent) splitInterestPercent.textContent = `${iPct}% (${formatCurrency(totalInterest)})`;
+    }
+
+    // Render Canvas Visualization
+    if (chartCanvas) {
+      drawMortgageGraph(chartCanvas, {
+        mode: currentMode,
+        propertyPrice,
+        principal,
+        downAmount,
+        totalInterest,
+        emi,
+        tenureYears,
+        monthlyRate,
+        annualRentalYield
+      });
+    }
+  }
+
+  function drawMortgageGraph(canvas, data) {
+    const dpi = setupCanvasDPI(canvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padLeft = 46;
+    const padRight = 16;
+    const padTop = 20;
+    const padBottom = 26;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    // Background Grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    for (let i = 0; i <= 4; i++) {
+      const y = padTop + (plotH / 4) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    if (data.mode === 'amort') {
+      const points = [];
+      const steps = Math.min(data.tenureYears, 30);
+
+      for (let y = 0; y <= steps; y++) {
+        if (y === 0) {
+          points.push({ year: 0, debt: data.principal, equity: data.downAmount });
+        } else {
+          const m = y * 12;
+          let rem = 0;
+          if (data.monthlyRate > 0) {
+            const num = Math.pow(1 + data.monthlyRate, data.tenureYears * 12) - Math.pow(1 + data.monthlyRate, m);
+            const den = Math.pow(1 + data.monthlyRate, data.tenureYears * 12) - 1;
+            rem = data.principal * (num / den);
+          }
+          rem = Math.max(0, rem);
+          const equity = data.propertyPrice - rem;
+          points.push({ year: y, debt: rem, equity: equity });
+        }
+      }
+
+      const maxVal = data.propertyPrice;
+
+      // Draw Equity Area (Champagne Gold Fill)
+      const gradEquity = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+      gradEquity.addColorStop(0, 'rgba(223, 183, 108, 0.28)');
+      gradEquity.addColorStop(1, 'rgba(223, 183, 108, 0.02)');
+
+      ctx.beginPath();
+      ctx.moveTo(padLeft, padTop + plotH);
+      points.forEach((p, idx) => {
+        const x = padLeft + (idx / steps) * plotW;
+        const y = padTop + plotH - (p.equity / maxVal) * plotH;
+        ctx.lineTo(x, y);
+      });
+      ctx.lineTo(padLeft + plotW, padTop + plotH);
+      ctx.closePath();
+      ctx.fillStyle = gradEquity;
+      ctx.fill();
+
+      // Equity Stroke Line
+      ctx.beginPath();
+      points.forEach((p, idx) => {
+        const x = padLeft + (idx / steps) * plotW;
+        const y = padTop + plotH - (p.equity / maxVal) * plotH;
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = '#dfb76c';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Remaining Loan Debt Line (Titanium Red/Coral)
+      ctx.beginPath();
+      points.forEach((p, idx) => {
+        const x = padLeft + (idx / steps) * plotW;
+        const y = padTop + plotH - (p.debt / maxVal) * plotH;
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = 'rgba(255, 69, 58, 0.85)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Y-axis Labels
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.font = '500 10px -apple-system, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(formatCompact(maxVal), padLeft - 6, padTop + 10);
+      ctx.fillText(formatCompact(maxVal / 2), padLeft - 6, padTop + plotH / 2 + 3);
+      ctx.fillText('₹0', padLeft - 6, padTop + plotH);
+
+      // X-axis Labels
+      ctx.textAlign = 'center';
+      ctx.fillText('Yr 0', padLeft, height - 8);
+      ctx.fillText(`Yr ${Math.round(data.tenureYears / 2)}`, padLeft + plotW / 2, height - 8);
+      ctx.fillText(`Yr ${data.tenureYears}`, padLeft + plotW, height - 8);
+
+      // Final Point Accent
+      const lastX = padLeft + plotW;
+      const lastY = padTop + plotH - (points[points.length - 1].equity / maxVal) * plotH;
+      ctx.beginPath();
+      ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffe5a3';
+      ctx.fill();
+
+    } else {
+      // 5-Year Wealth Trajectory Mode
+      const years = [0, 1, 2, 3, 4, 5];
+      const appreciation = years.map(y => data.propertyPrice * Math.pow(1.08, y));
+      const rentalCumulative = years.map(y => data.annualRentalYield * y);
+      const totalWealth = years.map((_, i) => appreciation[i] + rentalCumulative[i]);
+
+      const maxVal = totalWealth[5] * 1.06;
+
+      // Area under Total Wealth (Emerald)
+      const gradWealth = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+      gradWealth.addColorStop(0, 'rgba(48, 209, 88, 0.25)');
+      gradWealth.addColorStop(1, 'rgba(48, 209, 88, 0.01)');
+
+      ctx.beginPath();
+      ctx.moveTo(padLeft, padTop + plotH);
+      years.forEach((y, idx) => {
+        const x = padLeft + (idx / 5) * plotW;
+        const valY = padTop + plotH - (totalWealth[idx] / maxVal) * plotH;
+        ctx.lineTo(x, valY);
+      });
+      ctx.lineTo(padLeft + plotW, padTop + plotH);
+      ctx.closePath();
+      ctx.fillStyle = gradWealth;
+      ctx.fill();
+
+      // Total Wealth Stroke
+      ctx.beginPath();
+      years.forEach((y, idx) => {
+        const x = padLeft + (idx / 5) * plotW;
+        const valY = padTop + plotH - (totalWealth[idx] / maxVal) * plotH;
+        if (idx === 0) ctx.moveTo(x, valY);
+        else ctx.lineTo(x, valY);
+      });
+      ctx.strokeStyle = '#30d158';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Asset Appreciation Stroke (Champagne Gold Dashed)
+      ctx.beginPath();
+      years.forEach((y, idx) => {
+        const x = padLeft + (idx / 5) * plotW;
+        const valY = padTop + plotH - (appreciation[idx] / maxVal) * plotH;
+        if (idx === 0) ctx.moveTo(x, valY);
+        else ctx.lineTo(x, valY);
+      });
+      ctx.strokeStyle = '#dfb76c';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Final Year 5 Node
+      const finalX = padLeft + plotW;
+      const finalWealthY = padTop + plotH - (totalWealth[5] / maxVal) * plotH;
+      ctx.beginPath();
+      ctx.arc(finalX, finalWealthY, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#30d158';
+      ctx.fill();
+
+      // Y-axis Labels
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.font = '500 10px -apple-system, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(formatCompact(maxVal), padLeft - 6, padTop + 10);
+      ctx.fillText(formatCompact(maxVal / 2), padLeft - 6, padTop + plotH / 2 + 3);
+      ctx.fillText('₹0', padLeft - 6, padTop + plotH);
+
+      // X-axis Labels
+      ctx.textAlign = 'center';
+      years.forEach((y, idx) => {
+        const x = padLeft + (idx / 5) * plotW;
+        ctx.fillText(`Yr ${y}`, x, height - 8);
+      });
+    }
+  }
+
+  function formatCompact(val) {
+    if (val >= 10000000) return `₹${(val / 10000000).toFixed(1)}Cr`;
+    if (val >= 100000) return `₹${(val / 100000).toFixed(0)}L`;
+    return `₹${Math.round(val)}`;
   }
 
   function formatCurrency(amount) {
@@ -115,6 +385,7 @@ function initCalculator() {
     input.addEventListener('input', calculate);
   });
 
+  window.addEventListener('resize', calculate);
   calculate();
 }
 
@@ -405,6 +676,8 @@ function initModal() {
   const modalSpecs = document.getElementById('modalSpecs');
   const modalVisualText = document.getElementById('modalVisualText');
 
+  if (!modal || !closeBtn) return;
+
   const projectData = {
     'Rohan City': {
       title: 'Rohan City — Bejai Commercial & Living Digital Twin',
@@ -551,13 +824,14 @@ function initMobileMenu() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 7. HRL International™ 19-Pillar Venture Multiplier Simulator               */
+/* 7. HRL International™ 19-Pillar Venture Multiplier Simulator & Waterfall   */
 /* -------------------------------------------------------------------------- */
 function initVentureSimulator() {
   const portfolioRange = document.getElementById('portfolioRange');
   const portfolioVal = document.getElementById('portfolioVal');
   const gdvGainOutput = document.getElementById('gdvGainOutput');
   const forexGainOutput = document.getElementById('forexGainOutput');
+  const waterfallCanvas = document.getElementById('ventureWaterfallCanvas');
 
   if (!portfolioRange || !portfolioVal || !gdvGainOutput || !forexGainOutput) return;
 
@@ -569,12 +843,117 @@ function initVentureSimulator() {
     const gdvGain = cr * 0.142;
     // Forex Slippage Recovered: ~ 3.7% on NRI portion (65% of total portfolio)
     const forexGain = (cr * 0.65) * 0.037;
+    // Operational Escrow & Energy savings ~ 1.5%
+    const opGain = cr * 0.015;
+    const totalExpanded = cr + gdvGain + forexGain + opGain;
 
     gdvGainOutput.textContent = `+₹ ${gdvGain.toFixed(1)} Cr`;
     forexGainOutput.textContent = `₹ ${forexGain.toFixed(1)} Cr`;
+
+    if (waterfallCanvas) {
+      drawVentureWaterfall(waterfallCanvas, cr, gdvGain, forexGain, opGain, totalExpanded);
+    }
+  }
+
+  function drawVentureWaterfall(canvas, baseCr, gdvGain, forexGain, opGain, totalExpanded) {
+    const dpi = setupCanvasDPI(canvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padLeft = 52;
+    const padRight = 20;
+    const padTop = 26;
+    const padBottom = 26;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    const maxVal = totalExpanded * 1.15;
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    for (let i = 0; i <= 3; i++) {
+      const y = padTop + (plotH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    const columns = [
+      { label: 'Base GDV', start: 0, val: baseCr, color: 'rgba(255, 255, 255, 0.35)', isTotal: false },
+      { label: '+14.2% AI', start: baseCr, val: gdvGain, color: '#dfb76c', isTotal: false },
+      { label: '+Forex Lock', start: baseCr + gdvGain, val: forexGain, color: '#30d158', isTotal: false },
+      { label: '+Op Yield', start: baseCr + gdvGain + forexGain, val: opGain, color: '#2997ff', isTotal: false },
+      { label: 'Total Value', start: 0, val: totalExpanded, color: '#f5e6c8', isTotal: true }
+    ];
+
+    const colWidth = Math.min(plotW / 7, 54);
+    const spacing = (plotW - colWidth * columns.length) / (columns.length - 1);
+
+    columns.forEach((col, idx) => {
+      const x = padLeft + idx * (colWidth + spacing);
+      const topY = padTop + plotH - ((col.start + col.val) / maxVal) * plotH;
+      const bottomY = padTop + plotH - (col.start / maxVal) * plotH;
+      const h = Math.max(bottomY - topY, 4);
+
+      if (col.isTotal) {
+        const grad = ctx.createLinearGradient(0, topY, 0, topY + h);
+        grad.addColorStop(0, '#ffe5a3');
+        grad.addColorStop(1, '#dfb76c');
+        ctx.fillStyle = grad;
+      } else {
+        ctx.fillStyle = col.color;
+      }
+
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, topY, colWidth, h, 4);
+      } else {
+        ctx.rect(x, topY, colWidth, h);
+      }
+      ctx.fill();
+
+      // Connector dashed lines between steps
+      if (idx < columns.length - 1 && !columns[idx].isTotal && !columns[idx + 1].isTotal) {
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath();
+        ctx.moveTo(x + colWidth, topY);
+        ctx.lineTo(x + colWidth + spacing, topY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Value label on top of bar
+      ctx.fillStyle = col.isTotal ? '#dfb76c' : '#ffffff';
+      ctx.font = '600 9.5px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      const displayVal = col.val >= 100 ? Math.round(col.val) : col.val.toFixed(1);
+      ctx.fillText(`₹${displayVal}`, x + colWidth / 2, topY - 5);
+
+      // Bottom Category Label
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.font = '500 8.5px -apple-system, sans-serif';
+      ctx.fillText(col.label, x + colWidth / 2, height - 8);
+    });
+
+    // Y Axis labels
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '500 9px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`₹${Math.round(maxVal)}Cr`, padLeft - 6, padTop + 8);
+    ctx.fillText(`₹${Math.round(maxVal / 2)}Cr`, padLeft - 6, padTop + plotH / 2 + 3);
+    ctx.fillText('₹0', padLeft - 6, padTop + plotH);
   }
 
   portfolioRange.addEventListener('input', update);
+  window.addEventListener('resize', update);
   update();
 }
 
@@ -603,4 +982,525 @@ function initVentureTabs() {
       });
     });
   });
+}
+
+/* -------------------------------------------------------------------------- */
+/* 9. Dedicated Project Financial Visualizers                                 */
+/* -------------------------------------------------------------------------- */
+function initProjectFinanceVisualizers() {
+  initCityFinanceChart();
+  initMarinaFinanceChart();
+  initSquareFinanceChart();
+  initEstateFinanceChart();
+}
+
+function initCityFinanceChart() {
+  const canvas = document.getElementById('cityFinanceCanvas');
+  if (!canvas) return;
+
+  const unitTabs = document.querySelectorAll('.city-unit-btn');
+  const valCurrent = document.getElementById('cityFinanceCurrentVal');
+  const val5Yr = document.getElementById('cityFinance5YrVal');
+  const valYield = document.getElementById('cityFinanceYieldVal');
+  const valRoi = document.getElementById('cityFinanceRoiVal');
+
+  const unitData = {
+    '1bhk': { name: '1 BHK Suite', base: 48, p5: 71, rent: 2.50, yieldPct: '5.2% Net Yield', roi: '+48%' },
+    '2bhk': { name: '2 BHK Residence', base: 82, p5: 122, rent: 4.10, yieldPct: '5.0% Net Yield', roi: '+49%' },
+    '3bhk': { name: '3 BHK Skydeck', base: 128, p5: 194, rent: 6.14, yieldPct: '4.8% Net Yield', roi: '+51%' },
+    'commercial': { name: 'Commercial Arcade', base: 95, p5: 158, rent: 8.08, yieldPct: '8.5% Lease Yield', roi: '+66%' }
+  };
+
+  let activeUnit = '2bhk';
+
+  function draw() {
+    const data = unitData[activeUnit];
+    if (valCurrent) valCurrent.textContent = `₹ ${data.base} Lakhs`;
+    if (val5Yr) val5Yr.textContent = data.p5 >= 100 ? `₹ ${(data.p5 / 100).toFixed(2)} Cr` : `₹ ${data.p5} Lakhs`;
+    if (valYield) valYield.textContent = `₹ ${data.rent.toFixed(2)} L/yr (${data.yieldPct})`;
+    if (valRoi) valRoi.textContent = data.roi;
+
+    const dpi = setupCanvasDPI(canvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padLeft = 48;
+    const padRight = 20;
+    const padTop = 20;
+    const padBottom = 26;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    const years = [0, 1, 2, 3, 4, 5];
+    const cagrFactor = Math.pow(data.p5 / data.base, 1 / 5);
+    const valuations = years.map(y => data.base * Math.pow(cagrFactor, y));
+    const cumulativeRents = years.map(y => data.rent * y);
+    const totalReturns = valuations.map((v, i) => v + cumulativeRents[i]);
+
+    const maxVal = totalReturns[5] * 1.1;
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    for (let i = 0; i <= 3; i++) {
+      const y = padTop + (plotH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Area Fill
+    const grad = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+    grad.addColorStop(0, 'rgba(223, 183, 108, 0.28)');
+    grad.addColorStop(1, 'rgba(223, 183, 108, 0.01)');
+
+    ctx.beginPath();
+    ctx.moveTo(padLeft, padTop + plotH);
+    years.forEach((y, i) => {
+      const x = padLeft + (i / 5) * plotW;
+      const cy = padTop + plotH - (totalReturns[i] / maxVal) * plotH;
+      ctx.lineTo(x, cy);
+    });
+    ctx.lineTo(padLeft + plotW, padTop + plotH);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Total Wealth Stroke
+    ctx.beginPath();
+    years.forEach((y, i) => {
+      const x = padLeft + (i / 5) * plotW;
+      const cy = padTop + plotH - (totalReturns[i] / maxVal) * plotH;
+      if (i === 0) ctx.moveTo(x, cy);
+      else ctx.lineTo(x, cy);
+    });
+    ctx.strokeStyle = '#dfb76c';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Base Asset Valuation Stroke (Dashed Emerald)
+    ctx.beginPath();
+    years.forEach((y, i) => {
+      const x = padLeft + (i / 5) * plotW;
+      const cy = padTop + plotH - (valuations[i] / maxVal) * plotH;
+      if (i === 0) ctx.moveTo(x, cy);
+      else ctx.lineTo(x, cy);
+    });
+    ctx.strokeStyle = '#30d158';
+    ctx.lineWidth = 1.8;
+    ctx.setLineDash([3, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Final Node
+    const lastX = padLeft + plotW;
+    const lastY = padTop + plotH - (totalReturns[5] / maxVal) * plotH;
+    ctx.beginPath();
+    ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffe5a3';
+    ctx.fill();
+
+    // Y Labels
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '500 9px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`₹${Math.round(maxVal)}L`, padLeft - 6, padTop + 8);
+    ctx.fillText(`₹${Math.round(maxVal / 2)}L`, padLeft - 6, padTop + plotH / 2 + 3);
+    ctx.fillText('₹0', padLeft - 6, padTop + plotH);
+
+    // X Labels
+    ctx.textAlign = 'center';
+    years.forEach((y, i) => {
+      ctx.fillText(`Yr ${y}`, padLeft + (i / 5) * plotW, height - 8);
+    });
+  }
+
+  unitTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      unitTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeUnit = tab.getAttribute('data-unit');
+      draw();
+    });
+  });
+
+  window.addEventListener('resize', draw);
+  draw();
+}
+
+function initMarinaFinanceChart() {
+  const canvas = document.getElementById('marinaFinanceCanvas');
+  if (!canvas) return;
+
+  const unitTabs = document.querySelectorAll('.marina-unit-btn');
+  const valCurrent = document.getElementById('marinaFinanceCurrentVal');
+  const val5Yr = document.getElementById('marinaFinance5YrVal');
+  const valYield = document.getElementById('marinaFinanceYieldVal');
+  const valRoi = document.getElementById('marinaFinanceRoiVal');
+
+  const unitData = {
+    '2bhk': { name: '2 BHK Seafront', base: 92, p5: 142, rent: 7.20, yieldPct: '7.8% Vacation Staycation', roi: '+54%' },
+    '3bhk': { name: '3 BHK Ocean Deck', base: 148, p5: 236, rent: 11.10, yieldPct: '7.5% Vacation Staycation', roi: '+59%' },
+    'penthouse': { name: '4 BHK Horizon Penthouse', base: 260, p5: 430, rent: 19.50, yieldPct: '7.5% Vacation Staycation', roi: '+65%' }
+  };
+
+  let activeUnit = '2bhk';
+
+  function draw() {
+    const data = unitData[activeUnit];
+    if (valCurrent) valCurrent.textContent = `₹ ${data.base} Lakhs`;
+    if (val5Yr) val5Yr.textContent = data.p5 >= 100 ? `₹ ${(data.p5 / 100).toFixed(2)} Cr` : `₹ ${data.p5} Lakhs`;
+    if (valYield) valYield.textContent = `₹ ${data.rent.toFixed(2)} L/yr (${data.yieldPct})`;
+    if (valRoi) valRoi.textContent = data.roi;
+
+    const dpi = setupCanvasDPI(canvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padLeft = 48;
+    const padRight = 20;
+    const padTop = 20;
+    const padBottom = 26;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    const years = [0, 1, 2, 3, 4, 5];
+    const cagrFactor = Math.pow(data.p5 / data.base, 1 / 5);
+    const valuations = years.map(y => data.base * Math.pow(cagrFactor, y));
+    const cumulativeRents = years.map(y => data.rent * y);
+    const totalReturns = valuations.map((v, i) => v + cumulativeRents[i]);
+
+    const maxVal = totalReturns[5] * 1.1;
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    for (let i = 0; i <= 3; i++) {
+      const y = padTop + (plotH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Ocean Gradient Area Fill
+    const grad = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+    grad.addColorStop(0, 'rgba(41, 151, 255, 0.3)');
+    grad.addColorStop(1, 'rgba(41, 151, 255, 0.01)');
+
+    ctx.beginPath();
+    ctx.moveTo(padLeft, padTop + plotH);
+    years.forEach((y, i) => {
+      const x = padLeft + (i / 5) * plotW;
+      const cy = padTop + plotH - (totalReturns[i] / maxVal) * plotH;
+      ctx.lineTo(x, cy);
+    });
+    ctx.lineTo(padLeft + plotW, padTop + plotH);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line 1: Total Return
+    ctx.beginPath();
+    years.forEach((y, i) => {
+      const x = padLeft + (i / 5) * plotW;
+      const cy = padTop + plotH - (totalReturns[i] / maxVal) * plotH;
+      if (i === 0) ctx.moveTo(x, cy);
+      else ctx.lineTo(x, cy);
+    });
+    ctx.strokeStyle = '#2997ff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Line 2: Scarcity Capital Line
+    ctx.beginPath();
+    years.forEach((y, i) => {
+      const x = padLeft + (i / 5) * plotW;
+      const cy = padTop + plotH - (valuations[i] / maxVal) * plotH;
+      if (i === 0) ctx.moveTo(x, cy);
+      else ctx.lineTo(x, cy);
+    });
+    ctx.strokeStyle = '#dfb76c';
+    ctx.lineWidth = 1.8;
+    ctx.setLineDash([3, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Y Labels
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '500 9px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`₹${Math.round(maxVal)}L`, padLeft - 6, padTop + 8);
+    ctx.fillText(`₹${Math.round(maxVal / 2)}L`, padLeft - 6, padTop + plotH / 2 + 3);
+    ctx.fillText('₹0', padLeft - 6, padTop + plotH);
+
+    // X Labels
+    ctx.textAlign = 'center';
+    years.forEach((y, i) => {
+      ctx.fillText(`Yr ${y}`, padLeft + (i / 5) * plotW, height - 8);
+    });
+  }
+
+  unitTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      unitTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeUnit = tab.getAttribute('data-unit');
+      draw();
+    });
+  });
+
+  window.addEventListener('resize', draw);
+  draw();
+}
+
+function initSquareFinanceChart() {
+  const canvas = document.getElementById('squareFinanceCanvas');
+  if (!canvas) return;
+
+  const unitTabs = document.querySelectorAll('.square-unit-btn');
+  const valCurrent = document.getElementById('squareFinanceCurrentVal');
+  const val10Yr = document.getElementById('squareFinance10YrVal');
+  const valCapRate = document.getElementById('squareFinanceCapRate');
+  const valLease = document.getElementById('squareFinanceLeaseTenure');
+
+  const unitData = {
+    'office': { name: 'Corporate Office Suite', base: 75, cashflow10: 84.5, capRate: '9.0% Cap Rate', lease: '9 Yrs (3+3+3)' },
+    'retail': { name: 'High-Street Retail Store', base: 140, cashflow10: 158.0, capRate: '9.0% Cap Rate', lease: '12 Yrs (Anchor)' },
+    'food': { name: 'Anchor F&B Rooftop', base: 195, cashflow10: 220.0, capRate: '9.0% Cap Rate', lease: '15 Yrs (Multiplex)' }
+  };
+
+  let activeUnit = 'office';
+
+  function draw() {
+    const data = unitData[activeUnit];
+    if (valCurrent) valCurrent.textContent = `₹ ${data.base} Lakhs`;
+    if (val10Yr) val10Yr.textContent = `₹ ${(data.cashflow10 / 100).toFixed(2)} Cr`;
+    if (valCapRate) valCapRate.textContent = data.capRate;
+    if (valLease) valLease.textContent = data.lease;
+
+    const dpi = setupCanvasDPI(canvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padLeft = 48;
+    const padRight = 20;
+    const padTop = 20;
+    const padBottom = 26;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    const years = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const initialRent = data.base * 0.09;
+    let cum = 0;
+    const cumulativeCashFlow = years.map(y => {
+      // 5% escalation every 3 years
+      const esc = Math.pow(1.05, Math.floor((y - 1) / 3));
+      cum += initialRent * esc;
+      return cum;
+    });
+
+    const maxVal = cumulativeCashFlow[9] * 1.15;
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    for (let i = 0; i <= 3; i++) {
+      const y = padTop + (plotH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Step-up Cash Flow Bar Chart
+    const barWidth = Math.min(plotW / 14, 22);
+    const spacing = (plotW - barWidth * 10) / 9;
+
+    cumulativeCashFlow.forEach((cVal, i) => {
+      const x = padLeft + i * (barWidth + spacing);
+      const barH = (cVal / maxVal) * plotH;
+      const y = padTop + plotH - barH;
+
+      const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+      grad.addColorStop(0, '#ffe5a3');
+      grad.addColorStop(1, '#dfb76c');
+      ctx.fillStyle = grad;
+
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, barWidth, barH, 3);
+      } else {
+        ctx.rect(x, y, barWidth, barH);
+      }
+      ctx.fill();
+
+      // Top label
+      if (i === 4 || i === 9) {
+        ctx.fillStyle = '#30d158';
+        ctx.font = '600 8.5px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`₹${Math.round(cVal)}L`, x + barWidth / 2, y - 4);
+      }
+
+      // X label
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.font = '500 8.5px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Y${i + 1}`, x + barWidth / 2, height - 8);
+    });
+
+    // Y labels
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '500 9px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`₹${Math.round(maxVal)}L`, padLeft - 6, padTop + 8);
+    ctx.fillText(`₹${Math.round(maxVal / 2)}L`, padLeft - 6, padTop + plotH / 2 + 3);
+    ctx.fillText('₹0', padLeft - 6, padTop + plotH);
+  }
+
+  unitTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      unitTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeUnit = tab.getAttribute('data-unit');
+      draw();
+    });
+  });
+
+  window.addEventListener('resize', draw);
+  draw();
+}
+
+function initEstateFinanceChart() {
+  const canvas = document.getElementById('estateFinanceCanvas');
+  if (!canvas) return;
+
+  const unitTabs = document.querySelectorAll('.estate-unit-btn');
+  const valCurrent = document.getElementById('estateFinanceCurrentVal');
+  const val5Yr = document.getElementById('estateFinance5YrVal');
+  const val10Yr = document.getElementById('estateFinance10YrVal');
+  const valCagr = document.getElementById('estateFinanceCagr');
+
+  const unitData = {
+    '5cent': { name: '5 Cents Plot', base: 24, p5: 43, p10: 77, cagr: '12.4% Historical CAGR' },
+    '8cent': { name: '8 Cents Plot', base: 38, p5: 68, p10: 122, cagr: '12.4% Historical CAGR' },
+    '12cent': { name: '12 Cents Executive Estate', base: 58, p5: 104, p10: 186, cagr: '12.4% Historical CAGR' }
+  };
+
+  let activeUnit = '5cent';
+
+  function draw() {
+    const data = unitData[activeUnit];
+    if (valCurrent) valCurrent.textContent = `₹ ${data.base} Lakhs`;
+    if (val5Yr) val5Yr.textContent = `₹ ${data.p5} Lakhs (+79%)`;
+    if (val10Yr) val10Yr.textContent = data.p10 >= 100 ? `₹ ${(data.p10 / 100).toFixed(2)} Cr (+221%)` : `₹ ${data.p10} Lakhs`;
+    if (valCagr) valCagr.textContent = data.cagr;
+
+    const dpi = setupCanvasDPI(canvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padLeft = 48;
+    const padRight = 20;
+    const padTop = 20;
+    const padBottom = 26;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    const years = [0, 2, 4, 6, 8, 10];
+    const valuations = years.map(y => data.base * Math.pow(1.124, y));
+    const maxVal = valuations[5] * 1.1;
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    for (let i = 0; i <= 3; i++) {
+      const y = padTop + (plotH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Gradient Area
+    const grad = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+    grad.addColorStop(0, 'rgba(48, 209, 88, 0.3)');
+    grad.addColorStop(1, 'rgba(48, 209, 88, 0.01)');
+
+    ctx.beginPath();
+    ctx.moveTo(padLeft, padTop + plotH);
+    years.forEach((y, i) => {
+      const x = padLeft + (i / 5) * plotW;
+      const cy = padTop + plotH - (valuations[i] / maxVal) * plotH;
+      ctx.lineTo(x, cy);
+    });
+    ctx.lineTo(padLeft + plotW, padTop + plotH);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    years.forEach((y, i) => {
+      const x = padLeft + (i / 5) * plotW;
+      const cy = padTop + plotH - (valuations[i] / maxVal) * plotH;
+      if (i === 0) ctx.moveTo(x, cy);
+      else ctx.lineTo(x, cy);
+    });
+    ctx.strokeStyle = '#30d158';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Node at Year 10
+    const finalX = padLeft + plotW;
+    const finalY = padTop + plotH - (valuations[5] / maxVal) * plotH;
+    ctx.beginPath();
+    ctx.arc(finalX, finalY, 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#30d158';
+    ctx.fill();
+
+    // Y labels
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '500 9px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`₹${Math.round(maxVal)}L`, padLeft - 6, padTop + 8);
+    ctx.fillText(`₹${Math.round(maxVal / 2)}L`, padLeft - 6, padTop + plotH / 2 + 3);
+    ctx.fillText('₹0', padLeft - 6, padTop + plotH);
+
+    // X labels
+    ctx.textAlign = 'center';
+    years.forEach((y, i) => {
+      ctx.fillText(`Yr ${y}`, padLeft + (i / 5) * plotW, height - 8);
+    });
+  }
+
+  unitTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      unitTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeUnit = tab.getAttribute('data-unit');
+      draw();
+    });
+  });
+
+  window.addEventListener('resize', draw);
+  draw();
 }

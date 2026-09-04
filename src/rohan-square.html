@@ -49,6 +49,7 @@
         <li><a href="#overview">Overview</a></li>
         <li><a href="#ready-homes">Ready Homes</a></li>
         <li><a href="#commercial">Commercial Suites</a></li>
+        <li><a href="#finance">Commercial Cap Rate</a></li>
         <li><a href="#proptech">Smart Micro-Grid</a></li>
         <li><a href="#connectivity">Connectivity</a></li>
         <li><a href="#inquire" class="btn-apple btn-sm">Schedule Visit</a></li>
@@ -177,6 +178,70 @@
           </div>
           <div style="margin-top: 24px;">
             <a href="#inquire" class="btn-apple btn-sm" style="width: 100%;">Commercial Lease Inquiry</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Financial Intelligence & Commercial Cash Flow Horizon -->
+  <section class="section project-finance-section" id="finance">
+    <div class="container">
+      <div class="apple-section-header">
+        <div class="apple-eyebrow">Commercial Financial Intelligence</div>
+        <h2 class="apple-section-title">Grade-A Commercial Cap Rate & 10-Year Cash Flow.</h2>
+        <p class="apple-section-sub">
+          Analyze cumulative lease distributions, tenant escalation schedules (5% every 3 years), and institutional cap rates at Mangaluru's premier arterial highway gateway.
+        </p>
+      </div>
+
+      <div class="project-finance-grid">
+        <!-- Interactive Chart Card -->
+        <div class="chart-container-apple">
+          <div class="chart-header-bar">
+            <span class="chart-title-tag">10-Year Cumulative Net Lease Cash Flow</span>
+            <div class="chart-segmented-control">
+              <button class="chart-segment-btn square-unit-btn active" data-unit="office" type="button">Corporate Office</button>
+              <button class="chart-segment-btn square-unit-btn" data-unit="retail" type="button">Retail Showroom</button>
+              <button class="chart-segment-btn square-unit-btn" data-unit="food" type="button">F&B Podium</button>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap" style="height: 220px;">
+            <canvas id="squareFinanceCanvas"></canvas>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--apple-text-secondary); margin-top: 14px; flex-wrap: wrap; gap: 8px;">
+            <span style="display: flex; align-items: center; gap: 5px;">
+              <span style="width: 8px; height: 8px; background: var(--gold-primary); border-radius: 2px;"></span>
+              Cumulative Lease Inflow (5% Escalation Every 3 Yrs)
+            </span>
+            <span style="display: flex; align-items: center; gap: 5px;">
+              <span style="width: 8px; height: 8px; background: #30d158; border-radius: 50%;"></span>
+              Milestone Payout Markers
+            </span>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="finance-stats-column">
+          <div class="finance-stat-card">
+            <div class="finance-stat-label">Asset Acquisition</div>
+            <div class="finance-stat-val" id="squareFinanceCurrentVal">₹ 75 Lakhs</div>
+            <div class="finance-stat-delta" style="color: var(--apple-text-secondary);">Ready to Move In</div>
+          </div>
+          <div class="finance-stat-card">
+            <div class="finance-stat-label">10-Year Net Cash Flow</div>
+            <div class="finance-stat-val" style="color: var(--gold-primary);" id="squareFinance10YrVal">₹ 84.5 Lakhs</div>
+            <div class="finance-stat-delta" style="color: #30d158;">112% Capital Payback</div>
+          </div>
+          <div class="finance-stat-card">
+            <div class="finance-stat-label">Institutional Cap Rate</div>
+            <div class="finance-stat-val" style="color: #30d158;" id="squareFinanceCapRate">9.0% Cap Rate</div>
+            <div class="finance-stat-delta" style="color: #2997ff;">vs. 7.1% Metro Tier-1</div>
+          </div>
+          <div class="finance-stat-card">
+            <div class="finance-stat-label">Lease Commitment</div>
+            <div class="finance-stat-val" style="color: var(--gold-champagne);" id="squareFinanceLeaseTenure">9 Yrs (3+3+3)</div>
+            <div class="finance-stat-delta" style="color: #dfb76c;">Institutional Covenant</div>
           </div>
         </div>
       </div>
