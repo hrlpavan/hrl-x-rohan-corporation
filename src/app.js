@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModal();
   initBookingForm();
   initMobileMenu();
+  initSecretSimulator();
 });
 
 /* -------------------------------------------------------------------------- */
@@ -400,4 +401,32 @@ function initMobileMenu() {
       navLinks.style.borderBottom = '1px solid rgba(212, 175, 55, 0.2)';
     }
   });
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. HRL Core™ Secret Ingredient Simulator                                    */
+/* -------------------------------------------------------------------------- */
+function initSecretSimulator() {
+  const portfolioRange = document.getElementById('portfolioRange');
+  const portfolioVal = document.getElementById('portfolioVal');
+  const gdvGainOutput = document.getElementById('gdvGainOutput');
+  const forexGainOutput = document.getElementById('forexGainOutput');
+
+  if (!portfolioRange || !portfolioVal || !gdvGainOutput || !forexGainOutput) return;
+
+  function update() {
+    const cr = parseFloat(portfolioRange.value);
+    portfolioVal.textContent = `₹ ${cr.toLocaleString('en-IN')} Crores`;
+    
+    // Algorithmic Yield: ~ 14.2% incremental GDV
+    const gdvGain = cr * 0.142;
+    // Forex Slippage Recovered: ~ 3.7% on NRI portion (65% of total portfolio)
+    const forexGain = (cr * 0.65) * 0.037;
+
+    gdvGainOutput.textContent = `+₹ ${gdvGain.toFixed(1)} Cr`;
+    forexGainOutput.textContent = `₹ ${forexGain.toFixed(1)} Cr`;
+  }
+
+  portfolioRange.addEventListener('input', update);
+  update();
 }

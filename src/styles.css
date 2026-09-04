@@ -1276,8 +1276,183 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-weight: 600;
 }
 
+/* ==========================================================================
+   HRL Core™ Secret Ingredient Platform
+   ========================================================================== */
+.secret-grid-8 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin: 40px 0;
+}
+
+.secret-pillar-card {
+  background: var(--apple-card);
+  border-radius: var(--apple-radius-card);
+  padding: 36px 32px;
+  box-shadow: inset 0 0 0 1px var(--apple-border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--apple-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.secret-pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.secret-pillar-card:hover {
+  background: var(--apple-card-hover);
+  box-shadow: inset 0 0 0 1px var(--gold-border-subtle), 0 12px 40px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+.secret-pillar-card:hover::before {
+  opacity: 1;
+}
+
+.secret-pillar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.secret-pillar-num {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+}
+
+.secret-pillar-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--apple-radius-pill);
+  background: var(--gold-badge-bg);
+  color: var(--gold-champagne);
+  border: 1px solid var(--gold-border-subtle);
+}
+
+.secret-pillar-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+
+.secret-blindspot-box {
+  background: rgba(255, 69, 58, 0.08);
+  border-left: 3px solid #ff453a;
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin: 12px 0;
+  font-size: 13px;
+  color: #ff9f97;
+  line-height: 1.45;
+}
+
+.secret-blindspot-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  display: block;
+  margin-bottom: 3px;
+  color: #ff453a;
+}
+
+.secret-solution-desc {
+  font-size: 14px;
+  color: #d2d2d7;
+  line-height: 1.55;
+  margin-top: 10px;
+}
+
+.secret-capabilities-list {
+  list-style: none;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.secret-capabilities-list li {
+  font-size: 13px;
+  color: #a1a1a6;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.4;
+}
+
+.secret-capabilities-list li::before {
+  content: '✓';
+  color: var(--gold-primary);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.secret-metric-tray {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.secret-metric-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--apple-text-secondary);
+}
+
+.secret-metric-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gold-primary);
+}
+
+/* Secret Developer GDV Impact Box */
+.secret-impact-simulator {
+  background: linear-gradient(180deg, #161617 0%, #0d0d0e 100%);
+  border-radius: var(--apple-radius-bento);
+  border: 1px solid var(--gold-border-subtle);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(223, 183, 108, 0.1);
+  padding: 44px;
+  margin-top: 40px;
+}
+
+.secret-sim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: center;
+}
+
 /* Responsive */
 @media (max-width: 992px) {
+  .secret-grid-8 {
+    grid-template-columns: 1fr;
+  }
+  .secret-sim-grid {
+    grid-template-columns: 1fr;
+  }
   .bento-card.col-8, .bento-card.col-4, .bento-card.col-6 {
     grid-column: span 12;
   }
