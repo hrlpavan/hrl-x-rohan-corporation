@@ -82,6 +82,8 @@ class MasterMotionGraphicsEngine {
 
     this.currentSceneIndex = 0;
     this.currentVoiceSceneIndex = -1;
+    this.currentNarrator = 'daniel'; // 'daniel' | 'samantha' | 'rishi'
+    this.narratorAudio = null;
 
     this.initAudioEngine();
     this.bindUI();
@@ -98,8 +100,12 @@ class MasterMotionGraphicsEngine {
         this.audioCtx.resume();
         if (this.musicEnabled && this.isPlaying) this.startSoundtrack();
       }
-      if (this.voiceEnabled && this.isPlaying && window.speechSynthesis && !window.speechSynthesis.speaking) {
-        this.speakScene(this.currentSceneIndex);
+      if (this.voiceEnabled && this.isPlaying) {
+        if (this.narratorAudio && this.narratorAudio.paused && this.narratorAudio.currentTime > 0 && !this.narratorAudio.ended) {
+          this.narratorAudio.play().catch(e => console.log(e));
+        } else {
+          this.speakScene(this.currentSceneIndex);
+        }
       }
       window.removeEventListener('pointerdown', unlockAudio);
       window.removeEventListener('keydown', unlockAudio);
@@ -124,11 +130,35 @@ class MasterMotionGraphicsEngine {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       this.audioCtx = new AudioCtx();
       this.masterGain = this.audioCtx.createGain();
-      this.masterGain.gain.value = 0.22;
+      this.masterGain.gain.value = 0.20;
       this.masterGain.connect(this.audioCtx.destination);
     } catch (e) {
       console.warn('Web Audio API not supported', e);
     }
+
+    // Studio Human Narrator HTML5 Audio Player
+    this.narratorAudio = new Audio();
+    this.narratorAudio.preload = 'auto';
+
+    // Acoustic Ducking: when the human narrator speaks, lower ambient chord volume to 0.06
+    this.narratorAudio.addEventListener('play', () => {
+      if (this.masterGain && this.audioCtx && this.audioCtx.state === 'running') {
+        this.masterGain.gain.setTargetAtTime(0.06, this.audioCtx.currentTime, 0.15);
+      }
+    });
+
+    // Acoustic Restore: when human narrator finishes, gently raise ambient volume to 0.20
+    this.narratorAudio.addEventListener('ended', () => {
+      if (this.masterGain && this.audioCtx && this.audioCtx.state === 'running') {
+        this.masterGain.gain.setTargetAtTime(0.20, this.audioCtx.currentTime, 0.4);
+      }
+    });
+
+    // Fallback if audio fails to load
+    this.narratorAudio.addEventListener('error', (e) => {
+      console.warn('Studio narrator audio load issue, using SpeechSynthesis fallback', e);
+      this.fallbackSpeakScene(this.currentSceneIndex);
+    });
   }
 
   startSoundtrack() {
@@ -165,9 +195,47 @@ class MasterMotionGraphicsEngine {
   }
 
   /* -------------------------------------------------------------------------- */
-  /* Voiceover Narration (Web Speech API)                                       */
+  /* Studio Human Voice Narration Engine (Real Audio + Neural Fallback)          */
   /* -------------------------------------------------------------------------- */
   speakScene(sceneIndex) {
+    if (!this.voiceEnabled) return;
+    this.stopNarration();
+
+    const scene = this.scenes[sceneIndex];
+    if (!scene) return;
+
+    this.currentVoiceSceneIndex = sceneIndex;
+
+    // Load and play the human studio voice track
+    const voiceFolder = `narrator_${this.currentNarrator}`;
+    const audioSrc = `assets/audio/${voiceFolder}/scene_${sceneIndex}.m4a`;
+
+    this.narratorAudio.src = audioSrc;
+    this.narratorAudio.currentTime = 0;
+
+    const playPromise = this.narratorAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.warn('Studio audio playback blocked, falling back to SpeechSynthesis:', err);
+        this.fallbackSpeakScene(sceneIndex);
+      });
+    }
+  }
+
+  stopNarration() {
+    if (this.narratorAudio) {
+      this.narratorAudio.pause();
+      this.narratorAudio.currentTime = 0;
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    if (this.masterGain && this.audioCtx && this.audioCtx.state === 'running') {
+      this.masterGain.gain.setTargetAtTime(0.20, this.audioCtx.currentTime, 0.15);
+    }
+  }
+
+  fallbackSpeakScene(sceneIndex) {
     if (!this.voiceEnabled || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
 
@@ -175,15 +243,46 @@ class MasterMotionGraphicsEngine {
     if (!scene) return;
 
     const utterance = new SpeechSynthesisUtterance(scene.script);
-    utterance.rate = 0.96;
+    utterance.rate = 0.93; // deliberate, calm, human pacing
     utterance.pitch = 0.98;
 
     const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find(v => v.lang.includes('en') && (v.name.includes('Natural') || v.name.includes('Daniel') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('US') || v.name.includes('UK')));
+    const preferred = voices.find(v => v.lang.includes('en') && (
+      v.name.includes('Natural') ||
+      v.name.includes('Daniel') ||
+      v.name.includes('Samantha') ||
+      v.name.includes('Rishi') ||
+      v.name.includes('Google') ||
+      v.name.includes('Premium')
+    ));
     if (preferred) utterance.voice = preferred;
 
     window.speechSynthesis.speak(utterance);
     this.currentVoiceSceneIndex = sceneIndex;
+  }
+
+  toggleNarrator() {
+    const list = ['daniel', 'samantha', 'rishi'];
+    const idx = list.indexOf(this.currentNarrator);
+    this.currentNarrator = list[(idx + 1) % list.length];
+
+    const labels = {
+      daniel: '🎙️ Daniel (British)',
+      samantha: '🎙️ Samantha (US)',
+      rishi: '🎙️ Rishi (Indian)'
+    };
+
+    if (this.toggleNarratorBtn) {
+      this.toggleNarratorBtn.textContent = labels[this.currentNarrator];
+    }
+    const badge = document.getElementById('activeVoiceBadge');
+    if (badge) {
+      badge.textContent = labels[this.currentNarrator];
+    }
+
+    if (this.isPlaying && this.voiceEnabled) {
+      this.speakScene(this.currentSceneIndex);
+    }
   }
 
   /* -------------------------------------------------------------------------- */
@@ -201,6 +300,7 @@ class MasterMotionGraphicsEngine {
     this.toggleAutoBtn = document.getElementById('toggleAutoBtn');
     this.toggleAudioBtn = document.getElementById('toggleAudioBtn');
     this.toggleVoiceBtn = document.getElementById('toggleVoiceBtn');
+    this.toggleNarratorBtn = document.getElementById('toggleNarratorBtn');
     this.toggleCCBtn = document.getElementById('toggleCCBtn');
     this.fullscreenBtn = document.getElementById('fullscreenBtn');
     this.recordVideoBtn = document.getElementById('recordVideoBtn');
@@ -250,8 +350,17 @@ class MasterMotionGraphicsEngine {
       this.toggleVoiceBtn.addEventListener('click', () => {
         this.voiceEnabled = !this.voiceEnabled;
         this.toggleVoiceBtn.textContent = `Voice: ${this.voiceEnabled ? 'ON' : 'OFF'}`;
-        if (!this.voiceEnabled && window.speechSynthesis) window.speechSynthesis.cancel();
-        else if (this.voiceEnabled && this.isPlaying) this.speakScene(this.currentSceneIndex);
+        if (!this.voiceEnabled) {
+          this.stopNarration();
+        } else if (this.voiceEnabled && this.isPlaying) {
+          this.speakScene(this.currentSceneIndex);
+        }
+      });
+    }
+
+    if (this.toggleNarratorBtn) {
+      this.toggleNarratorBtn.addEventListener('click', () => {
+        this.toggleNarrator();
       });
     }
 
@@ -293,7 +402,13 @@ class MasterMotionGraphicsEngine {
     if (this.playOverlay) this.playOverlay.classList.add('hidden');
     if (this.playIcon) this.playIcon.textContent = 'Pause';
     this.startSoundtrack();
-    this.speakScene(this.currentSceneIndex);
+    if (this.voiceEnabled) {
+      if (this.narratorAudio && this.narratorAudio.paused && this.narratorAudio.currentTime > 0 && !this.narratorAudio.ended) {
+        this.narratorAudio.play().catch(e => console.log(e));
+      } else {
+        this.speakScene(this.currentSceneIndex);
+      }
+    }
     this.lastFrameTime = performance.now();
   }
 
@@ -301,13 +416,21 @@ class MasterMotionGraphicsEngine {
     this.isPlaying = false;
     if (this.playIcon) this.playIcon.textContent = 'Play';
     this.stopSoundtrack();
-    if (window.speechSynthesis) window.speechSynthesis.pause();
+    if (this.narratorAudio) {
+      this.narratorAudio.pause();
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.pause();
+    }
   }
 
   seekTo(seconds) {
     this.currentTime = Math.max(0, Math.min(this.duration, seconds));
+    this.stopNarration();
     this.updateSceneIndex();
-    if (this.isPlaying) this.speakScene(this.currentSceneIndex);
+    if (this.isPlaying) {
+      this.speakScene(this.currentSceneIndex);
+    }
   }
 
   updateSceneIndex() {
