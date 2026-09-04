@@ -39,6 +39,7 @@ hrl-x-rohan-corporation/
 │       └── deploy.yml            # Automated GitHub Pages CI/CD workflow
 ├── docs/
 │   ├── PARTNERSHIP_CHARTER.md   # Executive vision, pillars & mutual charter
+│   ├── PROJECT_TOTAL_EXPENSE.md # Comprehensive financial schedule & budget
 │   ├── PROPTECH_ARCHITECTURE.md # System blueprint, digital twins & edge IoT
 │   └── STATUTORY_COMPLIANCE.md  # RERA standards, DPDP Act 2023 & legal index
 ├── src/
