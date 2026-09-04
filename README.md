@@ -38,6 +38,7 @@ hrl-x-rohan-corporation/
 │   └── workflows/
 │       └── deploy.yml            # Automated GitHub Pages CI/CD workflow
 ├── docs/
+│   ├── EQUIPMENT_SPECIFICATION.md # Hardware inventory, drones & edge IoT specs
 │   ├── PARTNERSHIP_CHARTER.md   # Executive vision, pillars & mutual charter
 │   ├── PROJECT_TOTAL_EXPENSE.md # Comprehensive financial schedule & budget
 │   ├── PROPTECH_ARCHITECTURE.md # System blueprint, digital twins & edge IoT
