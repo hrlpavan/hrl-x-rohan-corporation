@@ -4,7 +4,7 @@
   "description": "Next-Generation PropTech, Smart Real Estate & Digital Architecture Platform uniting HRL International and Rohan Corporation.",
   "main": "src/index.html",
   "scripts": {
-    "start": "npx serve src -p 3000",
+    "start": "python3 server.py",
     "preview": "open src/index.html",
     "lint": "echo \"Codebase validated\""
   },

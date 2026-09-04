@@ -83,7 +83,12 @@ class MasterMotionGraphicsEngine {
     this.currentSceneIndex = 0;
     this.currentVoiceSceneIndex = -1;
     this.currentNarrator = 'daniel'; // 'daniel' | 'samantha' | 'rishi'
-    this.narratorAudio = null;
+    this.currentActiveAudio = null;
+    this.narratorPool = {
+      daniel: [],
+      samantha: [],
+      rishi: []
+    };
 
     this.initAudioEngine();
     this.bindUI();
@@ -101,8 +106,10 @@ class MasterMotionGraphicsEngine {
         if (this.musicEnabled && this.isPlaying) this.startSoundtrack();
       }
       if (this.voiceEnabled && this.isPlaying) {
-        if (this.narratorAudio && this.narratorAudio.paused && this.narratorAudio.currentTime > 0 && !this.narratorAudio.ended) {
-          this.narratorAudio.play().catch(e => console.log(e));
+        if (this.currentActiveAudio && this.currentActiveAudio.paused && this.currentActiveAudio.currentTime > 0 && !this.currentActiveAudio.ended) {
+          this.currentActiveAudio.play().catch(e => {
+            if (e.name !== 'AbortError') console.log(e);
+          });
         } else {
           this.speakScene(this.currentSceneIndex);
         }
@@ -136,28 +143,40 @@ class MasterMotionGraphicsEngine {
       console.warn('Web Audio API not supported', e);
     }
 
-    // Studio Human Narrator HTML5 Audio Player
-    this.narratorAudio = new Audio();
-    this.narratorAudio.preload = 'auto';
+    // Pre-instantiate and preload studio narrator audio tracks for all personas
+    const narrators = ['daniel', 'samantha', 'rishi'];
+    narrators.forEach(narrator => {
+      this.narratorPool[narrator] = [];
+      for (let s = 0; s < 6; s++) {
+        const aud = new Audio();
+        aud.preload = 'auto';
+        aud.src = `assets/audio/narrator_${narrator}/scene_${s}.m4a`;
 
-    // Acoustic Ducking: when the human narrator speaks, lower ambient chord volume to 0.06
-    this.narratorAudio.addEventListener('play', () => {
-      if (this.masterGain && this.audioCtx && this.audioCtx.state === 'running') {
-        this.masterGain.gain.setTargetAtTime(0.06, this.audioCtx.currentTime, 0.15);
+        // Acoustic Ducking: lower ambient volume to 0.06 while narrator is speaking
+        aud.addEventListener('play', () => {
+          if (this.masterGain && this.audioCtx && this.audioCtx.state === 'running') {
+            this.masterGain.gain.setTargetAtTime(0.06, this.audioCtx.currentTime, 0.15);
+          }
+        });
+
+        // Acoustic Restore: restore ambient volume to 0.20 when narrator finishes
+        aud.addEventListener('ended', () => {
+          if (this.masterGain && this.audioCtx && this.audioCtx.state === 'running') {
+            this.masterGain.gain.setTargetAtTime(0.20, this.audioCtx.currentTime, 0.4);
+          }
+        });
+
+        // Failover: if .m4a encounters codec issue, transparently failover to .wav
+        aud.addEventListener('error', () => {
+          if (aud.src && aud.src.endsWith('.m4a')) {
+            console.log(`Failing over narrator_${narrator}/scene_${s} to WAV format`);
+            aud.src = `assets/audio/narrator_${narrator}/scene_${s}.wav`;
+            aud.load();
+          }
+        });
+
+        this.narratorPool[narrator].push(aud);
       }
-    });
-
-    // Acoustic Restore: when human narrator finishes, gently raise ambient volume to 0.20
-    this.narratorAudio.addEventListener('ended', () => {
-      if (this.masterGain && this.audioCtx && this.audioCtx.state === 'running') {
-        this.masterGain.gain.setTargetAtTime(0.20, this.audioCtx.currentTime, 0.4);
-      }
-    });
-
-    // Fallback if audio fails to load
-    this.narratorAudio.addEventListener('error', (e) => {
-      console.warn('Studio narrator audio load issue, using SpeechSynthesis fallback', e);
-      this.fallbackSpeakScene(this.currentSceneIndex);
     });
   }
 
@@ -206,26 +225,38 @@ class MasterMotionGraphicsEngine {
 
     this.currentVoiceSceneIndex = sceneIndex;
 
-    // Load and play the human studio voice track
-    const voiceFolder = `narrator_${this.currentNarrator}`;
-    const audioSrc = `assets/audio/${voiceFolder}/scene_${sceneIndex}.m4a`;
-
-    this.narratorAudio.src = audioSrc;
-    this.narratorAudio.currentTime = 0;
-
-    const playPromise = this.narratorAudio.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(err => {
-        console.warn('Studio audio playback blocked, falling back to SpeechSynthesis:', err);
-        this.fallbackSpeakScene(sceneIndex);
-      });
+    const tracks = this.narratorPool ? this.narratorPool[this.currentNarrator] : null;
+    if (tracks && tracks[sceneIndex]) {
+      this.currentActiveAudio = tracks[sceneIndex];
+      this.currentActiveAudio.currentTime = 0;
+      const playPromise = this.currentActiveAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          if (err.name === 'AbortError') return;
+          console.warn(`Studio audio playback blocked for ${this.currentNarrator}, scene ${sceneIndex}:`, err);
+          this.fallbackSpeakScene(sceneIndex);
+        });
+      }
+    } else {
+      this.fallbackSpeakScene(sceneIndex);
     }
   }
 
   stopNarration() {
-    if (this.narratorAudio) {
-      this.narratorAudio.pause();
-      this.narratorAudio.currentTime = 0;
+    if (this.currentActiveAudio) {
+      this.currentActiveAudio.pause();
+      this.currentActiveAudio.currentTime = 0;
+      this.currentActiveAudio = null;
+    }
+    if (this.narratorPool) {
+      Object.values(this.narratorPool).forEach(list => {
+        list.forEach(a => {
+          if (!a.paused) {
+            a.pause();
+            a.currentTime = 0;
+          }
+        });
+      });
     }
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
@@ -247,14 +278,20 @@ class MasterMotionGraphicsEngine {
     utterance.pitch = 0.98;
 
     const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find(v => v.lang.includes('en') && (
-      v.name.includes('Natural') ||
-      v.name.includes('Daniel') ||
-      v.name.includes('Samantha') ||
-      v.name.includes('Rishi') ||
-      v.name.includes('Google') ||
-      v.name.includes('Premium')
-    ));
+    let preferred = null;
+
+    if (this.currentNarrator === 'samantha') {
+      preferred = voices.find(v => (v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Karen') || v.name.includes('Zira') || (v.lang.includes('en-US') && !v.name.includes('Daniel'))));
+    } else if (this.currentNarrator === 'rishi') {
+      preferred = voices.find(v => (v.lang.includes('en-IN') || v.lang.includes('en_IN') || v.name.includes('Rishi') || v.name.includes('Veena') || v.name.includes('India')));
+    } else { // daniel (British)
+      preferred = voices.find(v => (v.lang.includes('en-GB') || v.lang.includes('en_GB') || v.name.includes('Daniel') || v.name.includes('Oliver') || v.name.includes('George')));
+    }
+
+    if (!preferred) {
+      preferred = voices.find(v => v.lang.includes('en'));
+    }
+
     if (preferred) utterance.voice = preferred;
 
     window.speechSynthesis.speak(utterance);
@@ -280,6 +317,7 @@ class MasterMotionGraphicsEngine {
       badge.textContent = labels[this.currentNarrator];
     }
 
+    // Immediately stop old narrator voice and play the newly selected narrator persona
     if (this.isPlaying && this.voiceEnabled) {
       this.speakScene(this.currentSceneIndex);
     }
@@ -403,8 +441,10 @@ class MasterMotionGraphicsEngine {
     if (this.playIcon) this.playIcon.textContent = 'Pause';
     this.startSoundtrack();
     if (this.voiceEnabled) {
-      if (this.narratorAudio && this.narratorAudio.paused && this.narratorAudio.currentTime > 0 && !this.narratorAudio.ended) {
-        this.narratorAudio.play().catch(e => console.log(e));
+      if (this.currentActiveAudio && this.currentActiveAudio.paused && this.currentActiveAudio.currentTime > 0 && !this.currentActiveAudio.ended) {
+        this.currentActiveAudio.play().catch(e => {
+          if (e.name !== 'AbortError') console.log(e);
+        });
       } else {
         this.speakScene(this.currentSceneIndex);
       }
@@ -416,8 +456,8 @@ class MasterMotionGraphicsEngine {
     this.isPlaying = false;
     if (this.playIcon) this.playIcon.textContent = 'Play';
     this.stopSoundtrack();
-    if (this.narratorAudio) {
-      this.narratorAudio.pause();
+    if (this.currentActiveAudio) {
+      this.currentActiveAudio.pause();
     }
     if (window.speechSynthesis) {
       window.speechSynthesis.pause();
