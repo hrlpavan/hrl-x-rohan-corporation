@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModal();
   initBookingForm();
   initMobileMenu();
-  initSecretSimulator();
+  initVentureSimulator();
   initVentureTabs();
 });
 
@@ -119,7 +119,7 @@ function initCalculator() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 3. Canvas 3D Digital Twin Simulator                                        */
+/* 3. Canvas 3D Digital Twin Visual Computing Engine                          */
 /* -------------------------------------------------------------------------- */
 function initCanvasSimulator() {
   const canvas = document.getElementById('twinCanvas');
@@ -132,117 +132,263 @@ function initCanvasSimulator() {
   const simNightBtn = document.getElementById('simNightBtn');
 
   let mode = 'day'; // day, sunset, night
-  let angle = 0;
+  let rotAngle = 0.2;
+  let mouseOffset = { x: 0, y: 0 };
+  let targetMouse = { x: 0, y: 0 };
+  let frameCount = 0;
+  let lastTime = performance.now();
+  let fps = '60.0';
+
+  // Interactive subtle parallax on mouse move
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    targetMouse.x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    targetMouse.y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    targetMouse.x = 0;
+    targetMouse.y = 0;
+  });
 
   function setMode(newMode) {
     mode = newMode;
     [simDayBtn, simSunsetBtn, simNightBtn].forEach(b => b.classList.remove('active'));
     if (mode === 'day') {
       simDayBtn.classList.add('active');
-      sunlightText.textContent = 'Solar Azimuth: 145° (Midday Daylight & Balcony Lux Level: 92,000)';
+      if (sunlightText) sunlightText.textContent = 'Solar Azimuth: 145° (Midday Daylight • Balcony Lux Level: 92,000)';
     } else if (mode === 'sunset') {
       simSunsetBtn.classList.add('active');
-      sunlightText.textContent = 'Golden Hour Azimuth: 260° (Sea Breeze Vector: 14 knots West)';
+      if (sunlightText) sunlightText.textContent = 'Golden Hour Azimuth: 260° (Sea Breeze Vector: 14 knots West)';
     } else if (mode === 'night') {
       simNightBtn.classList.add('active');
-      sunlightText.textContent = 'Night Smart Grid: LED Facade Illumination & 38% Energy Savings';
+      if (sunlightText) sunlightText.textContent = 'Night Smart Grid: LED Facade Illumination & 38% Energy Savings';
     }
   }
 
-  simDayBtn.addEventListener('click', () => setMode('day'));
-  simSunsetBtn.addEventListener('click', () => setMode('sunset'));
-  simNightBtn.addEventListener('click', () => setMode('night'));
+  if (simDayBtn) simDayBtn.addEventListener('click', () => setMode('day'));
+  if (simSunsetBtn) simSunsetBtn.addEventListener('click', () => setMode('sunset'));
+  if (simNightBtn) simNightBtn.addEventListener('click', () => setMode('night'));
+
+  // 3D Isometric Projection Helper
+  function project(x, y, z, cx, cy) {
+    const cos30 = 0.8660254;
+    const sin30 = 0.5;
+    const cosR = Math.cos(rotAngle + mouseOffset.x * 0.15);
+    const sinR = Math.sin(rotAngle + mouseOffset.x * 0.15);
+
+    const rx = x * cosR - y * sinR;
+    const ry = x * sinR + y * cosR;
+
+    const px = cx + (rx - ry) * cos30;
+    const py = cy + (rx + ry) * sin30 - z + mouseOffset.y * 12;
+    return { x: px, y: py };
+  }
+
+  // Draw an isometric 3D box with architectural lighting
+  function drawIsoBlock(x, y, z, w, d, h, cx, cy, topColor, leftColor, rightColor, strokeColor) {
+    const p000 = project(x, y, z, cx, cy);
+    const p100 = project(x + w, y, z, cx, cy);
+    const p110 = project(x + w, y + d, z, cx, cy);
+    const p010 = project(x, y + d, z, cx, cy);
+
+    const p001 = project(x, y, z + h, cx, cy);
+    const p101 = project(x + w, y, z + h, cx, cy);
+    const p111 = project(x + w, y + d, z + h, cx, cy);
+    const p011 = project(x, y + d, z + h, cx, cy);
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = strokeColor || 'rgba(223, 183, 108, 0.2)';
+
+    // Left Face
+    ctx.fillStyle = leftColor;
+    ctx.beginPath();
+    ctx.moveTo(p000.x, p000.y);
+    ctx.lineTo(p100.x, p100.y);
+    ctx.lineTo(p101.x, p101.y);
+    ctx.lineTo(p001.x, p001.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Right Face
+    ctx.fillStyle = rightColor;
+    ctx.beginPath();
+    ctx.moveTo(p100.x, p100.y);
+    ctx.lineTo(p110.x, p110.y);
+    ctx.lineTo(p111.x, p111.y);
+    ctx.lineTo(p101.x, p101.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Top Face
+    ctx.fillStyle = topColor;
+    ctx.beginPath();
+    ctx.moveTo(p001.x, p001.y);
+    ctx.lineTo(p101.x, p101.y);
+    ctx.lineTo(p111.x, p111.y);
+    ctx.lineTo(p011.x, p011.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
 
   function draw() {
+    frameCount++;
+    const now = performance.now();
+    if (now - lastTime >= 1000) {
+      fps = (frameCount * 1000 / (now - lastTime)).toFixed(1);
+      frameCount = 0;
+      lastTime = now;
+    }
+
+    // Smooth lerp mouse parallax
+    mouseOffset.x += (targetMouse.x - mouseOffset.x) * 0.08;
+    mouseOffset.y += (targetMouse.y - mouseOffset.y) * 0.08;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Background sky gradient based on mode
-    const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    // Atmospheric Backdrop
+    const sky = ctx.createRadialGradient(canvas.width / 2, canvas.height * 0.4, 40, canvas.width / 2, canvas.height / 2, canvas.width);
     if (mode === 'day') {
-      sky.addColorStop(0, '#0c1d36');
-      sky.addColorStop(1, '#050a14');
+      sky.addColorStop(0, '#101a28');
+      sky.addColorStop(0.6, '#080d15');
+      sky.addColorStop(1, '#020305');
     } else if (mode === 'sunset') {
-      sky.addColorStop(0, '#4a1525');
-      sky.addColorStop(0.6, '#b45309');
-      sky.addColorStop(1, '#0f1118');
-    } else {
-      sky.addColorStop(0, '#020617');
-      sky.addColorStop(1, '#05070d');
+      sky.addColorStop(0, '#38161e');
+      sky.addColorStop(0.5, '#1e0f14');
+      sky.addColorStop(1, '#050306');
+    } else { // night
+      sky.addColorStop(0, '#0d131f');
+      sky.addColorStop(0.6, '#05080e');
+      sky.addColorStop(1, '#000000');
     }
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Grid Floor
-    ctx.strokeStyle = mode === 'night' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(212, 175, 55, 0.15)';
-    ctx.lineWidth = 1;
     const cx = canvas.width / 2;
-    const cy = canvas.height / 2 + 60;
+    const cy = canvas.height / 2 + 35;
 
-    for (let i = -6; i <= 6; i++) {
+    // Architectural Ground Grid (3D Projected Isometric Matrix)
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = mode === 'sunset' ? 'rgba(223, 183, 108, 0.12)' : (mode === 'night' ? 'rgba(41, 151, 255, 0.12)' : 'rgba(255, 255, 255, 0.07)');
+    const gridSize = 160;
+    const step = 20;
+    for (let gx = -gridSize; gx <= gridSize; gx += step) {
+      const pA = project(gx, -gridSize, 0, cx, cy);
+      const pB = project(gx, gridSize, 0, cx, cy);
       ctx.beginPath();
-      ctx.moveTo(cx + i * 35, cy);
-      ctx.lineTo(cx + i * 65, canvas.height);
+      ctx.moveTo(pA.x, pA.y);
+      ctx.lineTo(pB.x, pB.y);
+      ctx.stroke();
+    }
+    for (let gy = -gridSize; gy <= gridSize; gy += step) {
+      const pA = project(-gridSize, gy, 0, cx, cy);
+      const pB = project(gridSize, gy, 0, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(pA.x, pA.y);
+      ctx.lineTo(pB.x, pB.y);
       ctx.stroke();
     }
 
-    // Draw Isometric Towers representing Rohan City & Rohan Crown
-    angle += 0.01;
-    drawTower(cx - 70, cy - 20, 50, 140, mode, 'Rohan City Hub');
-    drawTower(cx + 30, cy - 10, 60, 180, mode, 'Rohan Crown Tower');
-    drawTower(cx + 110, cy - 25, 40, 100, mode, 'Plaza Suites');
+    // Palette per mode
+    let colTop, colLeft, colRight, wireCol;
+    if (mode === 'day') {
+      colTop = 'rgba(235, 240, 250, 0.22)';
+      colLeft = 'rgba(56, 130, 210, 0.45)';
+      colRight = 'rgba(20, 35, 60, 0.85)';
+      wireCol = 'rgba(223, 183, 108, 0.35)';
+    } else if (mode === 'sunset') {
+      colTop = 'rgba(250, 230, 190, 0.3)';
+      colLeft = 'rgba(220, 120, 40, 0.5)';
+      colRight = 'rgba(40, 18, 30, 0.9)';
+      wireCol = 'rgba(250, 210, 120, 0.45)';
+    } else { // night
+      colTop = 'rgba(30, 45, 75, 0.4)';
+      colLeft = 'rgba(20, 30, 50, 0.7)';
+      colRight = 'rgba(10, 15, 25, 0.95)';
+      wireCol = 'rgba(41, 151, 255, 0.4)';
+    }
+
+    // 1. Commercial Podium Base (Rohan City Ground & Retail Plaza)
+    drawIsoBlock(-90, -70, 0, 180, 140, 26, cx, cy, colTop, colLeft, colRight, wireCol);
+
+    // 2. Tower A (Rohan City North Tower - 24 Storeys)
+    drawIsoBlock(-70, -50, 26, 60, 55, 140, cx, cy, colTop, colLeft, colRight, wireCol);
+
+    // Cantilever Balcony Bands on Tower A
+    for (let f = 36; f < 160; f += 16) {
+      drawIsoBlock(-73, -53, f, 66, 6, 2, cx, cy, 'rgba(223, 183, 108, 0.4)', 'rgba(223, 183, 108, 0.5)', 'rgba(223, 183, 108, 0.2)', 'rgba(223, 183, 108, 0.5)');
+    }
+
+    // 3. Tower B (Rohan City South Tower - Commercial Suites)
+    drawIsoBlock(10, -35, 26, 65, 60, 110, cx, cy, colTop, colLeft, colRight, wireCol);
+    for (let f = 36; f < 130; f += 14) {
+      drawIsoBlock(8, -37, f, 6, 64, 2, cx, cy, 'rgba(223, 183, 108, 0.4)', 'rgba(223, 183, 108, 0.5)', 'rgba(223, 183, 108, 0.2)', 'rgba(223, 183, 108, 0.5)');
+    }
+
+    // 4. Rooftop Architectural Spire & Solar Node
+    const spireTop = project(-40, -22, 178, cx, cy);
+    const spireBase = project(-40, -22, 166, cx, cy);
+    ctx.strokeStyle = '#dfb76c';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(spireBase.x, spireBase.y);
+    ctx.lineTo(spireTop.x, spireTop.y);
+    ctx.stroke();
+
+    // Beacon Pulse
+    const pulse = (Math.sin(now * 0.005) + 1) * 0.5;
+    ctx.fillStyle = `rgba(255, 69, 58, ${0.4 + pulse * 0.6})`;
+    ctx.beginPath();
+    ctx.arc(spireTop.x, spireTop.y, 2.5 + pulse * 1.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Solar Azimuth Vector Ray Projection
+    const sunAngle = mode === 'day' ? 145 * Math.PI / 180 : (mode === 'sunset' ? 260 * Math.PI / 180 : 0);
+    if (mode !== 'night') {
+      const sunDist = 180;
+      const sunHeight = mode === 'day' ? 160 : 40;
+      const sunPos = project(Math.cos(sunAngle) * sunDist, Math.sin(sunAngle) * sunDist, sunHeight, cx, cy);
+
+      // Sun flare
+      const flareGrad = ctx.createRadialGradient(sunPos.x, sunPos.y, 2, sunPos.x, sunPos.y, 40);
+      flareGrad.addColorStop(0, mode === 'day' ? 'rgba(255, 250, 220, 0.9)' : 'rgba(255, 180, 80, 0.9)');
+      flareGrad.addColorStop(0.3, mode === 'day' ? 'rgba(255, 220, 140, 0.3)' : 'rgba(255, 120, 50, 0.3)');
+      flareGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = flareGrad;
+      ctx.beginPath();
+      ctx.arc(sunPos.x, sunPos.y, 40, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Light vector lines toward towers
+      ctx.strokeStyle = mode === 'day' ? 'rgba(255, 235, 180, 0.25)' : 'rgba(255, 160, 60, 0.35)';
+      ctx.setLineDash([3, 5]);
+      ctx.beginPath();
+      ctx.moveTo(sunPos.x, sunPos.y);
+      ctx.lineTo(cx - 30, cy - 60);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Technical Architectural HUD Overlays
+    ctx.font = '600 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+    ctx.fillStyle = 'rgba(223, 183, 108, 0.85)';
+    ctx.textAlign = 'left';
+    ctx.fillText('ROHAN CITY DIGITAL TWIN • 12°52\'N 74°50\'E', 16, 22);
+
+    ctx.font = '400 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.fillText('STRUCTURAL GRID: 8.4m × 8.4m | ELEVATION: 22m MSL', 16, 36);
+
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#30d158';
+    ctx.fillText(`${fps} FPS`, canvas.width - 16, 22);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.fillText('HARDWARE ACCELERATED', canvas.width - 16, 36);
 
     requestAnimationFrame(draw);
-  }
-
-  function drawTower(x, y, w, h, currentMode, label) {
-    // Front Face
-    const front = ctx.createLinearGradient(x, y - h, x, y);
-    if (currentMode === 'day') {
-      front.addColorStop(0, 'rgba(56, 189, 248, 0.4)');
-      front.addColorStop(1, 'rgba(15, 23, 42, 0.85)');
-    } else if (currentMode === 'sunset') {
-      front.addColorStop(0, 'rgba(245, 158, 11, 0.5)');
-      front.addColorStop(1, 'rgba(30, 27, 75, 0.9)');
-    } else {
-      front.addColorStop(0, 'rgba(168, 85, 247, 0.4)');
-      front.addColorStop(1, 'rgba(2, 6, 23, 0.95)');
-    }
-
-    ctx.fillStyle = front;
-    ctx.strokeStyle = currentMode === 'night' ? '#38bdf8' : '#d4af37';
-    ctx.lineWidth = 1.2;
-
-    ctx.beginPath();
-    ctx.rect(x, y - h, w, h);
-    ctx.fill();
-    ctx.stroke();
-
-    // Windows / Floor Levels
-    const floors = Math.floor(h / 14);
-    for (let f = 1; f < floors; f++) {
-      const fy = y - f * 14;
-      ctx.beginPath();
-      ctx.moveTo(x + 4, fy);
-      ctx.lineTo(x + w - 4, fy);
-      ctx.strokeStyle = currentMode === 'night' ? 'rgba(243, 229, 171, 0.6)' : 'rgba(255, 255, 255, 0.2)';
-      ctx.stroke();
-    }
-
-    // Rooftop Spire & Beacon
-    ctx.beginPath();
-    ctx.moveTo(x + w / 2, y - h);
-    ctx.lineTo(x + w / 2, y - h - 18);
-    ctx.strokeStyle = '#d4af37';
-    ctx.stroke();
-
-    // Beacon blink
-    const blink = Math.sin(angle * 4) > 0;
-    if (blink) {
-      ctx.fillStyle = '#ef4444';
-      ctx.beginPath();
-      ctx.arc(x + w / 2, y - h - 18, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
   }
 
   draw();
@@ -405,9 +551,9 @@ function initMobileMenu() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 7. HRL Core™ Secret Ingredient Simulator                                    */
+/* 7. HRL International™ 19-Pillar Venture Multiplier Simulator               */
 /* -------------------------------------------------------------------------- */
-function initSecretSimulator() {
+function initVentureSimulator() {
   const portfolioRange = document.getElementById('portfolioRange');
   const portfolioVal = document.getElementById('portfolioVal');
   const gdvGainOutput = document.getElementById('gdvGainOutput');
@@ -437,7 +583,7 @@ function initSecretSimulator() {
 /* -------------------------------------------------------------------------- */
 function initVentureTabs() {
   const tabs = document.querySelectorAll('.venture-tab-btn');
-  const cards = document.querySelectorAll('.secret-pillar-card');
+  const cards = document.querySelectorAll('.venture-pillar-card, .secret-pillar-card');
 
   if (!tabs.length || !cards.length) return;
 

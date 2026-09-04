@@ -280,7 +280,7 @@
       <div>
         <div class="apple-eyebrow" style="display: flex; align-items: center; gap: 8px;">
           Master Presentation • 4K 60 FPS
-          <span class="rera-pill-apple" id="activeVoiceBadge" style="background: rgba(223, 183, 108, 0.15); border: 1px solid rgba(223, 183, 108, 0.4); color: #dfb76c; font-size: 11px; padding: 2px 8px; border-radius: 9999px;">🎙️ Daniel (British)</span>
+          <span class="rera-pill-apple" id="activeVoiceBadge" style="background: rgba(223, 183, 108, 0.12); border: 1px solid rgba(223, 183, 108, 0.35); color: #dfb76c; font-size: 11px; padding: 3px 10px; border-radius: 9999px; letter-spacing: 0.04em;">Studio Master: Daniel (UK Executive)</span>
         </div>
         <h1 class="theater-title">Civil Grandeur. <span class="apple-headline-gradient">Computational Power.</span></h1>
       </div>
@@ -297,6 +297,7 @@
 
     <!-- 16:9 Video Canvas Frame -->
     <div class="video-viewport-frame" id="playerFrame">
+      <div class="cinema-ambient-glow"></div>
       <canvas id="videoCanvas" width="1920" height="1080"></canvas>
 
       <!-- Subtitles -->
@@ -332,9 +333,18 @@
             <button class="apple-ctrl-btn" id="toggleAutoBtn" style="color: #2997ff;">Auto: ON</button>
             <button class="apple-ctrl-btn" id="toggleAudioBtn">Music: ON</button>
             <button class="apple-ctrl-btn" id="toggleVoiceBtn">Voice: ON</button>
-            <button class="apple-ctrl-btn" id="toggleNarratorBtn" style="color: #dfb76c;" title="Switch Studio Narrator Voice">🎙️ Daniel (British)</button>
+            
+            <!-- Apple Executive Studio Persona Switcher -->
+            <div class="apple-voice-switcher" id="voiceSegmentedControl" title="Select Executive Studio Persona">
+              <button class="voice-segment-btn active" data-voice="daniel">UK Studio</button>
+              <button class="voice-segment-btn" data-voice="samantha">US Studio</button>
+              <button class="voice-segment-btn" data-voice="rishi">IN Studio</button>
+            </div>
+
             <button class="apple-ctrl-btn" id="toggleCCBtn">Subtitles: ON</button>
-            <button class="apple-ctrl-btn" id="fullscreenBtn">Fullscreen</button>
+            <button class="apple-ctrl-btn" id="fullscreenBtn" title="Fullscreen">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
           </div>
         </div>
       </div>

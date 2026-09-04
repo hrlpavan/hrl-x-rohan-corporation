@@ -298,16 +298,23 @@ class MasterMotionGraphicsEngine {
     this.currentVoiceSceneIndex = sceneIndex;
   }
 
-  toggleNarrator() {
-    const list = ['daniel', 'samantha', 'rishi'];
-    const idx = list.indexOf(this.currentNarrator);
-    this.currentNarrator = list[(idx + 1) % list.length];
+  setNarrator(narratorName) {
+    if (!['daniel', 'samantha', 'rishi'].includes(narratorName)) return;
+    this.currentNarrator = narratorName;
 
     const labels = {
-      daniel: '🎙️ Daniel (British)',
-      samantha: '🎙️ Samantha (US)',
-      rishi: '🎙️ Rishi (Indian)'
+      daniel: 'Studio Master: Daniel (UK Executive)',
+      samantha: 'Studio Master: Samantha (US Keynote)',
+      rishi: 'Studio Master: Rishi (IN Executive)'
     };
+
+    document.querySelectorAll('.voice-segment-btn').forEach(btn => {
+      if (btn.getAttribute('data-voice') === narratorName) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
 
     if (this.toggleNarratorBtn) {
       this.toggleNarratorBtn.textContent = labels[this.currentNarrator];
@@ -317,10 +324,16 @@ class MasterMotionGraphicsEngine {
       badge.textContent = labels[this.currentNarrator];
     }
 
-    // Immediately stop old narrator voice and play the newly selected narrator persona
+    // Immediately switch narration to selected persona
     if (this.isPlaying && this.voiceEnabled) {
       this.speakScene(this.currentSceneIndex);
     }
+  }
+
+  toggleNarrator() {
+    const list = ['daniel', 'samantha', 'rishi'];
+    const idx = list.indexOf(this.currentNarrator);
+    this.setNarrator(list[(idx + 1) % list.length]);
   }
 
   /* -------------------------------------------------------------------------- */
@@ -343,6 +356,14 @@ class MasterMotionGraphicsEngine {
     this.fullscreenBtn = document.getElementById('fullscreenBtn');
     this.recordVideoBtn = document.getElementById('recordVideoBtn');
     this.recordingStatus = document.getElementById('recordingStatus');
+
+    // Segmented Persona Controls
+    document.querySelectorAll('.voice-segment-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.getAttribute('data-voice');
+        if (v) this.setNarrator(v);
+      });
+    });
 
     const togglePlay = () => {
       if (this.isPlaying) this.pause();

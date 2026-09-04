@@ -1336,184 +1336,279 @@ input[type="range"]::-webkit-slider-thumb:hover {
   color: #000000;
 }
 
+/* ==========================================================================
+   HRL INTERNATIONAL™ VENTURE ARCHITECTURE • VERSION 3.0 SPECIFICATION DOSSIER
+   Bespoke Architectural Engineering Matrix (Pentagram / Foster + Partners)
+   ========================================================================== */
+.venture-grid-matrix,
 .secret-grid-8 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin: 20px 0 40px 0;
+  gap: 28px;
+  margin: 28px 0 48px 0;
 }
 
+.venture-pillar-card.d-none,
 .secret-pillar-card.d-none {
   display: none !important;
 }
 
+.venture-pillar-card,
 .secret-pillar-card {
-  background: var(--apple-card);
+  background: #111113;
   border-radius: var(--apple-radius-card);
-  padding: 36px 32px;
-  box-shadow: inset 0 0 0 1px var(--apple-border-subtle);
+  padding: 38px 34px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 36px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: var(--apple-transition);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
+.venture-pillar-card::before,
 .secret-pillar-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
-  opacity: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(223, 183, 108, 0.5) 50%, transparent 100%);
+  opacity: 0.4;
   transition: opacity 0.3s ease;
 }
 
+.venture-pillar-card:hover,
 .secret-pillar-card:hover {
-  background: var(--apple-card-hover);
-  box-shadow: inset 0 0 0 1px var(--gold-border-subtle), 0 12px 40px rgba(0, 0, 0, 0.6);
-  transform: translateY(-2px);
+  background: #161619;
+  box-shadow: inset 0 0 0 1px rgba(223, 183, 108, 0.35), 0 24px 60px rgba(0, 0, 0, 0.75);
+  transform: translateY(-3px);
 }
 
+.venture-pillar-card:hover::before,
 .secret-pillar-card:hover::before {
   opacity: 1;
 }
 
+.venture-pillar-header,
 .secret-pillar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
+.venture-pillar-num,
 .secret-pillar-num {
+  font-family: var(--apple-font-mono);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   color: var(--gold-primary);
   text-transform: uppercase;
 }
 
+.venture-pillar-badge,
 .secret-pillar-badge {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  padding: 4px 10px;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
   border-radius: var(--apple-radius-pill);
-  background: var(--gold-badge-bg);
+  background: rgba(223, 183, 108, 0.08);
   color: var(--gold-champagne);
-  border: 1px solid var(--gold-border-subtle);
+  border: 1px solid rgba(223, 183, 108, 0.22);
+  text-transform: uppercase;
 }
 
+.venture-pillar-title,
 .secret-pillar-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
   color: #ffffff;
-  margin-bottom: 12px;
-  line-height: 1.25;
+  margin-bottom: 14px;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
 }
 
+/* Authentic Architectural Friction & Operating Protocols */
+.venture-friction-strip,
 .secret-blindspot-box {
-  background: rgba(255, 69, 58, 0.08);
-  border-left: 3px solid #ff453a;
-  border-radius: 4px;
-  padding: 10px 14px;
-  margin: 12px 0;
-  font-size: 13px;
-  color: #ff9f97;
-  line-height: 1.45;
+  border-left: 2px solid rgba(223, 183, 108, 0.6);
+  padding: 10px 16px;
+  margin: 14px 0 18px 0;
+  background: rgba(223, 183, 108, 0.035);
+  border-radius: 0 8px 8px 0;
+  box-shadow: inset 0 0 0 1px rgba(223, 183, 108, 0.06);
 }
 
+.venture-friction-label,
 .secret-blindspot-label {
-  font-weight: 600;
+  font-family: var(--apple-font-mono);
+  font-size: 9px;
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.14em;
+  color: var(--gold-primary);
+  margin-bottom: 4px;
   display: block;
-  margin-bottom: 3px;
-  color: #ff453a;
 }
 
+.venture-friction-text {
+  font-size: 13px;
+  color: #a1a1a6;
+  line-height: 1.5;
+}
+
+.venture-solution-desc,
 .secret-solution-desc {
   font-size: 14px;
-  color: #d2d2d7;
-  line-height: 1.55;
-  margin-top: 10px;
+  color: #e5e5ea;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
+.venture-spec-matrix,
 .secret-capabilities-list {
   list-style: none;
   margin: 16px 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
+.venture-spec-matrix li,
 .secret-capabilities-list li {
   font-size: 13px;
-  color: #a1a1a6;
+  color: #8e8e93;
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  line-height: 1.4;
+  align-items: baseline;
+  gap: 10px;
+  line-height: 1.45;
 }
 
+.venture-spec-matrix li::before,
 .secret-capabilities-list li::before {
-  content: '✓';
+  content: '—';
   color: var(--gold-primary);
   font-weight: 700;
-  font-size: 12px;
+  flex-shrink: 0;
 }
 
+.venture-metric-tray,
 .secret-metric-tray {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding-top: 18px;
-  margin-top: 18px;
+  align-items: baseline;
+  padding-top: 20px;
+  margin-top: 22px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.venture-metric-label,
 .secret-metric-label {
-  font-size: 11px;
+  font-family: var(--apple-font-mono);
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   color: var(--apple-text-secondary);
 }
 
+.venture-metric-val,
 .secret-metric-val {
-  font-size: 15px;
+  font-family: var(--apple-font);
+  font-size: 17px;
   font-weight: 700;
-  color: var(--gold-primary);
+  letter-spacing: -0.02em;
+  background: var(--gold-text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Secret Developer GDV Impact Box */
+/* Venture Developer Multiplier Simulator */
+.venture-impact-simulator,
 .secret-impact-simulator {
-  background: linear-gradient(180deg, #161617 0%, #0d0d0e 100%);
+  background: linear-gradient(180deg, #161618 0%, #0d0d0f 100%);
   border-radius: var(--apple-radius-bento);
-  border: 1px solid var(--gold-border-subtle);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(223, 183, 108, 0.1);
-  padding: 44px;
-  margin-top: 40px;
+  border: 1px solid rgba(223, 183, 108, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 48px;
+  margin-top: 48px;
 }
 
+.venture-sim-grid,
 .secret-sim-grid {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 40px;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 48px;
   align-items: center;
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-  .secret-grid-8 {
-    grid-template-columns: 1fr;
-  }
-  .secret-sim-grid {
-    grid-template-columns: 1fr;
-  }
+/* Version 3.0 Apple TV / Keynote Theater Player Controls */
+.apple-voice-switcher {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(223, 183, 108, 0.25);
+  border-radius: var(--apple-radius-pill);
+  padding: 2px;
+  gap: 2px;
+}
+
+.voice-segment-btn {
+  background: transparent;
+  border: none;
+  color: #86868b;
+  font-family: var(--apple-font);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: var(--apple-radius-pill);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  white-space: nowrap;
+}
+
+.voice-segment-btn:hover {
+  color: #f5f5f7;
+}
+
+.voice-segment-btn.active {
+  background: rgba(223, 183, 108, 0.22);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.cinema-ambient-glow {
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 110%;
+  height: 120%;
+  background: radial-gradient(circle at 50% 50%, rgba(223, 183, 108, 0.08) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+/* Technical Digital Twin HUD Overlays */
+.hud-meta-badge {
+  font-family: var(--apple-font-mono);
+  font-size: 10px;
+  color: var(--gold-primary);
+  letter-spacing: 0.08em;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(223, 183, 108, 0.25);
+  display: inline-block;
+}
   .bento-card.col-8, .bento-card.col-4, .bento-card.col-6 {
     grid-column: span 12;
   }
