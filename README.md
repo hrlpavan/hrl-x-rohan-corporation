@@ -48,6 +48,7 @@ hrl-x-rohan-corporation/
 │   └── workflows/
 │       └── deploy.yml            # Automated GitHub Pages CI/CD workflow
 ├── docs/
+│   ├── CLIENT_EXECUTIVE_PITCH_AND_VIDEO_GUIDE.md # 15-minute winning client presentation playbook
 │   ├── EQUIPMENT_SPECIFICATION.md # Hardware inventory, drones & edge IoT specs
 │   ├── PARTNERSHIP_CHARTER.md   # Executive vision, pillars & mutual charter
 │   ├── PROJECT_EXPLAINER_VIDEO_SCRIPT.md # Master timecoded video script & storyboard
