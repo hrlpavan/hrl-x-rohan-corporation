@@ -40,6 +40,7 @@ hrl-x-rohan-corporation/
 ├── docs/
 │   ├── EQUIPMENT_SPECIFICATION.md # Hardware inventory, drones & edge IoT specs
 │   ├── PARTNERSHIP_CHARTER.md   # Executive vision, pillars & mutual charter
+│   ├── PROJECT_STARTUP_BLUEPRINT.md # 16-week operational rollout & 7-day checklist
 │   ├── PROJECT_TOTAL_EXPENSE.md # Comprehensive financial schedule & budget
 │   ├── PROPTECH_ARCHITECTURE.md # System blueprint, digital twins & edge IoT
 │   └── STATUTORY_COMPLIANCE.md  # RERA standards, DPDP Act 2023 & legal index
