@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVentureTabs();
   initProjectFinanceVisualizers();
   initPnlProfile();
+  initStockMarketTerminal();
 });
 
 /* -------------------------------------------------------------------------- */
@@ -1983,4 +1984,955 @@ function initPnlProfile() {
 
   // Initial draw
   update();
+}
+
+/* -------------------------------------------------------------------------- */
+/* 11. Universal Stock Market & Global Capital Terminal System                 */
+/* -------------------------------------------------------------------------- */
+function initStockMarketTerminal() {
+  const globalTickerTrack = document.getElementById('globalTickerTrack');
+  const terminalSection = document.getElementById('stockmarket');
+
+  if (!globalTickerTrack && !terminalSection) return;
+
+  // Universal Market Instruments Data Dictionary
+  const universalMarketData = {
+    indices: [
+      {
+        id: 'sp500',
+        symbol: 'S&P 500',
+        tickerTag: '^GSPC',
+        name: 'S&P 500 Index',
+        market: 'US Large-Cap Equity Benchmark • NYSE / CBOE',
+        currency: 'USD',
+        price: 5983.25,
+        change: 28.40,
+        changePercent: 0.48,
+        dayLow: 5958.10,
+        dayHigh: 5992.40,
+        week52Low: 4953.56,
+        week52High: 6025.10,
+        vol: '$42.8 Billion',
+        ratioLbl: 'P/E Ratio',
+        ratioVal: '26.4x',
+        volatility: 1.25,
+        insight: 'Universal institutional equity benchmark. Elevated US forward multiples (26.4x) are accelerating institutional capital rotation into high-yield tangible Indian real assets.'
+      },
+      {
+        id: 'nasdaq',
+        symbol: 'NASDAQ 100',
+        tickerTag: '^NDX',
+        name: 'NASDAQ 100',
+        market: 'Global Technology & AI Infrastructure • NASDAQ',
+        currency: 'USD',
+        price: 21124.60,
+        change: 138.20,
+        changePercent: 0.66,
+        dayLow: 20980.50,
+        dayHigh: 21185.00,
+        week52Low: 16973.10,
+        week52High: 21340.50,
+        vol: '$68.4 Billion',
+        ratioLbl: 'P/E Ratio',
+        ratioVal: '31.2x',
+        volatility: 4.50,
+        insight: 'Computational AI tech benchmark. Valuation expansion is prompting tech founders and diaspora leaders to anchor liquid gains in prime freehold residential and commercial estates.'
+      },
+      {
+        id: 'nifty50',
+        symbol: 'NIFTY 50',
+        tickerTag: 'NIFTY 50',
+        name: 'NSE NIFTY 50',
+        market: 'National Stock Exchange of India • NSE Mumbai',
+        currency: 'INR',
+        price: 24852.15,
+        change: 94.30,
+        changePercent: 0.38,
+        dayLow: 24740.10,
+        dayHigh: 24895.50,
+        week52Low: 21281.45,
+        week52High: 26277.35,
+        vol: '₹36,420 Cr',
+        ratioLbl: 'P/E Ratio',
+        ratioVal: '22.8x',
+        volatility: 3.80,
+        insight: 'Premier Indian sovereign index. Steady macro GDP growth (7.2%) underpins robust property absorption across Tier-1/2 coastal growth nodes.'
+      },
+      {
+        id: 'sensex',
+        symbol: 'BSE SENSEX',
+        tickerTag: 'SENSEX',
+        name: 'BSE SENSEX 30',
+        market: 'Bombay Stock Exchange • BSE Mumbai',
+        currency: 'INR',
+        price: 81332.72,
+        change: 331.45,
+        changePercent: 0.41,
+        dayLow: 81010.20,
+        dayHigh: 81480.00,
+        week52Low: 70001.20,
+        week52High: 85978.25,
+        vol: '₹12,850 Cr',
+        ratioLbl: 'P/E Ratio',
+        ratioVal: '23.1x',
+        volatility: 12.00,
+        insight: '30 premier blue-chip conglomerates reflecting strong corporate balance sheets and growing institutional appetite for co-developed infrastructure assets.'
+      },
+      {
+        id: 'dfmgi',
+        symbol: 'DFM GENERAL',
+        tickerTag: 'DFMGI',
+        name: 'Dubai Financial Market',
+        market: 'Dubai Financial Market • UAE / GCC Capital Center',
+        currency: 'AED',
+        price: 4720.18,
+        change: 43.15,
+        changePercent: 0.92,
+        dayLow: 4682.40,
+        dayHigh: 4735.00,
+        week52Low: 3980.20,
+        week52High: 4785.40,
+        vol: 'AED 780 Million',
+        ratioLbl: 'P/E Ratio',
+        ratioVal: '14.2x',
+        volatility: 0.85,
+        insight: 'Gulf diaspora financial capital center. Robust GCC liquidity drives 65%+ of Rohan Corporation luxury residential sales via direct AD-Cat 1 escrow pipelines.'
+      },
+      {
+        id: 'ftse',
+        symbol: 'FTSE 100',
+        tickerTag: '^FTSE',
+        name: 'FTSE 100 Index',
+        market: 'London Stock Exchange • LSE London',
+        currency: 'GBP',
+        price: 8379.64,
+        change: 18.45,
+        changePercent: 0.22,
+        dayLow: 8345.10,
+        dayHigh: 8392.20,
+        week52Low: 7420.10,
+        week52High: 8485.20,
+        vol: '£14.2 Billion',
+        ratioLbl: 'P/E Ratio',
+        ratioVal: '13.8x',
+        volatility: 1.10,
+        insight: 'UK and European multinational barometer. Favorable GBP/INR remittance parity (₹109.15) provides UK diaspora investors with outsized purchasing power.'
+      },
+      {
+        id: 'nikkei',
+        symbol: 'NIKKEI 225',
+        tickerTag: '^N225',
+        name: 'Nikkei 225',
+        market: 'Tokyo Stock Exchange • TSE Tokyo',
+        currency: 'JPY',
+        price: 38720.50,
+        change: -58.20,
+        changePercent: -0.15,
+        dayLow: 38550.00,
+        dayHigh: 38890.00,
+        week52Low: 35247.80,
+        week52High: 42426.77,
+        vol: '¥3.8 Trillion',
+        ratioLbl: 'P/E Ratio',
+        ratioVal: '16.4x',
+        volatility: 8.50,
+        insight: 'Asia-Pacific industrial index. Global capital rotation into non-correlated emerging market real assets offers portfolio resilience against Pacific currency fluctuations.'
+      }
+    ],
+    reits: [
+      {
+        id: 'niftyrealty',
+        symbol: 'NIFTY REALTY',
+        tickerTag: 'NIFTY_REALTY',
+        name: 'NIFTY Realty Index',
+        market: 'Indian Listed Real Estate Developers • NSE',
+        currency: 'INR',
+        price: 1048.90,
+        change: 18.95,
+        changePercent: 1.84,
+        dayLow: 1028.40,
+        dayHigh: 1054.20,
+        week52Low: 740.10,
+        week52High: 1120.40,
+        vol: '₹4,820 Cr',
+        ratioLbl: '1Y Capital Gain',
+        ratioVal: '+24.5%',
+        volatility: 0.45,
+        insight: 'Indian real estate developers benchmark. Outperforming broader indices as structural urban demand and institutional balance sheets drive historic multi-year expansion.'
+      },
+      {
+        id: 'vnq',
+        symbol: 'VANGUARD REIT',
+        tickerTag: 'VNQ',
+        name: 'Vanguard Real Estate ETF',
+        market: 'Universal Commercial & Residential REITs • NYSE Arca',
+        currency: 'USD',
+        price: 92.14,
+        change: 1.02,
+        changePercent: 1.12,
+        dayLow: 91.05,
+        dayHigh: 92.45,
+        week52Low: 78.20,
+        week52High: 98.45,
+        vol: '$1.42 Billion',
+        ratioLbl: 'Div Yield',
+        ratioVal: '4.12%',
+        volatility: 0.08,
+        insight: 'Universal benchmark for REIT valuations. Coastal Indian physical rental yields (5.8%–6.4% at Rohan City) exceed US commercial REIT distribution averages by over 180 bps.'
+      },
+      {
+        id: 'embassy',
+        symbol: 'EMBASSY REIT',
+        tickerTag: 'EMBASSY',
+        name: 'Embassy Office Parks REIT',
+        market: 'Grade-A Institutional Tech Office Parks • NSE',
+        currency: 'INR',
+        price: 388.50,
+        change: 5.35,
+        changePercent: 1.40,
+        dayLow: 382.10,
+        dayHigh: 390.00,
+        week52Low: 310.00,
+        week52High: 412.00,
+        vol: '₹95 Cr',
+        ratioLbl: 'Distribution Yield',
+        ratioVal: '7.20%',
+        volatility: 0.25,
+        insight: 'Institutional tech park REIT benchmark validating high Grade-A office demand across Karnataka, supporting Rohan Square commercial lease values.'
+      },
+      {
+        id: 'brookfield',
+        symbol: 'BROOKFIELD REIT',
+        tickerTag: 'BIRET',
+        name: 'Brookfield India Real Estate Trust',
+        market: 'Institutional Real Estate Trust • NSE',
+        currency: 'INR',
+        price: 274.20,
+        change: 2.45,
+        changePercent: 0.90,
+        dayLow: 271.00,
+        dayHigh: 275.80,
+        week52Low: 235.00,
+        week52High: 290.00,
+        vol: '₹42 Cr',
+        ratioLbl: 'Distribution Yield',
+        ratioVal: '7.85%',
+        volatility: 0.20,
+        insight: 'High-yielding institutional asset syndicate demonstrating strong investor appetite for institutional fractional real estate syndications.'
+      }
+    ],
+    forex: [
+      {
+        id: 'usdinr',
+        symbol: 'USD / INR',
+        tickerTag: 'USDINR',
+        name: 'USD to Indian Rupee',
+        market: 'Interbank Forex Spot Rate • Sovereign FX',
+        currency: 'INR',
+        price: 86.425,
+        change: -0.035,
+        changePercent: -0.04,
+        dayLow: 86.380,
+        dayHigh: 86.490,
+        week52Low: 82.800,
+        week52High: 87.100,
+        vol: 'RBI Fix: ₹86.41',
+        ratioLbl: 'Hedging Buffer',
+        ratioVal: '72h Lock',
+        volatility: 0.012,
+        insight: 'Universal reserve rate. HRL Pillar 01 autonomous 72-hour spot locking eliminates volatility friction for US diaspora remittances.'
+      },
+      {
+        id: 'aedinr',
+        symbol: 'AED / INR',
+        tickerTag: 'AEDINR',
+        name: 'UAE Dirham to Indian Rupee',
+        market: 'UAE Central Bank Fixed Peg • GCC Corridor',
+        currency: 'INR',
+        price: 23.532,
+        change: -0.005,
+        changePercent: -0.02,
+        dayLow: 23.510,
+        dayHigh: 23.550,
+        week52Low: 22.540,
+        week52High: 23.720,
+        vol: 'High Liquidity',
+        ratioLbl: 'Allotment Speed',
+        ratioVal: 'Sub-90s',
+        volatility: 0.004,
+        insight: 'Primary diaspora liquidity artery. Seamless AD-Cat 1 direct bank transfer secures prime Mangaluru units with zero intermediary forex shaving.'
+      },
+      {
+        id: 'sarinr',
+        symbol: 'SAR / INR',
+        tickerTag: 'SARINR',
+        name: 'Saudi Riyal to Indian Rupee',
+        market: 'SAMA Central Bank Peg • Gulf Corridor',
+        currency: 'INR',
+        price: 23.041,
+        change: -0.002,
+        changePercent: -0.01,
+        dayLow: 23.020,
+        dayHigh: 23.060,
+        week52Low: 22.050,
+        week52High: 23.210,
+        vol: 'High Liquidity',
+        ratioLbl: 'KYC Process',
+        ratioVal: 'Automated',
+        volatility: 0.004,
+        insight: 'Key Saudi Arabian diaspora corridor enabling institutional wealth preservation in freehold coastal property.'
+      },
+      {
+        id: 'gbpinr',
+        symbol: 'GBP / INR',
+        tickerTag: 'GBPINR',
+        name: 'British Pound to Indian Rupee',
+        market: 'London Interbank FX Rate • European Desk',
+        currency: 'INR',
+        price: 109.150,
+        change: 0.200,
+        changePercent: 0.18,
+        dayLow: 108.800,
+        dayHigh: 109.400,
+        week52Low: 103.400,
+        week52High: 111.800,
+        vol: 'High Flow',
+        ratioLbl: 'Yield Conversion',
+        ratioVal: '+18.2% 2Y',
+        volatility: 0.025,
+        insight: 'UK diaspora real estate wire with multi-year high conversion leverage on luxury sea-facing residences.'
+      },
+      {
+        id: 'eurinr',
+        symbol: 'EUR / INR',
+        tickerTag: 'EURINR',
+        name: 'Euro to Indian Rupee',
+        market: 'European Central Bank Reference Rate',
+        currency: 'INR',
+        price: 90.280,
+        change: 0.110,
+        changePercent: 0.12,
+        dayLow: 90.050,
+        dayHigh: 90.450,
+        week52Low: 88.100,
+        week52High: 93.400,
+        vol: 'Active Cross',
+        ratioLbl: 'FEMA Compliance',
+        ratioVal: 'Form A2 Auto',
+        volatility: 0.020,
+        insight: 'Direct Euro gateway clearing NRI investments without manual physical bank branch submissions.'
+      }
+    ],
+    commodities: [
+      {
+        id: 'gold',
+        symbol: 'GOLD (XAU)',
+        tickerTag: 'XAU/USD',
+        name: 'Gold Spot Bullion',
+        market: 'Universal Real Asset Hedge • COMEX / LBMA',
+        currency: 'USD/oz',
+        price: 2912.40,
+        change: 20.40,
+        changePercent: 0.71,
+        dayLow: 2888.00,
+        dayHigh: 2920.50,
+        week52Low: 2020.00,
+        week52High: 2940.00,
+        vol: '$28.4 Billion',
+        ratioLbl: 'Asset Class',
+        ratioVal: 'Store of Value',
+        volatility: 1.50,
+        insight: 'Gold hitting all-time highs reinforces investor demand to rotate liquid precious metals into revenue-generating freehold prime real estate.'
+      },
+      {
+        id: 'brent',
+        symbol: 'BRENT CRUDE',
+        tickerTag: 'BRENT',
+        name: 'Brent Crude Oil',
+        market: 'Global Energy & Logistics Benchmark • ICE London',
+        currency: 'USD/bbl',
+        price: 74.20,
+        change: -0.60,
+        changePercent: -0.80,
+        dayLow: 73.60,
+        dayHigh: 74.90,
+        week52Low: 68.50,
+        week52High: 92.40,
+        vol: '1.2M Contracts',
+        ratioLbl: 'EPC Impact',
+        ratioVal: 'Cost Neutral',
+        volatility: 0.12,
+        insight: 'Stabilized crude oil prices ease supply chain costs and concrete clinker logistics across coastal Karnataka construction sites.'
+      },
+      {
+        id: 'us10y',
+        symbol: 'US 10-YR YIELD',
+        tickerTag: 'US10Y',
+        name: 'US 10-Year Treasury Yield',
+        market: 'Universal Sovereign Risk-Free Benchmark • US Treasury',
+        currency: '%',
+        price: 4.282,
+        change: -0.032,
+        changePercent: -0.74,
+        dayLow: 4.260,
+        dayHigh: 4.315,
+        week52Low: 3.620,
+        week52High: 4.740,
+        vol: 'Benchmark',
+        ratioLbl: 'Cap Rate Spread',
+        ratioVal: '+210 bps',
+        volatility: 0.005,
+        insight: 'Global cost of capital barometer. The spread between Rohan commercial yields (6.4%) and US Treasuries remains attractive for international funds.'
+      },
+      {
+        id: 'in10y',
+        symbol: 'INDIA 10-YR G-SEC',
+        tickerTag: 'IN10Y',
+        name: 'India 10-Year G-Sec Benchmark',
+        market: 'Sovereign Debt Hurdle Rate • RBI NDS-OM',
+        currency: '%',
+        price: 6.745,
+        change: -0.018,
+        changePercent: -0.27,
+        dayLow: 6.730,
+        dayHigh: 6.765,
+        week52Low: 6.650,
+        week52High: 7.220,
+        vol: '₹4,200 Cr',
+        ratioLbl: 'Mortgage Base',
+        ratioVal: 'Repo Linked',
+        volatility: 0.003,
+        insight: 'Softening Indian sovereign bond yields pave the way for home loan interest rate reductions, spurring residential buyer liquidity.'
+      }
+    ]
+  };
+
+  function getUniverseOf(id) {
+    for (const [cat, items] of Object.entries(universalMarketData)) {
+      if (items.some(it => it.id === id)) return cat;
+    }
+    return 'indices';
+  }
+
+  function formatMarketPrice(price, currency) {
+    if (currency === '%') return `${price.toFixed(3)}%`;
+    if (currency === 'INR') {
+      return price > 1000 ? `₹ ${price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : `₹ ${price.toFixed(2)}`;
+    }
+    if (currency === 'AED') return `AED ${price.toFixed(2)}`;
+    if (currency === 'GBP') return `£ ${price.toFixed(2)}`;
+    if (currency === 'JPY') return `¥ ${price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    if (currency === 'USD/oz' || currency === 'USD/bbl') return `$ ${price.toFixed(2)}`;
+    return `$ ${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  // Populate Global Running Ticker Tape
+  function populateTickerTape() {
+    if (!globalTickerTrack) return;
+    const allItems = [
+      ...universalMarketData.indices,
+      ...universalMarketData.reits,
+      ...universalMarketData.forex,
+      ...universalMarketData.commodities
+    ];
+
+    function createTickerHtml(list) {
+      return list.map(item => {
+        const isUp = item.change >= 0;
+        const arrow = isUp ? '▲' : '▼';
+        const deltaClass = isUp ? 'delta-up' : 'delta-down';
+        const formattedPrice = formatMarketPrice(item.price, item.currency);
+        const sign = isUp ? '+' : '';
+        return `
+          <a href="#stockmarket" class="ticker-item" data-id="${item.id}" data-universe="${getUniverseOf(item.id)}">
+            <span class="ticker-symbol">${item.symbol}</span>
+            <span class="ticker-price" id="tick-p-${item.id}">${formattedPrice}</span>
+            <span class="ticker-delta ${deltaClass}" id="tick-d-${item.id}">${sign}${item.changePercent.toFixed(2)}% ${arrow}</span>
+          </a>
+        `;
+      }).join('');
+    }
+
+    globalTickerTrack.innerHTML = createTickerHtml(allItems) + createTickerHtml(allItems);
+
+    globalTickerTrack.querySelectorAll('.ticker-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const u = el.getAttribute('data-universe');
+        const id = el.getAttribute('data-id');
+        if (u && id) selectAsset(u, id);
+      });
+    });
+  }
+
+  // State
+  let activeUniverse = 'indices';
+  let activeAssetId = 'sp500';
+  let activeTimeframe = '1M';
+  let hoveredPoint = null;
+
+  // DOM Elements for Terminal
+  const tabsContainer = document.getElementById('stockUniverseTabs');
+  const activeAssetName = document.getElementById('activeAssetName');
+  const activeAssetSymbol = document.getElementById('activeAssetSymbol');
+  const activeAssetMarket = document.getElementById('activeAssetMarket');
+  const activeAssetPrice = document.getElementById('activeAssetPrice');
+  const activeAssetDelta = document.getElementById('activeAssetDelta');
+  const metricDayRange = document.getElementById('metricDayRange');
+  const metric52Range = document.getElementById('metric52Range');
+  const metricVolLbl = document.getElementById('metricVolLbl');
+  const metricVolVal = document.getElementById('metricVolVal');
+  const metricValLbl = document.getElementById('metricValLbl');
+  const metricValVal = document.getElementById('metricValVal');
+  const stockWatchlistTbody = document.getElementById('stockWatchlistTbody');
+  const watchlistCategoryTitle = document.getElementById('watchlistCategoryTitle');
+  const watchlistCount = document.getElementById('watchlistCount');
+  const stockMacroInsight = document.getElementById('stockMacroInsight');
+  const timeframeButtons = document.getElementById('timeframeButtons');
+  const chartCanvas = document.getElementById('stockMarketCanvas');
+  const chartHoverPrice = document.getElementById('chartHoverPrice');
+
+  function getActiveAsset() {
+    const list = universalMarketData[activeUniverse] || [];
+    return list.find(a => a.id === activeAssetId) || list[0] || universalMarketData.indices[0];
+  }
+
+  // Generate historical curve data deterministically
+  function generateTimeSeries(asset, timeframe) {
+    const counts = { '1D': 24, '1W': 14, '1M': 30, '1Y': 24, '5Y': 30 };
+    const n = counts[timeframe] || 30;
+    const points = [];
+    const current = asset.price;
+    const changePct = asset.changePercent / 100;
+    
+    // Determine start price
+    let startPrice = current / (1 + changePct);
+    if (timeframe === '1W') startPrice = current * (1 - changePct * 1.8);
+    if (timeframe === '1M') startPrice = current * (1 - changePct * 3.2);
+    if (timeframe === '1Y') startPrice = asset.week52Low + (current - asset.week52Low) * 0.2;
+    if (timeframe === '5Y') startPrice = asset.week52Low * 0.72;
+
+    const priceDiff = current - startPrice;
+    
+    for (let i = 0; i < n; i++) {
+      const progress = i / (n - 1);
+      // Realistic financial noise walk
+      const noise = Math.sin(i * 1.7) * (asset.volatility * (timeframe === '1D' ? 0.8 : 3.5));
+      const trend = startPrice + priceDiff * Math.pow(progress, 0.95);
+      const val = i === n - 1 ? current : Math.max(0.01, trend + noise);
+      
+      let label = '';
+      if (timeframe === '1D') label = `${String(Math.floor(i)).padStart(2, '0')}:00`;
+      else if (timeframe === '1W') label = `Day ${i + 1}`;
+      else if (timeframe === '1M') label = `D${i + 1}`;
+      else if (timeframe === '1Y') label = `M${Math.floor(i / 2) + 1}`;
+      else label = `Yr ${Math.floor(i / 6) + 1}`;
+
+      points.push({ index: i, val: val, label: label });
+    }
+    return points;
+  }
+
+  function renderActiveAsset() {
+    const asset = getActiveAsset();
+    if (!asset) return;
+
+    if (activeAssetName) {
+      activeAssetName.innerHTML = `
+        ${asset.name}
+        <span class="stock-active-tag" id="activeAssetSymbol">${asset.tickerTag}</span>
+      `;
+    }
+    if (activeAssetMarket) activeAssetMarket.textContent = asset.market;
+    if (activeAssetPrice) activeAssetPrice.textContent = formatMarketPrice(asset.price, asset.currency);
+    
+    if (activeAssetDelta) {
+      const isUp = asset.change >= 0;
+      const sign = isUp ? '+' : '';
+      const arrow = isUp ? '▲' : '▼';
+      activeAssetDelta.className = `stock-delta-hero ${isUp ? 'delta-up' : 'delta-down'}`;
+      activeAssetDelta.textContent = `${sign}${formatMarketPrice(asset.change, asset.currency)} (${sign}${asset.changePercent.toFixed(2)}%) ${arrow}`;
+    }
+
+    if (metricDayRange) metricDayRange.textContent = `${formatMarketPrice(asset.dayLow, asset.currency)} - ${formatMarketPrice(asset.dayHigh, asset.currency)}`;
+    if (metric52Range) metric52Range.textContent = `${formatMarketPrice(asset.week52Low, asset.currency)} - ${formatMarketPrice(asset.week52High, asset.currency)}`;
+    if (metricVolLbl) metricVolLbl.textContent = asset.currency === 'INR' || asset.currency === '%' ? 'Market Volume' : 'Trading Volume';
+    if (metricVolVal) metricVolVal.textContent = asset.vol;
+    if (metricValLbl) metricValLbl.textContent = asset.ratioLbl;
+    if (metricValVal) metricValVal.textContent = asset.ratioVal;
+
+    if (stockMacroInsight) {
+      stockMacroInsight.innerHTML = `<strong>Macro Capital Moat:</strong> ${asset.insight}`;
+    }
+
+    drawChart();
+  }
+
+  function renderWatchlist() {
+    if (!stockWatchlistTbody) return;
+    const list = universalMarketData[activeUniverse] || [];
+
+    const categoryTitles = {
+      indices: 'Universal Equity Indices',
+      reits: 'Global REITs & PropTech Pool',
+      forex: 'Universal Diaspora Forex Crosses',
+      commodities: 'Commodities & Sovereign Yields'
+    };
+
+    if (watchlistCategoryTitle) watchlistCategoryTitle.textContent = categoryTitles[activeUniverse] || 'Universal Instruments';
+    if (watchlistCount) watchlistCount.textContent = `${list.length} Instruments`;
+
+    stockWatchlistTbody.innerHTML = list.map(item => {
+      const isUp = item.change >= 0;
+      const sign = isUp ? '+' : '';
+      const arrow = isUp ? '▲' : '▼';
+      const deltaClass = isUp ? 'delta-up' : 'delta-down';
+      const isActive = item.id === activeAssetId ? 'class="active"' : '';
+      return `
+        <tr ${isActive} data-id="${item.id}" id="row-${item.id}">
+          <td>
+            <div class="stock-row-symbol">
+              <span>${item.symbol}</span>
+              <span class="stock-row-subname">${item.name}</span>
+            </div>
+          </td>
+          <td class="stock-row-price" id="row-p-${item.id}">${formatMarketPrice(item.price, item.currency)}</td>
+          <td class="stock-row-delta">
+            <span class="ticker-delta ${deltaClass}" id="row-d-${item.id}">${sign}${item.changePercent.toFixed(2)}% ${arrow}</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    stockWatchlistTbody.querySelectorAll('tr').forEach(tr => {
+      tr.addEventListener('click', () => {
+        const id = tr.getAttribute('data-id');
+        selectAsset(activeUniverse, id);
+      });
+    });
+  }
+
+  function selectAsset(universe, id) {
+    activeUniverse = universe;
+    activeAssetId = id;
+
+    if (tabsContainer) {
+      tabsContainer.querySelectorAll('.stock-tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-universe') === universe) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+    }
+
+    renderWatchlist();
+    renderActiveAsset();
+  }
+
+  function drawChart() {
+    if (!chartCanvas) return;
+    const dpi = setupCanvasDPI(chartCanvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const asset = getActiveAsset();
+    const data = generateTimeSeries(asset, activeTimeframe);
+    if (!data.length) return;
+
+    const padLeft = 14;
+    const padRight = 54;
+    const padTop = 18;
+    const padBottom = 26;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    const values = data.map(d => d.val);
+    const minVal = Math.min(...values) * 0.998;
+    const maxVal = Math.max(...values) * 1.002;
+    const range = maxVal - minVal || 1;
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    for (let i = 0; i <= 3; i++) {
+      const y = padTop + (plotH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    const isPositive = asset.change >= 0;
+    const strokeColor = isPositive ? '#30d158' : '#ff453a';
+
+    // Area Gradient
+    const gradArea = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+    if (isPositive) {
+      gradArea.addColorStop(0, 'rgba(48, 209, 88, 0.26)');
+      gradArea.addColorStop(1, 'rgba(48, 209, 88, 0.00)');
+    } else {
+      gradArea.addColorStop(0, 'rgba(255, 69, 58, 0.26)');
+      gradArea.addColorStop(1, 'rgba(255, 69, 58, 0.00)');
+    }
+
+    // Path
+    ctx.beginPath();
+    ctx.moveTo(padLeft, padTop + plotH);
+    data.forEach((p, idx) => {
+      const x = padLeft + (idx / (data.length - 1)) * plotW;
+      const y = padTop + plotH - ((p.val - minVal) / range) * plotH;
+      ctx.lineTo(x, y);
+    });
+    ctx.lineTo(padLeft + plotW, padTop + plotH);
+    ctx.closePath();
+    ctx.fillStyle = gradArea;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    data.forEach((p, idx) => {
+      const x = padLeft + (idx / (data.length - 1)) * plotW;
+      const y = padTop + plotH - ((p.val - minVal) / range) * plotH;
+      if (idx === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+
+    // End node
+    const lastX = padLeft + plotW;
+    const lastY = padTop + plotH - ((data[data.length - 1].val - minVal) / range) * plotH;
+    ctx.beginPath();
+    ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+    ctx.fillStyle = strokeColor;
+    ctx.fill();
+
+    // Crosshair hover inspection
+    if (hoveredPoint !== null && hoveredPoint >= 0 && hoveredPoint < data.length) {
+      const hp = data[hoveredPoint];
+      const hx = padLeft + (hoveredPoint / (data.length - 1)) * plotW;
+      const hy = padTop + plotH - ((hp.val - minVal) / range) * plotH;
+
+      ctx.strokeStyle = 'rgba(223, 183, 108, 0.6)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(hx, padTop);
+      ctx.lineTo(hx, padTop + plotH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.beginPath();
+      ctx.arc(hx, hy, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      if (chartHoverPrice) {
+        chartHoverPrice.innerHTML = `<span style="color: #ffffff; font-weight: 600;">${hp.label}</span> • <strong style="color: var(--gold-champagne);">${formatMarketPrice(hp.val, asset.currency)}</strong>`;
+      }
+    }
+
+    // Y labels (right)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.font = '500 9px -apple-system, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(formatMarketPrice(maxVal, asset.currency), width - padRight + 6, padTop + 8);
+    ctx.fillText(formatMarketPrice(minVal + range / 2, asset.currency), width - padRight + 6, padTop + plotH / 2 + 3);
+    ctx.fillText(formatMarketPrice(minVal, asset.currency), width - padRight + 6, padTop + plotH);
+
+    // X labels (bottom)
+    ctx.textAlign = 'center';
+    ctx.fillText(data[0].label, padLeft + 8, height - 8);
+    ctx.fillText(data[Math.floor(data.length / 2)].label, padLeft + plotW / 2, height - 8);
+    ctx.fillText(data[data.length - 1].label, padLeft + plotW - 12, height - 8);
+  }
+
+  // Crosshair mouse tracking
+  if (chartCanvas) {
+    chartCanvas.addEventListener('mousemove', (e) => {
+      const rect = chartCanvas.getBoundingClientRect();
+      const clientX = e.clientX - rect.left;
+      const padLeft = 14;
+      const padRight = 54;
+      const plotW = rect.width - padLeft - padRight;
+      const ratio = Math.max(0, Math.min(1, (clientX - padLeft) / plotW));
+      const asset = getActiveAsset();
+      const data = generateTimeSeries(asset, activeTimeframe);
+      hoveredPoint = Math.round(ratio * (data.length - 1));
+      drawChart();
+    });
+
+    chartCanvas.addEventListener('mouseleave', () => {
+      hoveredPoint = null;
+      if (chartHoverPrice) chartHoverPrice.textContent = 'Drag or hover crosshair to inspect';
+      drawChart();
+    });
+  }
+
+  // Universe Switcher Tabs event listeners
+  if (tabsContainer) {
+    tabsContainer.querySelectorAll('.stock-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const u = btn.getAttribute('data-universe');
+        if (u) {
+          activeUniverse = u;
+          const firstAsset = universalMarketData[u][0];
+          activeAssetId = firstAsset ? firstAsset.id : 'sp500';
+          tabsContainer.querySelectorAll('.stock-tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderWatchlist();
+          renderActiveAsset();
+        }
+      });
+    });
+  }
+
+  // Timeframe buttons event listeners
+  if (timeframeButtons) {
+    timeframeButtons.querySelectorAll('.timeframe-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        timeframeButtons.querySelectorAll('.timeframe-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTimeframe = btn.getAttribute('data-tf') || '1M';
+        drawChart();
+      });
+    });
+  }
+
+  // Live Exchange Clocks & Session Status
+  function updateExchangeClocks() {
+    const now = new Date();
+    const utcHour = now.getUTCHours();
+    const utcMin = now.getUTCMinutes();
+    const utcSec = now.getUTCSeconds();
+    const day = now.getUTCDay(); // 0 = Sun, 6 = Sat
+    const isWeekday = day >= 1 && day <= 5;
+
+    const utcTimeStr = `${String(utcHour).padStart(2, '0')}:${String(utcMin).padStart(2, '0')}:${String(utcSec).padStart(2, '0')}`;
+    const istDate = new Date(now.getTime() + (5.5 * 3600000));
+    const istTimeStr = `${String(istDate.getUTCHours()).padStart(2, '0')}:${String(istDate.getUTCMinutes()).padStart(2, '0')}:${String(istDate.getUTCSeconds()).padStart(2, '0')}`;
+    const gstDate = new Date(now.getTime() + (4 * 3600000));
+    const gstTimeStr = `${String(gstDate.getUTCHours()).padStart(2, '0')}:${String(gstDate.getUTCMinutes()).padStart(2, '0')}:${String(gstDate.getUTCSeconds()).padStart(2, '0')}`;
+
+    const utcElem = document.getElementById('utcTime');
+    const istElem = document.getElementById('istTime');
+    const gstElem = document.getElementById('gstTime');
+    if (utcElem) utcElem.textContent = utcTimeStr;
+    if (istElem) istElem.textContent = istTimeStr;
+    if (gstElem) gstElem.textContent = gstTimeStr;
+
+    // Exchange Status Dots
+    function setDot(id, isOpen) {
+      const el = document.getElementById(id);
+      if (el) {
+        const dot = el.querySelector('.exchange-dot');
+        if (dot) {
+          dot.className = `exchange-dot ${isOpen ? 'open' : 'closed'}`;
+        }
+      }
+    }
+
+    // NYSE (14:30 - 21:00 UTC)
+    const nyseOpen = isWeekday && (utcHour > 14 || (utcHour === 14 && utcMin >= 30)) && utcHour < 21;
+    // NSE Mumbai (03:45 - 10:00 UTC)
+    const nseOpen = isWeekday && (utcHour > 3 || (utcHour === 3 && utcMin >= 45)) && utcHour < 10;
+    // DFM Dubai (06:00 - 11:00 UTC)
+    const dfmOpen = isWeekday && utcHour >= 6 && utcHour < 11;
+    // LSE London (08:00 - 16:30 UTC)
+    const lseOpen = isWeekday && utcHour >= 8 && (utcHour < 16 || (utcHour === 16 && utcMin <= 30));
+    // TSE Tokyo (00:00 - 06:00 UTC)
+    const tseOpen = isWeekday && utcHour >= 0 && utcHour < 6;
+
+    setDot('exchNYC', nyseOpen);
+    setDot('exchMUM', nseOpen);
+    setDot('exchDXB', dfmOpen);
+    setDot('exchLON', lseOpen);
+    setDot('exchTYO', tseOpen);
+  }
+
+  // Live Micro-Tick Engine (simulates live streaming market ticks every 1.8s)
+  function runTick() {
+    const allCategories = ['indices', 'reits', 'forex', 'commodities'];
+    const chosenCat = allCategories[Math.floor(Math.random() * allCategories.length)];
+    const list = universalMarketData[chosenCat];
+    const asset = list[Math.floor(Math.random() * list.length)];
+
+    const tickDelta = (Math.random() - 0.49) * asset.volatility;
+    asset.price = Math.max(0.001, asset.price + tickDelta);
+    asset.change += tickDelta;
+    asset.changePercent = (asset.change / (asset.price - asset.change)) * 100;
+    asset.dayHigh = Math.max(asset.dayHigh, asset.price);
+    asset.dayLow = Math.min(asset.dayLow, asset.price);
+
+    const isUp = tickDelta >= 0;
+    const flashClass = isUp ? 'tick-flash-green' : 'tick-flash-red';
+    const arrow = isUp ? '▲' : '▼';
+    const sign = asset.change >= 0 ? '+' : '';
+    const formattedPrice = formatMarketPrice(asset.price, asset.currency);
+
+    // Update Ticker Tape Elements
+    const tickPriceEl = document.getElementById(`tick-p-${asset.id}`);
+    const tickDeltaEl = document.getElementById(`tick-d-${asset.id}`);
+    if (tickPriceEl) {
+      tickPriceEl.textContent = formattedPrice;
+      tickPriceEl.classList.remove('tick-flash-green', 'tick-flash-red');
+      void tickPriceEl.offsetWidth; // trigger reflow
+      tickPriceEl.classList.add(flashClass);
+    }
+    if (tickDeltaEl) {
+      tickDeltaEl.textContent = `${sign}${asset.changePercent.toFixed(2)}% ${arrow}`;
+      tickDeltaEl.className = `ticker-delta ${asset.change >= 0 ? 'delta-up' : 'delta-down'}`;
+    }
+
+    // Update Watchlist Row
+    const rowPriceEl = document.getElementById(`row-p-${asset.id}`);
+    const rowDeltaEl = document.getElementById(`row-d-${asset.id}`);
+    if (rowPriceEl) {
+      rowPriceEl.textContent = formattedPrice;
+      rowPriceEl.classList.remove('tick-flash-green', 'tick-flash-red');
+      void rowPriceEl.offsetWidth;
+      rowPriceEl.classList.add(flashClass);
+    }
+    if (rowDeltaEl) {
+      rowDeltaEl.textContent = `${sign}${asset.changePercent.toFixed(2)}% ${arrow}`;
+      rowDeltaEl.className = `ticker-delta ${asset.change >= 0 ? 'delta-up' : 'delta-down'}`;
+    }
+
+    // Update Active Inspector if this is the active asset
+    if (asset.id === activeAssetId) {
+      if (activeAssetPrice) {
+        activeAssetPrice.textContent = formattedPrice;
+        activeAssetPrice.classList.remove('tick-flash-green', 'tick-flash-red');
+        void activeAssetPrice.offsetWidth;
+        activeAssetPrice.classList.add(flashClass);
+      }
+      if (activeAssetDelta) {
+        activeAssetDelta.className = `stock-delta-hero ${asset.change >= 0 ? 'delta-up' : 'delta-down'}`;
+        activeAssetDelta.textContent = `${sign}${formatMarketPrice(asset.change, asset.currency)} (${sign}${asset.changePercent.toFixed(2)}%) ${arrow}`;
+      }
+      if (metricDayRange) {
+        metricDayRange.textContent = `${formatMarketPrice(asset.dayLow, asset.currency)} - ${formatMarketPrice(asset.dayHigh, asset.currency)}`;
+      }
+      drawChart();
+    }
+  }
+
+  // Initialize
+  populateTickerTape();
+  renderWatchlist();
+  renderActiveAsset();
+  updateExchangeClocks();
+
+  // Intervals
+  setInterval(updateExchangeClocks, 1000);
+  setInterval(runTick, 1800);
+
+  window.addEventListener('resize', () => {
+    drawChart();
+  });
 }

@@ -27,6 +27,7 @@
           <li><a href="rohan-estate.html">Rohan Estate</a></li>
           <li><a href="#hrl-core" style="color: var(--gold-primary); font-weight: 600;">HRL 19™</a></li>
           <li><a href="#pnl-profile" style="color: var(--gold-champagne); font-weight: 600;">P&L Profile</a></li>
+          <li><a href="#stockmarket" style="color: var(--gold-champagne); font-weight: 600;">Markets</a></li>
           <li><a href="video.html">Watch Film</a></li>
         </ul>
       </nav>
@@ -40,6 +41,19 @@
       </div>
     </div>
   </header>
+
+  <!-- Global Live Universal Market Ticker Tape (Fixed under Nav) -->
+  <div class="global-market-ticker-wrap" id="globalMarketTicker">
+    <a href="#stockmarket" class="ticker-live-badge" title="Jump to Universal Stock Market Terminal">
+      <span class="ticker-pulse-dot"></span>
+      <span>Universal Markets</span>
+    </a>
+    <div class="ticker-viewport">
+      <div class="ticker-track" id="globalTickerTrack">
+        <!-- Injected and duplicated dynamically by app.js for continuous loop -->
+      </div>
+    </div>
+  </div>
 
   <!-- Apple Hero Section -->
   <section class="hero-section" id="overview">
@@ -1296,6 +1310,158 @@
     </div>
   </section>
 
+  <!-- Universal Stock Market & Global Capital Terminal -->
+  <section class="section stock-terminal-section" id="stockmarket">
+    <div class="container">
+      <div class="apple-section-header">
+        <div class="apple-eyebrow">Institutional Capital Intelligence</div>
+        <h2 class="apple-section-title">Universal Stock Market & Capital Terminal.</h2>
+        <p class="apple-section-sub">
+          Live universal equity indices, Gulf diaspora forex crosses, commercial REIT benchmarks, and sovereign yields driving institutional capital into Rohan Corporation developments.
+        </p>
+      </div>
+
+      <div class="stock-terminal-card">
+        <!-- World Financial Centers Bar -->
+        <div class="stock-exchange-bar">
+          <div class="exchange-centers-wrap">
+            <div class="exchange-pill" id="exchNYC">
+              <span class="exchange-dot open"></span>
+              <span><strong>New York</strong> NYSE/NASDAQ</span>
+            </div>
+            <div class="exchange-pill" id="exchMUM">
+              <span class="exchange-dot open"></span>
+              <span><strong>Mumbai</strong> NSE/BSE</span>
+            </div>
+            <div class="exchange-pill" id="exchDXB">
+              <span class="exchange-dot open"></span>
+              <span><strong>Dubai</strong> DFM/ADX</span>
+            </div>
+            <div class="exchange-pill" id="exchLON">
+              <span class="exchange-dot open"></span>
+              <span><strong>London</strong> LSE</span>
+            </div>
+            <div class="exchange-pill" id="exchTYO">
+              <span class="exchange-dot closed"></span>
+              <span><strong>Tokyo</strong> TSE</span>
+            </div>
+          </div>
+
+          <div class="exchange-clock-display" id="exchangeClocks">
+            <span>UTC <strong id="utcTime">--:--:--</strong></span>
+            <span>•</span>
+            <span>IST <strong id="istTime">--:--:--</strong></span>
+            <span>•</span>
+            <span>GST <strong id="gstTime">--:--:--</strong></span>
+          </div>
+        </div>
+
+        <!-- Universe Switcher -->
+        <div class="stock-universe-switcher">
+          <div class="stock-tabs-group" id="stockUniverseTabs">
+            <button class="stock-tab-btn active" data-universe="indices" type="button">Universal Equities & Indices</button>
+            <button class="stock-tab-btn" data-universe="reits" type="button">Global REITs & PropTech</button>
+            <button class="stock-tab-btn" data-universe="forex" type="button">NRI Forex Crosses</button>
+            <button class="stock-tab-btn" data-universe="commodities" type="button">Commodities & Sovereign Yields</button>
+          </div>
+          <div style="font-size: 11px; color: var(--apple-text-secondary); display: flex; align-items: center; gap: 6px;">
+            <span style="width: 7px; height: 7px; background: #30d158; border-radius: 50%; box-shadow: 0 0 6px #30d158;"></span>
+            <span>Live Interbank Feed Simulated</span>
+          </div>
+        </div>
+
+        <!-- Terminal Main Grid Split -->
+        <div class="stock-main-grid">
+          <!-- Left: Active Asset Chart Panel -->
+          <div class="stock-chart-panel">
+            <div class="stock-active-header">
+              <div>
+                <div class="stock-active-name" id="activeAssetName">
+                  S&P 500
+                  <span class="stock-active-tag" id="activeAssetSymbol">^GSPC</span>
+                </div>
+                <div class="stock-active-market" id="activeAssetMarket">
+                  US Large-Cap Benchmark Index • NYSE / CBOE
+                </div>
+              </div>
+
+              <div class="stock-price-hero">
+                <div class="stock-large-val" id="activeAssetPrice">5,983.25</div>
+                <div class="stock-delta-hero delta-up" id="activeAssetDelta">+28.40 (+0.48%) ▲</div>
+              </div>
+            </div>
+
+            <!-- Timeframe selector -->
+            <div class="stock-timeframe-row">
+              <div class="stock-timeframe-group" id="timeframeButtons">
+                <button class="timeframe-btn" data-tf="1D" type="button">1D</button>
+                <button class="timeframe-btn" data-tf="1W" type="button">1W</button>
+                <button class="timeframe-btn active" data-tf="1M" type="button">1M</button>
+                <button class="timeframe-btn" data-tf="1Y" type="button">1Y</button>
+                <button class="timeframe-btn" data-tf="5Y" type="button">5Y</button>
+              </div>
+              <div style="font-size: 11px; color: var(--apple-text-secondary);" id="chartHoverPrice">
+                Drag or hover crosshair to inspect
+              </div>
+            </div>
+
+            <!-- Interactive Chart Canvas -->
+            <div class="stock-canvas-wrap">
+              <canvas id="stockMarketCanvas"></canvas>
+            </div>
+
+            <!-- Key Financial Metrics Bar -->
+            <div class="stock-metrics-grid">
+              <div class="stock-metric-col">
+                <span class="stock-metric-lbl">Day Range</span>
+                <span class="stock-metric-val" id="metricDayRange">5,958.10 - 5,992.40</span>
+              </div>
+              <div class="stock-metric-col">
+                <span class="stock-metric-lbl">52-Week Range</span>
+                <span class="stock-metric-val" id="metric52Range">4,953.56 - 6,025.10</span>
+              </div>
+              <div class="stock-metric-col">
+                <span class="stock-metric-lbl" id="metricVolLbl">Trading Volume</span>
+                <span class="stock-metric-val" id="metricVolVal">$42.8 Billion</span>
+              </div>
+              <div class="stock-metric-col">
+                <span class="stock-metric-lbl" id="metricValLbl">P/E Ratio</span>
+                <span class="stock-metric-val" id="metricValVal">26.4x</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Universal Watchlist & Macro Intelligence -->
+          <div class="stock-watchlist-panel">
+            <div class="watchlist-header-bar">
+              <span class="watchlist-title" id="watchlistCategoryTitle">Universal Equity Indices</span>
+              <span style="font-size: 11px; color: var(--apple-text-secondary);" id="watchlistCount">7 Instruments</span>
+            </div>
+
+            <div style="overflow-x: auto; flex: 1;">
+              <table class="stock-watchlist-table" id="stockWatchlistTable">
+                <thead>
+                  <tr>
+                    <th>Asset</th>
+                    <th style="text-align: right;">Price</th>
+                    <th style="text-align: right;">24h Change</th>
+                  </tr>
+                </thead>
+                <tbody id="stockWatchlistTbody">
+                  <!-- Populated dynamically by app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="stock-macro-insight" id="stockMacroInsight">
+              <strong>Macro Capital Moat:</strong> NIFTY Realty has appreciated +24.5% over the past 12 months, outperforming US commercial indices. Rohan Corporation developments in Mangaluru capture Gulf NRI forex stability (AED/INR spot rate locking) while generating 5.0%–6.4% net unhedged rental yields.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Strategic Charter Section (Apple Minimalist Declaration) -->
   <section class="section" id="charter">
     <div class="container">
@@ -1437,6 +1603,7 @@
             <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/PROJECT_TOTAL_EXPENSE.md" target="_blank">Project Total Expense</a></li>
             <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/PARTNERSHIP_CHARTER.md" target="_blank">Partnership Charter</a></li>
             <li><a href="#pnl-profile" style="color: var(--gold-champagne); font-weight: 600;">Executive P&L Statement Profile</a></li>
+            <li><a href="#stockmarket" style="color: var(--gold-champagne); font-weight: 600;">Universal Stock Market Terminal</a></li>
             <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/STATUTORY_COMPLIANCE.md" target="_blank">RERA & Statutory Notice</a></li>
           </ul>
         </div>
