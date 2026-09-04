@@ -269,6 +269,17 @@ function initModal() {
         { label: 'RERA Status', val: 'Fully Sanctioned & Compliant' }
       ]
     },
+    'Rohan Marina One': {
+      title: 'Rohan Marina One — Sea-Facing Beachfront Digital Twin',
+      elevation: 'Direct Maritime Frontage with 100% Uninterrupted Ocean Horizons',
+      specs: [
+        { label: 'Location', val: 'Surathkal Beachfront, Mangalore' },
+        { label: 'Configuration', val: '2, 3 & 4 BHK Sea-Facing Luxury Apartments' },
+        { label: 'Sea Visibility', val: '100% Guaranteed Arabian Sea Vista from Every Home' },
+        { label: 'Smart Tech', val: 'Coastal Wind Vector Shaders & Remote NRI Reservation' },
+        { label: 'RERA Status', val: 'Approved by Karnataka RERA Authority' }
+      ]
+    },
     'Rohan Crown': {
       title: 'Rohan Crown — Ultra-Luxury Sky Residence Twin',
       elevation: 'Towering Horizon Landmark with Arabian Sea Vista',

@@ -440,6 +440,28 @@ body {
   min-height: 440px;
 }
 
+.bento-media {
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 20px 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #000000;
+}
+
+.bento-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bento-card:hover .bento-img {
+  transform: scale(1.03);
+}
+
 .bento-eyebrow {
   font-size: 12px;
   font-weight: 600;
