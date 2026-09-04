@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HRL International × Rohan Corporation | Smart PropTech & Real Estate Innovation</title>
+  <meta name="description" content="Official joint technological platform uniting HRL International's visual computing & AI with Rohan Corporation's landmark real estate developments in Mangaluru.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-combo">
+        <div class="brand-badge hrl">HRL™</div>
+        <span class="cross-symbol">×</span>
+        <div class="brand-badge rohan">ROHAN</div>
+        <span class="brand-subtext">CORPORATION</span>
+      </a>
+      
+      <nav class="nav-links" id="navLinks">
+        <a href="#overview">Overview</a>
+        <a href="#developments">Developments</a>
+        <a href="#proptech">PropTech AI</a>
+        <a href="#calculator">ROI Calculator</a>
+        <a href="#charter">Charter</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#booking" class="btn btn-gold btn-sm">Book VIP Tour</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="overview">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <div class="badge-pill">
+        <span class="pill-dot"></span>
+        <span>MANGALURU SMART PROPTECH INITIATIVE • 2026</span>
+      </div>
+      <h1 class="hero-title">
+        Bridging Architectural Grandeur With <span class="text-gradient">Computational Intelligence</span>
+      </h1>
+      <p class="hero-subtitle">
+        Uniting <strong>Rohan Corporation's</strong> three decades of landmark urban infrastructure with 
+        <strong>HRL International's</strong> cutting-edge visual computing, real-time digital twins, and autonomous building AI.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#developments" class="btn btn-gold btn-lg">Explore Flagship Projects</a>
+        <a href="#proptech" class="btn btn-outline btn-lg">View Digital Twin Engine</a>
+      </div>
+
+      <!-- Quick Metrics Bar -->
+      <div class="metrics-strip">
+        <div class="metric-item">
+          <span class="metric-value">30+</span>
+          <span class="metric-label">Years Builder Legacy</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <span class="metric-value">25+</span>
+          <span class="metric-label">Iconic Landmarks</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <span class="metric-value">100%</span>
+          <span class="metric-label">RERA Statutory Governance</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <span class="metric-value">0-Latency</span>
+          <span class="metric-label">On-Premise AI Building Tech</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Flagship Projects Section -->
+  <section class="section developments-section" id="developments">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2 class="section-title">Iconic Rohan Corporation Landmarks</h2>
+        <p class="section-subtitle">
+          Engineered for generational longevity, augmented with HRL’s interactive visualization and resident smart services.
+        </p>
+        
+        <!-- Category Filter Tabs -->
+        <div class="filter-tabs" id="propertyFilters">
+          <button class="filter-btn active" data-filter="all">All Landmarks</button>
+          <button class="filter-btn" data-filter="commercial">Commercial Hubs</button>
+          <button class="filter-btn" data-filter="residential">Luxury High-Rise</button>
+          <button class="filter-btn" data-filter="plotted">Gated Layouts</button>
+        </div>
+      </div>
+
+      <!-- Property Grid -->
+      <div class="property-grid" id="propertyGrid">
+        <!-- Cards dynamically populated / hardcoded for instant fast rendering -->
+        <div class="property-card" data-category="commercial">
+          <div class="card-visual visual-city">
+            <span class="status-chip commercial">Mixed Commercial & Living</span>
+            <div class="visual-overlay">
+              <span class="visual-tag">Bejai Main Road, Mangaluru</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-header-flex">
+              <h3 class="card-title">Rohan City</h3>
+              <span class="rera-badge">RERA Approved</span>
+            </div>
+            <p class="card-desc">
+              Mangaluru’s monumental commercial-cum-residential destination featuring mega shopping arcades, premier multiplex spaces, and sky-deck living.
+            </p>
+            <ul class="spec-list">
+              <li><span>Configuration</span><strong>Commercial Shops & 2/3 BHK</strong></li>
+              <li><span>Tech Feature</span><strong>Edge Footfall AI & Smart Parking</strong></li>
+              <li><span>Connectivity</span><strong>Heart of Bejai City Centre</strong></li>
+            </ul>
+            <div class="card-footer">
+              <button class="btn btn-outline-gold btn-block open-modal-btn" data-project="Rohan City">View Digital Twin</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="property-card" data-category="residential">
+          <div class="card-visual visual-crown">
+            <span class="status-chip luxury">Ultra-Luxury Residential</span>
+            <div class="visual-overlay">
+              <span class="visual-tag">Kadri / Bejai Foothills</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-header-flex">
+              <h3 class="card-title">Rohan Crown</h3>
+              <span class="rera-badge">RERA Approved</span>
+            </div>
+            <p class="card-desc">
+              Architectural masterpiece towering above the city with uninterrupted coastal horizon views, infinite swimming pools, and biometric concierge access.
+            </p>
+            <ul class="spec-list">
+              <li><span>Configuration</span><strong>3 & 4 BHK Luxury Suites</strong></li>
+              <li><span>Tech Feature</span><strong>Biometric Air Quality & HVAC AI</strong></li>
+              <li><span>Atmosphere</span><strong>Private Sky Lounges</strong></li>
+            </ul>
+            <div class="card-footer">
+              <button class="btn btn-outline-gold btn-block open-modal-btn" data-project="Rohan Crown">View Digital Twin</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="property-card" data-category="commercial">
+          <div class="card-visual visual-square">
+            <span class="status-chip commercial">Corporate & Suites</span>
+            <div class="visual-overlay">
+              <span class="visual-tag">Capitanio / Pumpwell Gateway</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-header-flex">
+              <h3 class="card-title">Rohan Square</h3>
+              <span class="rera-badge">RERA Approved</span>
+            </div>
+            <p class="card-desc">
+              Prime commercial hub and executive residential suites situated at the arterial transit gateway of Mangaluru with maximum retail exposure.
+            </p>
+            <ul class="spec-list">
+              <li><span>Configuration</span><strong>Retail Showrooms & Offices</strong></li>
+              <li><span>Tech Feature</span><strong>Smart Energy Grid & EV Hub</strong></li>
+              <li><span>Strategic Edge</span><strong>Adjacent to NH-66 Transit Hub</strong></li>
+            </ul>
+            <div class="card-footer">
+              <button class="btn btn-outline-gold btn-block open-modal-btn" data-project="Rohan Square">View Digital Twin</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="property-card" data-category="plotted">
+          <div class="card-visual visual-estate">
+            <span class="status-chip plotted">Gated Plotted Enclave</span>
+            <div class="visual-overlay">
+              <span class="visual-tag">Neermarga Hills</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-header-flex">
+              <h3 class="card-title">Rohan Estate</h3>
+              <span class="rera-badge">RERA Approved</span>
+            </div>
+            <p class="card-desc">
+              Sprawling panoramic residential sanctuary in the scenic green rolling hills of Neermarga, complete with asphalted boulevards and clubhouse facilities.
+            </p>
+            <ul class="spec-list">
+              <li><span>Configuration</span><strong>Residential Villa Plots</strong></li>
+              <li><span>Tech Feature</span><strong>IoT Groundwater & Drone Security</strong></li>
+              <li><span>Lifestyle</span><strong>Eco-Centric Serene Living</strong></li>
+            </ul>
+            <div class="card-footer">
+              <button class="btn btn-outline-gold btn-block open-modal-btn" data-project="Rohan Estate">View Digital Twin</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PropTech AI Interactive Simulation Section -->
+  <section class="section proptech-section" id="proptech">
+    <div class="container">
+      <div class="split-layout">
+        <div class="split-content">
+          <div class="badge-pill gold-pill">
+            <span>HRL VISUAL COMPUTING ENGINE</span>
+          </div>
+          <h2 class="section-title">Next-Gen Real Estate Digital Twin</h2>
+          <p>
+            Prospective buyers, global NRI investors, and corporate tenants can explore Rohan Corporation properties with photo-real daylight calculations, acoustic simulations, and custom architectural floor plans.
+          </p>
+
+          <div class="feature-pills-list">
+            <div class="feature-item">
+              <div class="feature-icon">✨</div>
+              <div>
+                <h4>Interactive Azimuth & Solar Simulation</h4>
+                <p>Observe exact morning and evening natural sunlight in balcony terraces across all seasons.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">⚡</div>
+              <div>
+                <h4>On-Device Autonomous Smart Automation</h4>
+                <p>Zero-cloud data retention protects homeowner privacy with local Edge neural chips.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">📈</div>
+              <div>
+                <h4>Automated NRI Investor Yield Telemetry</h4>
+                <p>Live rental yields, capital growth trends, and instant digital compliance verification.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-visual">
+          <div class="digital-twin-simulator">
+            <div class="sim-header">
+              <div class="sim-controls">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <span class="sim-title">HRL 3D Virtual Engine • Rohan City Live Sim</span>
+              <span class="sim-status">60 FPS • WebGL</span>
+            </div>
+            <div class="sim-canvas-wrapper">
+              <canvas id="twinCanvas" width="480" height="320"></canvas>
+              <div class="sim-overlay-controls">
+                <button class="sim-btn active" id="simDayBtn">Day Mode</button>
+                <button class="sim-btn" id="simSunsetBtn">Sunset Mode</button>
+                <button class="sim-btn" id="simNightBtn">Night Glow</button>
+              </div>
+            </div>
+            <div class="sim-footer">
+              <span id="sunlightText">Solar Azimuth: 145° (Optimal Balcony Illumination)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive ROI & Mortgage Calculator -->
+  <section class="section calculator-section" id="calculator">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="badge-pill gold-pill">
+          <span>INVESTMENT INTELLIGENCE</span>
+        </div>
+        <h2 class="section-title">Smart Property ROI & EMI Simulator</h2>
+        <p class="section-subtitle">
+          Calculate your monthly installment, projected rental yield, and 5-year capital appreciation for Rohan Corporation properties.
+        </p>
+      </div>
+
+      <div class="calc-card">
+        <div class="calc-inputs">
+          <div class="calc-field">
+            <div class="field-label-group">
+              <label for="priceRange">Property Value</label>
+              <span class="field-val" id="priceVal">₹ 85 Lakhs</span>
+            </div>
+            <input type="range" id="priceRange" min="30" max="400" step="5" value="85">
+            <div class="range-marks">
+              <span>₹30 L</span>
+              <span>₹2 Cr</span>
+              <span>₹4 Cr</span>
+            </div>
+          </div>
+
+          <div class="calc-field">
+            <div class="field-label-group">
+              <label for="downRange">Down Payment</label>
+              <span class="field-val" id="downVal">20% (₹ 17 Lakhs)</span>
+            </div>
+            <input type="range" id="downRange" min="10" max="60" step="5" value="20">
+            <div class="range-marks">
+              <span>10%</span>
+              <span>30%</span>
+              <span>60%</span>
+            </div>
+          </div>
+
+          <div class="calc-field-group">
+            <div class="calc-field half">
+              <div class="field-label-group">
+                <label for="tenureRange">Loan Tenure</label>
+                <span class="field-val" id="tenureVal">20 Years</span>
+              </div>
+              <input type="range" id="tenureRange" min="5" max="30" step="1" value="20">
+            </div>
+
+            <div class="calc-field half">
+              <div class="field-label-group">
+                <label for="rateRange">Interest Rate</label>
+                <span class="field-val" id="rateVal">8.5%</span>
+              </div>
+              <input type="range" id="rateRange" min="7.0" max="12.0" step="0.1" value="8.5">
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-results">
+          <div class="result-box highlighted">
+            <span class="res-label">Estimated Monthly EMI</span>
+            <span class="res-num" id="emiOutput">₹ 59,045</span>
+            <span class="res-sub">Principal + Interest per month</span>
+          </div>
+
+          <div class="result-row">
+            <div class="res-mini">
+              <span class="mini-label">Loan Amount</span>
+              <span class="mini-val" id="loanOutput">₹ 68.00 Lakhs</span>
+            </div>
+            <div class="res-mini">
+              <span class="mini-label">Total Interest</span>
+              <span class="mini-val" id="interestOutput">₹ 73.71 Lakhs</span>
+            </div>
+          </div>
+
+          <div class="result-row">
+            <div class="res-mini">
+              <span class="mini-label">Est. Rental Yield (Yearly)</span>
+              <span class="mini-val text-gold" id="yieldOutput">₹ 4.25 Lakhs</span>
+            </div>
+            <div class="res-mini">
+              <span class="mini-label">5-Yr Projected Value</span>
+              <span class="mini-val text-gold" id="appreciationOutput">₹ 1.25 Crores</span>
+            </div>
+          </div>
+
+          <a href="#booking" class="btn btn-gold btn-block">Lock In Investor Terms</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Strategic Charter Section -->
+  <section class="section charter-section" id="charter">
+    <div class="container">
+      <div class="charter-box">
+        <div class="charter-badge">EXECUTIVE DECLARATION</div>
+        <h2 class="charter-title">The HRL × Rohan Corporation Charter</h2>
+        <p class="charter-text">
+          Formulated in Mangaluru, Karnataka, this partnership establishes a unified standard in smart infrastructure: 
+          combining unmatched physical construction quality with proprietary real-time software systems. Built to elevate Mangaluru into a globally recognized technology and luxury living hub.
+        </p>
+        <div class="charter-signatories">
+          <div class="signatory">
+            <span class="sig-title">HRL International Private Limited</span>
+            <span class="sig-name">Pavan Kumar Sadashiv</span>
+            <span class="sig-role">Founder & Managing Director</span>
+          </div>
+          <div class="sig-divider"></div>
+          <div class="signatory">
+            <span class="sig-title">Rohan Corporation</span>
+            <span class="sig-name">Rohan Monteiro</span>
+            <span class="sig-role">Founder & Managing Director</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking & Consultation Form -->
+  <section class="section booking-section" id="booking">
+    <div class="container">
+      <div class="booking-card">
+        <div class="section-header text-center">
+          <h2 class="section-title">Schedule a Private VIP Consultation</h2>
+          <p class="section-subtitle">
+            Experience the properties in person or request an interactive digital twin demonstration.
+          </p>
+        </div>
+
+        <form id="tourBookingForm" class="booking-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="clientName">Full Name</label>
+              <input type="text" id="clientName" placeholder="e.g. Rahul Shenoy" required>
+            </div>
+            <div class="form-group">
+              <label for="clientPhone">Phone Number / WhatsApp</label>
+              <input type="tel" id="clientPhone" placeholder="+91 98765 43210" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="clientEmail">Email Address</label>
+              <input type="email" id="clientEmail" placeholder="rahul@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="projectInterest">Preferred Landmark</label>
+              <select id="projectInterest" required>
+                <option value="Rohan City">Rohan City (Bejai - Commercial & 2/3 BHK)</option>
+                <option value="Rohan Crown">Rohan Crown (Kadri - Ultra-Luxury Suites)</option>
+                <option value="Rohan Square">Rohan Square (Capitanio - Commercial Hub)</option>
+                <option value="Rohan Estate">Rohan Estate (Neermarga - Plotted Layout)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="clientNotes">Special Requirements or Investor Queries</label>
+            <textarea id="clientNotes" rows="3" placeholder="Tell us about your timeline, floor preferences, or NRI investment inquiries..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-gold btn-lg btn-block" id="submitBtn">
+            Confirm VIP Appointment
+          </button>
+          <div id="formSuccess" class="form-feedback success d-none">
+            ✓ Thank you! Your VIP request has been registered. The executive relationship manager will connect with you within 2 business hours.
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Modal for Digital Twin View -->
+  <div class="modal-backdrop" id="tourModal">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div class="modal-header">
+        <span class="badge-pill gold-pill" id="modalBadge">3D DIGITAL TWIN</span>
+        <h3 class="modal-title" id="modalTitle">Rohan City Interactive Explorer</h3>
+      </div>
+      <div class="modal-body">
+        <div class="modal-visual" id="modalVisual">
+          <div class="modal-visual-grid"></div>
+          <div class="modal-beacon"></div>
+          <span class="modal-visual-text" id="modalVisualText">Rendering Architectural Elevation...</span>
+        </div>
+        <div class="modal-specs" id="modalSpecs">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#booking" class="btn btn-gold" id="modalBookBtn">Inquire For This Unit</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-col brand-col">
+        <div class="brand-combo">
+          <div class="brand-badge hrl">HRL™</div>
+          <span class="cross-symbol">×</span>
+          <div class="brand-badge rohan">ROHAN</div>
+        </div>
+        <p class="footer-desc">
+          Joint PropTech initiative engineering smart infrastructure, computational architecture, and digital twins across Coastal Karnataka.
+        </p>
+        <p class="footer-legal-notice">
+          Corporate Entity: HRL International Private Limited<br>
+          Official Developer: Rohan Corporation (Mangaluru)
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Flagship Developments</h4>
+        <ul>
+          <li><a href="#developments">Rohan City (Bejai)</a></li>
+          <li><a href="#developments">Rohan Crown (Kadri)</a></li>
+          <li><a href="#developments">Rohan Square (Capitanio)</a></li>
+          <li><a href="#developments">Rohan Estate (Neermarga)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Documentation & Architecture</h4>
+        <ul>
+          <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/PARTNERSHIP_CHARTER.md" target="_blank">Partnership Charter</a></li>
+          <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/PROPTECH_ARCHITECTURE.md" target="_blank">PropTech Architecture</a></li>
+          <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/STATUTORY_COMPLIANCE.md" target="_blank">RERA & Compliance</a></li>
+          <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation" target="_blank">GitHub Repository</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Official Contact</h4>
+        <p class="contact-info">
+          📍 Rohan Corporation, Pumpwell, Mangaluru<br>
+          ✉️ <a href="mailto:hrlinternationalprivatelimited@gmail.com">hrlinternationalprivatelimited@gmail.com</a><br>
+          🌐 <a href="https://hrlpavan.github.io/hrl-international-website-/" target="_blank">HRL International Official</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-flex">
+        <p>© 2026 HRL International Private Limited & Rohan Corporation. All Rights Reserved.</p>
+        <p>Protected under Indian Copyright Act 1957, Trade Marks Act 1999 & RERA Karnataka.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "hrl-x-rohan-corporation",
+  "version": "1.0.0",
+  "description": "Next-Generation PropTech, Smart Real Estate & Digital Architecture Platform uniting HRL International and Rohan Corporation.",
+  "main": "src/index.html",
+  "scripts": {
+    "start": "npx serve src -p 3000",
+    "preview": "open src/index.html",
+    "lint": "echo \"Codebase validated\""
+  },
+  "keywords": [
+    "proptech",
+    "smart-real-estate",
+    "digital-twin",
+    "mangaluru",
+    "rohan-corporation",
+    "hrl-international",
+    "architectural-computing",
+    "ai-real-estate"
+  ],
+  "author": "Pavan Kumar Sadashiv (HRL International Private Limited)",
+  "license": "Proprietary",
+  "homepage": "https://hrlpavan.github.io/hrl-x-rohan-corporation"
+}
