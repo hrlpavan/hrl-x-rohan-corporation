@@ -3,12 +3,12 @@
  * HRL International × Rohan Corporation
  * Master Project Explainer Engine (4K UHD 60FPS)
  * 
- * Clean, Clutter-Free, Cinematic Apple-Grade Visual Explanation
+ * Aspect Ratio Fidelity: Exact 2.37:1 (1024 × 432) Ultra-Wide Panoramic Alignment
  * Incorporating Authentic Photographic Renders:
- * 1. Rohan City (Bejai Main Road, Mangaluru)
- * 2. Rohan Marina One (Surathkal, Mangalore)
- * 3. Rohan Square (Capitanio, Pumpwell, Mangalore)
- * 4. Rohan Estate (Neermarga Hills, Mangaluru)
+ * 1. Rohan City (Bejai Main Road, Mangaluru) - 1024 × 432 (Ratio 2.37:1)
+ * 2. Rohan Marina One (Surathkal, Mangalore) - 1024 × 431 (Ratio 2.37:1)
+ * 3. Rohan Square (Capitanio, Pumpwell, Mangalore) - 1024 × 431 (Ratio 2.37:1)
+ * 4. Rohan Estate (Neermarga Hills, Mangaluru) - 1024 × 432 (Ratio 2.37:1)
  * ============================================================================
  */
 
@@ -23,9 +23,10 @@ class MasterMotionGraphicsEngine {
     this.voiceEnabled = true;
     this.ccEnabled = true;
     this.isRecording = false;
+    this.autoRun = true;
     this.lastFrameTime = performance.now();
 
-    // Preload Real Photographic Assets
+    // Preload Real Photographic Assets (All Native 2.37:1)
     this.assets = {
       city: this.loadImage('assets/images/rohan-city-bejai.jpg'),
       marina: this.loadImage('assets/images/rohan-marina-one-surathkal.jpg'),
@@ -81,18 +82,17 @@ class MasterMotionGraphicsEngine {
 
     this.currentSceneIndex = 0;
     this.currentVoiceSceneIndex = -1;
-    this.autoRun = true;
 
     this.initAudioEngine();
     this.bindUI();
     this.render();
 
-    // Auto-Run immediately upon launch
+    // Autonomous Auto-Run on Launch
     setTimeout(() => {
       this.play();
     }, 200);
 
-    // Smoothly unlock audio if browser autoplay policy delays Web Audio until gesture
+    // Audio unblocking listener for browser autoplay restrictions
     const unlockAudio = () => {
       if (this.audioCtx && this.audioCtx.state === 'suspended') {
         this.audioCtx.resume();
@@ -140,7 +140,7 @@ class MasterMotionGraphicsEngine {
     this.stopSoundtrack();
     this.oscillators = [];
 
-    // Warm Analog Tri-Chords (Warm C-Major9 / A-Minor7 Chord Bed)
+    // Warm Analog Tri-Chords (C-Major9 / A-Minor7 Chord Bed)
     const chordFreqs = [130.81, 164.81, 196.00, 246.94, 293.66];
     chordFreqs.forEach((freq, idx) => {
       const osc = this.audioCtx.createOscillator();
@@ -198,6 +198,7 @@ class MasterMotionGraphicsEngine {
     this.progressBarContainer = document.getElementById('progressBarContainer');
     this.timeDisplay = document.getElementById('timeDisplay');
     this.captionText = document.getElementById('captionText');
+    this.toggleAutoBtn = document.getElementById('toggleAutoBtn');
     this.toggleAudioBtn = document.getElementById('toggleAudioBtn');
     this.toggleVoiceBtn = document.getElementById('toggleVoiceBtn');
     this.toggleCCBtn = document.getElementById('toggleCCBtn');
@@ -228,7 +229,6 @@ class MasterMotionGraphicsEngine {
       });
     }
 
-    this.toggleAutoBtn = document.getElementById('toggleAutoBtn');
     if (this.toggleAutoBtn) {
       this.toggleAutoBtn.addEventListener('click', () => {
         this.autoRun = !this.autoRun;
@@ -379,7 +379,7 @@ class MasterMotionGraphicsEngine {
   }
 
   /* -------------------------------------------------------------------------- */
-  /* Main 60 FPS Engine Loop (Clean, Clutter-Free)                              */
+  /* Main 60 FPS Engine Loop (Clean, Clutter-Free, Auto-Looping)                */
   /* -------------------------------------------------------------------------- */
   render() {
     const now = performance.now();
@@ -415,7 +415,7 @@ class MasterMotionGraphicsEngine {
       this.timeDisplay.textContent = `${String(curMin).padStart(2, '0')}:${String(curSec).padStart(2, '0')} / ${String(durMin).padStart(2, '0')}:${String(durSec).padStart(2, '0')}`;
     }
 
-    // Clean Obsidian Background - No Clutter, No Starfield!
+    // Clean Obsidian Background
     this.ctx.fillStyle = '#000000';
     this.ctx.fillRect(0, 0, 1920, 1080);
 
@@ -428,7 +428,7 @@ class MasterMotionGraphicsEngine {
     else if (scene.id === 'square_estate') this.renderSceneSquareEstate();
     else if (scene.id === 'finale') this.renderSceneFinale();
 
-    // Clean, Minimalist Header & Metadata (No Clutter)
+    // Clean Header with Auto-Run Status
     this.drawCleanHeader();
 
     requestAnimationFrame(() => this.render());
@@ -436,57 +436,52 @@ class MasterMotionGraphicsEngine {
 
   /* -------------------------------------------------------------------------- */
   /* Scene 1: The Genesis & The Vision (0:00 - 0:25)                            */
-  /* Clean, elegant Apple typography with subtle collage preview               */
+  /* Clean, elegant Apple typography with soft vignette                         */
   /* -------------------------------------------------------------------------- */
   renderSceneGenesis() {
     const ctx = this.ctx;
     const t = this.currentTime;
-    const sceneProgress = Math.min(1.0, t / 25);
 
-    // Subtle background collage of the real properties with soft opacity
-    const bgOpacity = Math.min(0.25, t * 0.08);
+    // Soft panoramic ambient backdrop (preserving 2.37:1 ratio)
     ctx.save();
-    ctx.globalAlpha = bgOpacity;
+    ctx.globalAlpha = 0.22;
     if (this.assets.city.complete) {
-      const zoom = 1.0 + sceneProgress * 0.05;
-      this.drawImageCover(ctx, this.assets.city, 0, 0, 1920, 1080, 0, zoom);
+      this.drawImageNativeRatio(ctx, this.assets.city, 200, 120, 1520, 24);
     }
-    // Gradient overlay to keep text 100% legible
     const vignette = ctx.createRadialGradient(960, 540, 200, 960, 540, 900);
     vignette.addColorStop(0, 'rgba(0, 0, 0, 0.7)');
-    vignette.addColorStop(1, 'rgba(0, 0, 0, 0.96)');
+    vignette.addColorStop(1, 'rgba(0, 0, 0, 0.98)');
     ctx.fillStyle = vignette;
     ctx.fillRect(0, 0, 1920, 1080);
     ctx.restore();
 
-    // Clean Monolithic Typography (ZERO OVERLAP!)
+    // Monolithic Partnership Typography (Zero Overlap)
     ctx.textAlign = 'center';
 
-    // Eyebrow Badge
-    ctx.font = '600 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    // Eyebrow
+    ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#e2d5c3';
-    ctx.letterSpacing = '0.12em';
-    ctx.fillText('MANGALURU SMART PROPTECH INITIATIVE', 960, 340);
+    ctx.fillText('MANGALURU SMART PROPTECH INITIATIVE', 960, 330);
 
-    // Primary Partnership Title - High Contrast, Crystal Clear
-    ctx.font = '700 68px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    // Headline
+    ctx.font = '700 64px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('HRL INTERNATIONAL  ×  ROHAN CORPORATION', 960, 430);
+    ctx.fillText('HRL INTERNATIONAL  ×  ROHAN CORPORATION', 960, 420);
 
     // Subtitle
     ctx.font = '400 24px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#86868b';
-    ctx.fillText('Bridging Architectural Grandeur with Computational Intelligence', 960, 485);
+    ctx.fillText('Bridging Architectural Grandeur with Computational Intelligence', 960, 475);
 
-    // Thin elegant separator
+    // Separator line
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(760, 530);
-    ctx.lineTo(1160, 530);
+    ctx.moveTo(760, 520);
+    ctx.lineTo(1160, 520);
     ctx.stroke();
 
-    // 4 Key Pillar Badges
+    // 4 Proof Pillars
     const pillars = [
       { num: '30+ Years', lbl: 'Rohan Corporation Legacy' },
       { num: '4 Flagships', lbl: 'Mangaluru Premier Sites' },
@@ -496,7 +491,7 @@ class MasterMotionGraphicsEngine {
 
     pillars.forEach((p, idx) => {
       const px = 300 + idx * 360;
-      const py = 600;
+      const py = 590;
       const pw = 300;
       const ph = 100;
 
@@ -519,7 +514,7 @@ class MasterMotionGraphicsEngine {
 
   /* -------------------------------------------------------------------------- */
   /* Scene 2: Landmark Portfolio Showcase (0:25 - 0:55)                        */
-  /* Displays the 4 real photographic assets in clean Apple Bento cards        */
+  /* 2×2 Panoramic Grid: 100% Exact 2.37:1 Ratio for ALL 4 Banners             */
   /* -------------------------------------------------------------------------- */
   renderScenePortfolio() {
     const ctx = this.ctx;
@@ -527,497 +522,446 @@ class MasterMotionGraphicsEngine {
     ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#e2d5c3';
-    ctx.fillText('PORTFOLIO OVERVIEW', 960, 130);
+    ctx.fillText('PORTFOLIO OVERVIEW • 2.37:1 NATIVE ARCHITECTURAL RATIO', 960, 118);
 
-    ctx.font = '600 42px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '600 38px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Four Landmark Developments Across Mangaluru', 960, 185);
+    ctx.fillText('Four Landmark Developments Across Mangaluru', 960, 162);
 
     const items = [
       {
         title: 'Rohan City',
-        sub: 'Bejai Main Road',
-        config: '3, 2 & 1 BHK + Commercial',
+        sub: 'Bejai Main Road • 3, 2 & 1 BHK + Commercial Spaces',
+        spec: 'RERA: PRM/KA/RERA/1251/305/PR/210219/003908 • 3.5M Sq. Ft.',
         img: this.assets.city,
+        col: 0, row: 0,
         highlight: '#0071e3'
       },
       {
         title: 'Rohan Marina One',
-        sub: 'Surathkal Beachfront',
-        config: '2, 3 & 4 BHK Sea-Facing',
+        sub: 'Surathkal Beach • 2, 3 & 4 BHK Sea-Facing Apartments',
+        spec: '100% Sea-Horizon Visibility • Coastal Wind Vector Modeling',
         img: this.assets.marina,
+        col: 1, row: 0,
         highlight: '#2997ff'
       },
       {
         title: 'Rohan Square',
-        sub: 'Capitanio, Pumpwell',
-        config: 'Ready to Move In Homes',
+        sub: 'Capitanio, Pumpwell • Ready to Move In Corporate & Living',
+        spec: 'NH-66 Arterial Gateway • Smart Micro-Grid Dual Power Backup',
         img: this.assets.square,
+        col: 0, row: 1,
         highlight: '#30d158'
       },
       {
         title: 'Rohan Estate',
-        sub: 'Neermarga Hills',
-        config: 'Plots from 5.5 Cents',
+        sub: 'Neermarga Hills • Plots Starting from 5.5 Cents',
+        spec: 'Gated Hillside Sanctuary • IoT Subsoil Moisture Telemetry',
         img: this.assets.estate,
+        col: 1, row: 1,
         highlight: '#e2d5c3'
       }
     ];
 
-    const cardW = 390;
-    const cardH = 550;
-    const cardY = 250;
-    const startX = 120;
-    const gap = 30;
+    const cardW = 790;
+    const imgW = 770;
+    const imgH = 325; // 770 / 2.3704 = 324.8 px
+    const startX = 130;
+    const startY = 195;
+    const rowGap = 395;
+    const colGap = 840;
 
-    items.forEach((item, idx) => {
-      const cardX = startX + idx * (cardW + gap);
+    items.forEach(item => {
+      const cx = startX + item.col * colGap;
+      const cy = startY + item.row * rowGap;
 
-      // Card Container
+      // Outer Card Box
       ctx.fillStyle = '#161617';
-      this.roundRect(ctx, cardX, cardY, cardW, cardH, 24);
+      this.roundRect(ctx, cx, cy, cardW, 375, 20);
       ctx.fill();
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // Top Real Image Preview
-      const imgH = 260;
+      // Native 2.37:1 Image Drawing (Zero Crop, Zero Distortion)
       if (item.img.complete) {
-        ctx.save();
-        this.clipRoundedRect(ctx, cardX + 12, cardY + 12, cardW - 24, imgH, 16);
-        this.drawImageCover(ctx, item.img, cardX + 12, cardY + 12, cardW - 24, imgH, 0, 1.0);
-        ctx.restore();
+        this.drawImageNativeRatio(ctx, item.img, cx + 10, cy + 10, imgW, 14);
       }
 
-      // Project Details
+      // Bottom Professional Spec Strip
       ctx.textAlign = 'left';
-
-      // Category Pill
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-      this.roundRect(ctx, cardX + 24, cardY + imgH + 28, 120, 26, 13);
-      ctx.fill();
-      ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = item.highlight;
-      ctx.fillText('FLAGSHIP SITE', cardX + 36, cardY + imgH + 45);
-
-      // Title
-      ctx.font = '600 26px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(item.title, cardX + 24, cardY + imgH + 90);
-
-      // Location
-      ctx.font = '400 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
-      ctx.fillText(item.sub, cardX + 24, cardY + imgH + 122);
-
-      // Specs
-      ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#f5f5f7';
-      ctx.fillText(item.config, cardX + 24, cardY + imgH + 160);
-
-      // Bottom Status Indicator
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.beginPath();
-      ctx.moveTo(cardX + 24, cardY + cardH - 56);
-      ctx.lineTo(cardX + cardW - 24, cardY + cardH - 56);
-      ctx.stroke();
-
+      ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
       ctx.fillStyle = '#30d158';
-      ctx.beginPath();
-      ctx.arc(cardX + 32, cardY + cardH - 30, 4, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillText('RERA APPROVED', cx + 20, cy + imgH + 34);
 
-      ctx.font = '500 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
       ctx.fillStyle = '#86868b';
-      ctx.fillText('RERA Approved • PropTech Integrated', cardX + 46, cardY + cardH - 26);
+      ctx.fillText(item.spec, cx + 138, cy + imgH + 34);
     });
   }
 
   /* -------------------------------------------------------------------------- */
-  /* Scene 3: Rohan City — Bejai (0:55 - 1:25)                                 */
-  /* Clean deep-dive on Rohan City with authentic render & clear features      */
+  /* Scene 3: Rohan City — Bejai Deep-Dive (0:55 - 1:25)                        */
+  /* Hero 2.37:1 Banner (1480×624) + Apple Professional Information Matrix Tray */
   /* -------------------------------------------------------------------------- */
   renderSceneRohanCity() {
     const ctx = this.ctx;
-    const t = this.currentTime;
-    const progress = (t - 55) / 30;
 
-    // Left Side: Cinematic Large Display of Rohan City Render
-    const imgX = 100;
-    const imgY = 160;
-    const imgW = 1080;
-    const imgH = 680;
-
-    if (this.assets.city.complete) {
-      ctx.save();
-      this.clipRoundedRect(ctx, imgX, imgY, imgW, imgH, 28);
-      // Gentle Ken-Burns zoom
-      const zoom = 1.0 + progress * 0.04;
-      this.drawImageCover(ctx, this.assets.city, imgX, imgY, imgW, imgH, 0, zoom, progress * -20, 0);
-
-      // Subtle gradient at bottom of image
-      const grad = ctx.createLinearGradient(0, imgY + imgH - 140, 0, imgY + imgH);
-      grad.addColorStop(0, 'transparent');
-      grad.addColorStop(1, 'rgba(0, 0, 0, 0.85)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(imgX, imgY + imgH - 140, imgW, 140);
-
-      // Image Caption
-      ctx.textAlign = 'left';
-      ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText('Rohan City • Bejai Main Road, Mangaluru', imgX + 36, imgY + imgH - 50);
-
-      ctx.font = '400 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
-      ctx.fillText('3, 2 & 1 BHK Apartments & Commercial Spaces', imgX + 36, imgY + imgH - 24);
-
-      ctx.restore();
-
-      // Border outline
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.lineWidth = 1;
-      this.roundRect(ctx, imgX, imgY, imgW, imgH, 28);
-      ctx.stroke();
-    }
-
-    // Right Side: Clean Apple Bento Spec & Explanation Column
-    const panelX = 1220;
-    const panelY = 160;
-    const panelW = 600;
-    const panelH = 680;
-
-    ctx.fillStyle = '#161617';
-    this.roundRect(ctx, panelX, panelY, panelW, panelH, 28);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-    ctx.stroke();
-
-    ctx.textAlign = 'left';
+    ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#0071e3';
-    ctx.fillText('FLAGSHIP MIXED-USE TOWNSHIP', panelX + 44, panelY + 54);
+    ctx.fillText('FLAGSHIP MIXED-USE TOWNSHIP • CENTRAL MANGALURU', 960, 118);
 
-    ctx.font = '600 36px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '600 38px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Rohan City', panelX + 44, panelY + 104);
+    ctx.fillText('Rohan City • Bejai Main Road, Mangaluru', 960, 160);
 
-    ctx.font = '400 16px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#86868b';
-    this.wrapText(ctx, "Mangaluru's most ambitious mixed-use development combining world-class retail plazas, dining arcades, and luxury residential towers.", panelX + 44, panelY + 145, 510, 24);
+    // Hero 2.37:1 Banner Display (1480 px width -> 624 px height)
+    const bannerW = 1480;
+    const bannerH = 624; // 1480 / 2.37037 = 624.3 px
+    const bannerX = (1920 - bannerW) / 2;
+    const bannerY = 190;
 
-    // 3 Clean PropTech Pillars
-    const features = [
+    if (this.assets.city.complete) {
+      this.drawImageNativeRatio(ctx, this.assets.city, bannerX, bannerY, bannerW, 20);
+    }
+
+    // Professional Information Tray
+    const trayY = bannerY + bannerH + 18;
+    const trayH = 150;
+    ctx.fillStyle = '#161617';
+    this.roundRect(ctx, bannerX, trayY, bannerW, trayH, 20);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // 4 Professional Real Estate Spec Columns
+    const proCols = [
       {
-        title: '3D Photorealistic Digital Twin',
-        desc: 'Enables global NRI buyers to walk through apartments, view actual floor plans, and inspect living room balconies.'
+        tag: 'STATUTORY REGISTRATION',
+        title: 'Karnataka RERA Approved',
+        desc: 'PRM/KA/RERA/1251/305/PR/210219/003908'
       },
       {
-        title: 'Daylight & Solar Azimuth Engine',
-        desc: 'Calculates real-time natural sunlight exposure across all 3, 2 & 1 BHK residences throughout the calendar year.'
+        tag: 'DEVELOPMENT SCALE',
+        title: '3.5 Million+ Sq. Ft.',
+        desc: 'Podium High-Street Retail & Luxury Twin Towers'
       },
       {
-        title: 'Zero-Cloud On-Premise IoT',
-        desc: 'NVIDIA Jetson edge nodes govern parking dispatch and energy efficiency while protecting resident data privacy.'
+        tag: 'RESIDENCE MATRIX',
+        title: '3, 2 & 1 BHK Apartments',
+        desc: 'Skydeck Balconies with Panoramic City Views'
+      },
+      {
+        tag: 'PROPTECH INTEGRATION',
+        title: '60 FPS 3D Digital Twin',
+        desc: 'Balcony Solar Daylight & Edge AI Building Node'
       }
     ];
 
-    features.forEach((feat, idx) => {
-      const fy = panelY + 260 + idx * 125;
+    const colW = (bannerW - 80) / 4;
+    proCols.forEach((col, idx) => {
+      const cx = bannerX + 40 + idx * colW;
+      ctx.textAlign = 'left';
 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-      this.roundRect(ctx, panelX + 44, fy, 512, 105, 16);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.stroke();
+      ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = idx === 0 ? '#30d158' : '#0071e3';
+      ctx.fillText(col.tag, cx, trayY + 38);
 
-      ctx.font = '600 17px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+      ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(feat.title, panelX + 64, fy + 36);
+      ctx.fillText(col.title, cx, trayY + 68);
 
       ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
       ctx.fillStyle = '#86868b';
-      this.wrapText(ctx, feat.desc, panelX + 64, fy + 62, 470, 18);
+      ctx.fillText(col.desc, cx, trayY + 98);
     });
   }
 
   /* -------------------------------------------------------------------------- */
-  /* Scene 4: Rohan Marina One — Surathkal (0:85 - 1:15)                       */
-  /* Clean showcase of the real sea-facing photographic render                 */
+  /* Scene 4: Rohan Marina One — Surathkal Waterfront (1:25 - 1:55)             */
+  /* Hero 2.37:1 Banner (1480×623) + Apple Professional Information Matrix Tray */
   /* -------------------------------------------------------------------------- */
   renderSceneRohanMarina() {
     const ctx = this.ctx;
-    const t = this.currentTime;
-    const progress = (t - 85) / 30;
 
-    // Right Side: Cinematic Large Display of Rohan Marina One Render
-    const imgX = 740;
-    const imgY = 160;
-    const imgW = 1080;
-    const imgH = 680;
-
-    if (this.assets.marina.complete) {
-      ctx.save();
-      this.clipRoundedRect(ctx, imgX, imgY, imgW, imgH, 28);
-      const zoom = 1.0 + progress * 0.04;
-      this.drawImageCover(ctx, this.assets.marina, imgX, imgY, imgW, imgH, 0, zoom, progress * -15, 0);
-
-      // Bottom gradient
-      const grad = ctx.createLinearGradient(0, imgY + imgH - 140, 0, imgY + imgH);
-      grad.addColorStop(0, 'transparent');
-      grad.addColorStop(1, 'rgba(0, 0, 0, 0.85)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(imgX, imgY + imgH - 140, imgW, 140);
-
-      ctx.textAlign = 'left';
-      ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText('Rohan Marina One • Surathkal, Mangalore', imgX + 36, imgY + imgH - 50);
-
-      ctx.font = '400 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
-      ctx.fillText('Where Every Home Faces the Sea • 2, 3 & 4 BHK Apartments', imgX + 36, imgY + imgH - 24);
-
-      ctx.restore();
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.lineWidth = 1;
-      this.roundRect(ctx, imgX, imgY, imgW, imgH, 28);
-      ctx.stroke();
-    }
-
-    // Left Side: Explanation Panel
-    const panelX = 100;
-    const panelY = 160;
-    const panelW = 600;
-    const panelH = 680;
-
-    ctx.fillStyle = '#161617';
-    this.roundRect(ctx, panelX, panelY, panelW, panelH, 28);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-    ctx.stroke();
-
-    ctx.textAlign = 'left';
+    ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#2997ff';
-    ctx.fillText('ULTRA-LUXURY COASTAL WATERFRONT', panelX + 44, panelY + 54);
+    ctx.fillText('ULTRA-LUXURY COASTAL WATERFRONT • SURATHKAL', 960, 118);
 
-    ctx.font = '600 36px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '600 38px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Rohan Marina One', panelX + 44, panelY + 104);
+    ctx.fillText('Rohan Marina One • Where Every Home Faces the Sea', 960, 160);
 
-    ctx.font = '400 16px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#86868b';
-    this.wrapText(ctx, "Direct Arabian Sea coastal frontage in Surathkal. Towering residences designed where 100% of apartments enjoy uninterrupted maritime horizon views.", panelX + 44, panelY + 145, 510, 24);
+    const bannerW = 1480;
+    const bannerH = 623; // 1480 / 2.37587 = 622.9 px
+    const bannerX = (1920 - bannerW) / 2;
+    const bannerY = 190;
 
-    // 3 Clean PropTech Pillars
-    const features = [
+    if (this.assets.marina.complete) {
+      this.drawImageNativeRatio(ctx, this.assets.marina, bannerX, bannerY, bannerW, 20);
+    }
+
+    // Professional Information Tray
+    const trayY = bannerY + bannerH + 18;
+    const trayH = 150;
+    ctx.fillStyle = '#161617';
+    this.roundRect(ctx, bannerX, trayY, bannerW, trayH, 20);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    const proCols = [
       {
-        title: '100% Sea-Horizon Visibility Simulation',
-        desc: 'Buyers can verify exact sea-facing sightlines from any floor level prior to construction booking.'
+        tag: 'MARITIME ORIENTATION',
+        title: '100% Sea-Facing Frontage',
+        desc: 'Uninterrupted Arabian Sea Horizon Sightlines'
       },
       {
-        title: 'Coastal Wind Vector Analytics',
-        desc: 'Simulates natural cross-ventilation corridors, calculating reduced seasonal air conditioning loads.'
+        tag: 'CONFIGURATIONS',
+        title: '2, 3 & 4 BHK Sky Mansions',
+        desc: 'Direct Coastal Access & Private Sea Balconies'
       },
       {
-        title: 'Instant NRI Remote Reservation',
-        desc: 'Interactive 3D unit reservation pipeline built for Gulf and international Mangalorean diaspora.'
+        tag: 'STRATEGIC LOCATION',
+        title: 'Surathkal Beach Corridor',
+        desc: 'Premium Educational & IT Hub Connectivity'
+      },
+      {
+        tag: 'PROPTECH INTEGRATION',
+        title: 'Wind Vector & NRI Engine',
+        desc: 'Cross-Ventilation Shaders & Remote Booking'
       }
     ];
 
-    features.forEach((feat, idx) => {
-      const fy = panelY + 260 + idx * 125;
+    const colW = (bannerW - 80) / 4;
+    proCols.forEach((col, idx) => {
+      const cx = bannerX + 40 + idx * colW;
+      ctx.textAlign = 'left';
 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-      this.roundRect(ctx, panelX + 44, fy, 512, 105, 16);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.stroke();
+      ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = idx === 0 ? '#2997ff' : '#e2d5c3';
+      ctx.fillText(col.tag, cx, trayY + 38);
 
-      ctx.font = '600 17px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+      ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(feat.title, panelX + 64, fy + 36);
+      ctx.fillText(col.title, cx, trayY + 68);
 
       ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
       ctx.fillStyle = '#86868b';
-      this.wrapText(ctx, feat.desc, panelX + 64, fy + 62, 470, 18);
+      ctx.fillText(col.desc, cx, trayY + 98);
     });
   }
 
   /* -------------------------------------------------------------------------- */
-  /* Scene 5: Rohan Square & Rohan Estate (1:15 - 1:35)                        */
-  /* Clean side-by-side presentation using real photos                         */
+  /* Scene 5: Rohan Square & Rohan Estate (1:55 - 2:15)                        */
+  /* Side-by-Side Dual 2.37:1 Banners (820×346) + Professional Information Tray */
   /* -------------------------------------------------------------------------- */
   renderSceneSquareEstate() {
     const ctx = this.ctx;
-    const t = this.currentTime;
-    const progress = (t - 115) / 20;
 
     ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#e2d5c3';
-    ctx.fillText('COMPREHENSIVE ECOSYSTEM', 960, 120);
+    ctx.fillText('COMPREHENSIVE ECOSYSTEM • COMMERCIAL HUB & HILLSIDE SANCTUARY', 960, 118);
 
-    ctx.font = '600 40px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '600 38px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Commercial Transit Hub & Hillside Plotted Sanctuary', 960, 172);
+    ctx.fillText('Rohan Square (Pumpwell) & Rohan Estate (Neermarga)', 960, 160);
 
-    const cardW = 820;
-    const cardH = 580;
-    const cardY = 230;
+    const bannerW = 810;
+    const bannerH = 341; // 810 / 2.37587 = 340.9 px
+    const leftX = 110;
+    const rightX = 1000;
+    const bannerY = 200;
 
-    // Left Card: Rohan Square (Pumpwell)
-    const leftX = 100;
+    // Left Banner: Rohan Square (Pumpwell)
+    if (this.assets.square.complete) {
+      this.drawImageNativeRatio(ctx, this.assets.square, leftX, bannerY, bannerW, 16);
+    }
+
+    // Left Info Tray
+    const trayY = bannerY + bannerH + 18;
+    const trayH = 260;
     ctx.fillStyle = '#161617';
-    this.roundRect(ctx, leftX, cardY, cardW, cardH, 24);
+    this.roundRect(ctx, leftX, trayY, bannerW, trayH, 20);
     ctx.fill();
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
     ctx.stroke();
-
-    if (this.assets.square.complete) {
-      ctx.save();
-      this.clipRoundedRect(ctx, leftX + 16, cardY + 16, cardW - 32, 320, 16);
-      this.drawImageCover(ctx, this.assets.square, leftX + 16, cardY + 16, cardW - 32, 320, 0, 1.0 + progress * 0.03);
-      ctx.restore();
-    }
 
     ctx.textAlign = 'left';
     ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#30d158';
-    ctx.fillText('READY TO MOVE IN • COMMERCIAL & RESIDENTIAL', leftX + 32, cardY + 380);
+    ctx.fillText('READY TO MOVE IN • IMMEDIATE POSSESSION', leftX + 32, trayY + 40);
 
-    ctx.font = '600 28px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Rohan Square', leftX + 32, cardY + 420);
+    ctx.fillText('Rohan Square • Capitanio, Pumpwell, Mangalore', leftX + 32, trayY + 75);
 
-    ctx.font = '400 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#86868b';
-    ctx.fillText('Capitanio, Pumpwell, Mangalore • NH-66 Arterial Gateway', leftX + 32, cardY + 452);
+    const sqSpecs = [
+      { l: 'Asset Class', v: 'Grade-A Retail Showrooms & Executive Corporate Suites' },
+      { l: 'Connectivity', v: 'Arterial NH-66 Junction Gateway with High Footfall' },
+      { l: 'Infrastructure', v: '100% Dual Power Backup & High-Speed Passenger Elevators' },
+      { l: 'PropTech IoT', v: 'Smart Micro-Grid Energy Telemetry & Resident Privacy' }
+    ];
+    sqSpecs.forEach((s, idx) => {
+      const sy = trayY + 115 + idx * 30;
+      ctx.font = '500 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = '#86868b';
+      ctx.fillText(s.l + ':', leftX + 32, sy);
+      ctx.fillStyle = '#f5f5f7';
+      ctx.fillText(s.v, leftX + 140, sy);
+    });
 
-    ctx.font = '400 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#d2d2d7';
-    this.wrapText(ctx, 'Prime strategic highway connectivity with high-footfall executive suites, retail outlets, and ready-to-move-in luxury residences.', leftX + 32, cardY + 490, cardW - 64, 22);
+    // Right Banner: Rohan Estate (Neermarga)
+    if (this.assets.estate.complete) {
+      this.drawImageNativeRatio(ctx, this.assets.estate, rightX, bannerY, bannerW, 16);
+    }
 
-    // Right Card: Rohan Estate (Neermarga Hills)
-    const rightX = 1000;
+    // Right Info Tray
     ctx.fillStyle = '#161617';
-    this.roundRect(ctx, rightX, cardY, cardW, cardH, 24);
+    this.roundRect(ctx, rightX, trayY, bannerW, trayH, 20);
     ctx.fill();
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
     ctx.stroke();
-
-    if (this.assets.estate.complete) {
-      ctx.save();
-      this.clipRoundedRect(ctx, rightX + 16, cardY + 16, cardW - 32, 320, 16);
-      this.drawImageCover(ctx, this.assets.estate, rightX + 16, cardY + 16, cardW - 32, 320, 0, 1.0 + progress * 0.03);
-      ctx.restore();
-    }
 
     ctx.textAlign = 'left';
     ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#e2d5c3';
-    ctx.fillText('LUSH GREENERY • PLOTTED COMMUNITY', rightX + 32, cardY + 380);
+    ctx.fillText('LUSH GREEN HILLSIDE SANCTUARY • PLOTS FROM 5.5 CENTS', rightX + 32, trayY + 40);
 
-    ctx.font = '600 28px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Rohan Estate', rightX + 32, cardY + 420);
+    ctx.fillText('Rohan Estate • Neermarga Hills, Mangaluru', rightX + 32, trayY + 75);
 
-    ctx.font = '400 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#86868b';
-    ctx.fillText('Neermarga Hills, Mangaluru • Plots Starts from 5.5 Cents', rightX + 32, cardY + 452);
-
-    ctx.font = '400 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#d2d2d7';
-    this.wrapText(ctx, 'Tranquil hillside development with asphalted boulevards, subsoil moisture telemetry, automated perimeter security, and serene green vistas.', rightX + 32, cardY + 490, cardW - 64, 22);
+    const estSpecs = [
+      { l: 'Configuration', v: 'Master-Planned Gated Villa Plots (Clear Statutory Titles)' },
+      { l: 'Topography', v: 'Scenic Elevated Neermarga Hills with Panoramic Vistas' },
+      { l: 'Civil Specs', v: 'Wide Asphalted Boulevards, Storm Drainage, Solar Streetlights' },
+      { l: 'PropTech IoT', v: 'Subsoil Moisture Telemetry & Perimeter Drone Surveillance' }
+    ];
+    estSpecs.forEach((s, idx) => {
+      const sy = trayY + 115 + idx * 30;
+      ctx.font = '500 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = '#86868b';
+      ctx.fillText(s.l + ':', rightX + 32, sy);
+      ctx.fillStyle = '#f5f5f7';
+      ctx.fillText(s.v, rightX + 140, sy);
+    });
   }
 
   /* -------------------------------------------------------------------------- */
-  /* Scene 6: Executive Sign-off & Partnership Finale (1:35 - 2:30)             */
-  /* Clean, authoritative boardroom close                                       */
+  /* Scene 6: Executive Sign-off & Partnership Finale (2:15 - 2:30)             */
+  /* Clean Boardroom Closing with 4 Mini 2.37:1 Panoramic Thumbnails            */
   /* -------------------------------------------------------------------------- */
   renderSceneFinale() {
     const ctx = this.ctx;
 
     ctx.textAlign = 'center';
-    ctx.font = '600 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#e2d5c3';
-    ctx.fillText('OFFICIAL JOINT INITIATIVE', 960, 240);
+    ctx.fillText('OFFICIAL STRATEGIC ALLIANCE', 960, 120);
 
-    ctx.font = '700 64px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '700 56px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('The Future of Living Begins Today.', 960, 320);
+    ctx.fillText('The Future of Living Begins Today.', 960, 185);
 
-    ctx.font = '400 22px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.font = '400 20px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#86868b';
-    ctx.fillText('Engineered to accelerate pre-sales velocity and empower NRI investors worldwide.', 960, 375);
+    ctx.fillText('Engineered to accelerate pre-sales velocity and empower NRI investors worldwide.', 960, 230);
+
+    // 4 Mini 2.37:1 Panoramic Thumbnails in a Row
+    const thumbW = 340;
+    const thumbH = 143; // 340 / 2.3704 = 143.4 px
+    const startX = (1920 - (4 * thumbW + 3 * 24)) / 2;
+    const thumbY = 280;
+
+    const miniList = [
+      { img: this.assets.city, label: 'Rohan City (Bejai)' },
+      { img: this.assets.marina, label: 'Rohan Marina One (Surathkal)' },
+      { img: this.assets.square, label: 'Rohan Square (Pumpwell)' },
+      { img: this.assets.estate, label: 'Rohan Estate (Neermarga)' }
+    ];
+
+    miniList.forEach((m, idx) => {
+      const mx = startX + idx * (thumbW + 24);
+      if (m.img.complete) {
+        this.drawImageNativeRatio(ctx, m.img, mx, thumbY, thumbW, 12);
+      }
+      ctx.textAlign = 'center';
+      ctx.font = '500 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = '#86868b';
+      ctx.fillText(m.label, mx + thumbW / 2, thumbY + thumbH + 24);
+    });
 
     // Executive Signatories Card
     const signW = 1080;
-    const signH = 220;
+    const signH = 190;
     const signX = (1920 - signW) / 2;
-    const signY = 440;
+    const signY = 500;
 
     ctx.fillStyle = '#161617';
-    this.roundRect(ctx, signX, signY, signW, signH, 28);
+    this.roundRect(ctx, signX, signY, signW, signH, 24);
     ctx.fill();
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
     ctx.stroke();
 
     // Left: HRL International
     ctx.textAlign = 'left';
-    ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#0071e3';
-    ctx.fillText('TECHNOLOGY PARTNER', signX + 60, signY + 54);
+    ctx.fillText('TECHNOLOGY PARTNER', signX + 60, signY + 45);
 
-    ctx.font = '600 28px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '600 26px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Pavan Kumar Sadashiv', signX + 60, signY + 104);
+    ctx.fillText('Pavan Kumar Sadashiv', signX + 60, signY + 85);
 
-    ctx.font = '400 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.font = '400 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#86868b';
-    ctx.fillText('HRL International Private Limited', signX + 60, signY + 140);
-    ctx.fillText('Managing Director & AI Architect', signX + 60, signY + 168);
+    ctx.fillText('HRL International Private Limited • AI Architect & MD', signX + 60, signY + 115);
 
     // Center Divider
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
     ctx.beginPath();
-    ctx.moveTo(960, signY + 40);
-    ctx.lineTo(960, signY + signH - 40);
+    ctx.moveTo(960, signY + 30);
+    ctx.lineTo(960, signY + signH - 30);
     ctx.stroke();
 
     // Right: Rohan Corporation
     ctx.textAlign = 'left';
-    ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#e2d5c3';
-    ctx.fillText('REAL ESTATE CONGLOMERATE', 1020, signY + 54);
+    ctx.fillText('REAL ESTATE CONGLOMERATE', 1020, signY + 45);
 
-    ctx.font = '600 28px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.font = '600 26px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Rohan Monteiro', 1020, signY + 104);
+    ctx.fillText('Rohan Monteiro', 1020, signY + 85);
 
-    ctx.font = '400 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.font = '400 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#86868b';
-    ctx.fillText('Rohan Corporation', 1020, signY + 140);
-    ctx.fillText('Founder & Chairman', 1020, signY + 168);
+    ctx.fillText('Rohan Corporation • Founder & Chairman', 1020, signY + 115);
 
-    // Bottom Action / Next Step Pill
+    // Bottom Action Pill
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(0, 113, 227, 0.12)';
-    this.roundRect(ctx, 640, 720, 640, 56, 28);
+    this.roundRect(ctx, 640, 740, 640, 54, 27);
     ctx.fill();
     ctx.strokeStyle = 'rgba(0, 113, 227, 0.35)';
     ctx.stroke();
 
     ctx.font = '500 16px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#2997ff';
-    ctx.fillText('Phase 1 Pilot Sanction • Rohan City Drone & LiDAR Baseline Survey', 960, 755);
+    ctx.fillText('Phase 1 Pilot Sanction • Rohan City Drone & LiDAR Baseline Survey', 960, 773);
   }
 
   /* -------------------------------------------------------------------------- */
-  /* Clean Header (Minimal, No Clutter)                                         */
+  /* Clean Header (Minimal, Auto-Run Indicator)                                 */
   /* -------------------------------------------------------------------------- */
   drawCleanHeader() {
     const ctx = this.ctx;
@@ -1056,34 +1000,25 @@ class MasterMotionGraphicsEngine {
   }
 
   /* -------------------------------------------------------------------------- */
-  /* Geometry & Image Helper Methods                                            */
+  /* Geometry & Image Helper: Native 2.37:1 Ratio Drawing                       */
+  /* Guarantees ZERO CROPPING, ZERO DISTORTION across all photographic renders   */
   /* -------------------------------------------------------------------------- */
-  drawImageCover(ctx, img, x, y, width, height, radius = 0, scale = 1.0, panX = 0, panY = 0) {
-    if (!img || !img.complete || img.naturalWidth === 0) return;
+  drawImageNativeRatio(ctx, img, x, y, width, radius = 16) {
+    if (!img || !img.complete || img.naturalWidth === 0) return 0;
+    const ratio = img.naturalWidth / img.naturalHeight; // ~2.37:1
+    const height = width / ratio;
 
-    const imgW = img.naturalWidth;
-    const imgH = img.naturalHeight;
-    const imgAspect = imgW / imgH;
-    const frameAspect = width / height;
+    ctx.save();
+    this.clipRoundedRect(ctx, x, y, width, height, radius);
+    ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, x, y, width, height);
+    ctx.restore();
 
-    let sW, sH, sX, sY;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+    ctx.lineWidth = 1;
+    this.roundRect(ctx, x, y, width, height, radius);
+    ctx.stroke();
 
-    if (imgAspect > frameAspect) {
-      sH = imgH / scale;
-      sW = sH * frameAspect;
-      sX = (imgW - sW) / 2 + panX;
-      sY = (imgH - sH) / 2 + panY;
-    } else {
-      sW = imgW / scale;
-      sH = sW / frameAspect;
-      sX = (imgW - sW) / 2 + panX;
-      sY = (imgH - sH) / 2 + panY;
-    }
-
-    sX = Math.max(0, Math.min(imgW - sW, sX));
-    sY = Math.max(0, Math.min(imgH - sH, sY));
-
-    ctx.drawImage(img, sX, sY, sW, sH, x, y, width, height);
+    return height;
   }
 
   clipRoundedRect(ctx, x, y, width, height, radius) {
@@ -1095,7 +1030,7 @@ class MasterMotionGraphicsEngine {
     ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
     ctx.lineTo(x + radius, y + height);
     ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-    ctx.lineTo(x, y + radius);
+    ctx.lineTo(x + radius, y);
     ctx.quadraticCurveTo(x, y, x + radius, y);
     ctx.closePath();
     ctx.clip();
@@ -1113,24 +1048,6 @@ class MasterMotionGraphicsEngine {
     ctx.lineTo(x, y + radius);
     ctx.quadraticCurveTo(x, y, x + radius, y);
     ctx.closePath();
-  }
-
-  wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-    const words = text.split(' ');
-    let line = '';
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      const testWidth = metrics.width;
-      if (testWidth > maxWidth && n > 0) {
-        ctx.fillText(line, x, y);
-        line = words[n] + ' ';
-        y += lineHeight;
-      } else {
-        line = testLine;
-      }
-    }
-    ctx.fillText(line, x, y);
   }
 }
 
