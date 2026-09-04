@@ -113,7 +113,8 @@ During today's sprint, the `docs/` repository was expanded with four major execu
 2. `docs/HRL_INTERNATIONAL_19_VENTURE_ARCHITECTURE.md` (21.0 KB) — Complete charter of the 19 venture architecture pillars.
 3. `docs/PROJECT_STARTUP_BLUEPRINT.md` (7.0 KB) — 16-week execution roadmap and staffing model.
 4. `docs/EQUIPMENT_SPECIFICATION.md` (8.4 KB) — Hardware, network, and sensor architecture for smart developments.
-5. `TODAYS_WORK.md` (This document) — Comprehensive executive summary of September 5, 2026 sprint deliverables.
+5. `docs/PROJECT_TOTAL_EXPENSE.md` (10.2 KB) — Project Total Expense & Financial Master Budget (Phase 1 MVP ₹18L vs Phase 2 Enterprise ₹38.5L; ₹56.5L consolidated platform budget + 38.1% EBITDA analysis).
+6. `TODAYS_WORK.md` / `docs/TODAYS_WORK_2026_09_05.md` (This document) — Comprehensive executive summary of September 5, 2026 sprint deliverables.
 
 ---
 
