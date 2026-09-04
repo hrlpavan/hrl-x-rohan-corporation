@@ -26,9 +26,9 @@ graph TD
     A["HRL International<br/>(AI, Visual Computing, Systems)"] --> C["HRL x Rohan Corporation<br/>PropTech Platform"]
     B["Rohan Corporation<br/>(Real Estate, Urban Infrastructure)"] --> C
     
-    C --> D["Smart Living & Digital Twins"]
-    C --> E["AI Energy & Facility Autonomy"]
-    C --> F["Global Investor Relations & Web Portal"]
+    C --> D["Smart Living and Digital Twins"]
+    C --> E["AI Energy and Facility Autonomy"]
+    C --> F["Global Investor Relations and Web Portal"]
 ```
 
 ### Pillar I: Photorealistic Architectural Digital Twins

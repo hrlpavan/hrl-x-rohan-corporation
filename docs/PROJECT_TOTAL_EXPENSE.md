@@ -35,12 +35,21 @@ This master expense schedule provides an exhaustive financial framework covering
 For the direct implementation of the **HRL × Rohan Corporation** technology stack across Rohan City, Rohan Crown, Rohan Square, and Rohan Estate:
 
 ```mermaid
-pie title PropTech Platform Budget Allocation (₹18,00,000 Total)
-    "3D Digital Twin & Shaders" : 650000
-    "Edge IoT & Smart Controllers" : 500000
-    "Photogrammetry & Drone Data" : 350000
-    "CDN, Cloud & CI/CD Hosting" : 150000
-    "RERA & DPDP Statutory Audits" : 150000
+flowchart TD
+    Total["Total Dedicated Capital Outlay: ₹18,00,000"]
+    
+    Total --> A["3D Digital Twin and Shaders<br/><b>₹6,50,000 (36.1%)</b>"]
+    Total --> B["Edge IoT and Smart Controllers<br/><b>₹5,00,000 (27.8%)</b>"]
+    Total --> C["Photogrammetry and Drone Spatial Data<br/><b>₹3,50,000 (19.4%)</b>"]
+    Total --> D["Cloud CDN and CI/CD Hosting<br/><b>₹1,50,000 (8.3%)</b>"]
+    Total --> E["RERA and DPDP Statutory Compliance<br/><b>₹1,50,000 (8.3%)</b>"]
+
+    style Total fill:#0f172a,stroke:#d4af37,stroke-width:2px,color:#ffffff
+    style A fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#ffffff
+    style B fill:#1e293b,stroke:#10b981,stroke-width:1px,color:#ffffff
+    style C fill:#1e293b,stroke:#f59e0b,stroke-width:1px,color:#ffffff
+    style D fill:#1e293b,stroke:#a855f7,stroke-width:1px,color:#ffffff
+    style E fill:#1e293b,stroke:#ec4899,stroke-width:1px,color:#ffffff
 ```
 
 | Component | Budgeted Expense | Purpose & Technical Scope |
