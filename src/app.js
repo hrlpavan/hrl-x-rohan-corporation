@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBookingForm();
   initMobileMenu();
   initSecretSimulator();
+  initVentureTabs();
 });
 
 /* -------------------------------------------------------------------------- */
@@ -429,4 +430,31 @@ function initSecretSimulator() {
 
   portfolioRange.addEventListener('input', update);
   update();
+}
+
+/* -------------------------------------------------------------------------- */
+/* 8. 19-Pillar Venture Architecture Tier Tabs Filter                         */
+/* -------------------------------------------------------------------------- */
+function initVentureTabs() {
+  const tabs = document.querySelectorAll('.venture-tab-btn');
+  const cards = document.querySelectorAll('.secret-pillar-card');
+
+  if (!tabs.length || !cards.length) return;
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const tier = tab.getAttribute('data-tier');
+      cards.forEach(card => {
+        const cardTier = card.getAttribute('data-tier');
+        if (tier === 'all' || cardTier === tier) {
+          card.classList.remove('d-none');
+        } else {
+          card.classList.add('d-none');
+        }
+      });
+    });
+  });
 }

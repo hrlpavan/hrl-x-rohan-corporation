@@ -1277,13 +1277,74 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* ==========================================================================
-   HRL Core™ Secret Ingredient Platform
+/* ==========================================================================
+   HRL INTERNATIONAL™ VENTURE ARCHITECTURE (19 PILLARS)
    ========================================================================== */
+.venture-tier-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 6px 2px 14px 2px;
+  margin: 28px 0 32px 0;
+  scrollbar-width: none;
+}
+
+.venture-tier-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.venture-tab-btn {
+  background: var(--apple-card);
+  border: 1px solid var(--apple-border-subtle);
+  border-radius: var(--apple-radius-pill);
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--apple-transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.venture-tab-btn:hover {
+  color: #ffffff;
+  border-color: var(--gold-border-subtle);
+  background: var(--apple-card-hover);
+}
+
+.venture-tab-btn.active {
+  background: var(--gold-badge-bg);
+  border-color: var(--gold-primary);
+  color: var(--gold-champagne);
+  box-shadow: 0 0 16px rgba(223, 183, 108, 0.2);
+}
+
+.venture-tab-count {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: var(--apple-radius-pill);
+  color: #ffffff;
+}
+
+.venture-tab-btn.active .venture-tab-count {
+  background: var(--gold-primary);
+  color: #000000;
+}
+
 .secret-grid-8 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
-  margin: 40px 0;
+  margin: 20px 0 40px 0;
+}
+
+.secret-pillar-card.d-none {
+  display: none !important;
 }
 
 .secret-pillar-card {
