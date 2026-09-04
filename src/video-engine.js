@@ -438,6 +438,20 @@ class MasterMotionGraphicsEngine {
   /* Scene 1: The Genesis & The Vision (0:00 - 0:25)                            */
   /* Clean, elegant Apple typography with soft vignette                         */
   /* -------------------------------------------------------------------------- */
+  /* Premium Metallic & Champagne Gold Typography Helper                        */
+  /* -------------------------------------------------------------------------- */
+  createGoldGradient(yTop, yBottom) {
+    const grad = this.ctx.createLinearGradient(0, yTop, 0, yBottom);
+    grad.addColorStop(0, '#ffffff');
+    grad.addColorStop(0.3, '#faeccd');
+    grad.addColorStop(0.65, '#dfb76c');
+    grad.addColorStop(1, '#9b7218');
+    return grad;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* Scene 1: Executive Genesis & Monolithic Branding (0:00 - 0:25)             */
+  /* -------------------------------------------------------------------------- */
   renderSceneGenesis() {
     const ctx = this.ctx;
     const t = this.currentTime;
@@ -455,26 +469,26 @@ class MasterMotionGraphicsEngine {
     ctx.fillRect(0, 0, 1920, 1080);
     ctx.restore();
 
-    // Monolithic Partnership Typography (Zero Overlap)
+    // Monolithic Partnership Typography (Zero Overlap, Premium Gold)
     ctx.textAlign = 'center';
 
     // Eyebrow
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#e2d5c3';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('MANGALURU SMART PROPTECH INITIATIVE', 960, 330);
 
-    // Headline
+    // Headline (Metallic Gold Gradient)
     ctx.font = '700 64px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = this.createGoldGradient(360, 425);
     ctx.fillText('HRL INTERNATIONAL  ×  ROHAN CORPORATION', 960, 420);
 
     // Subtitle
     ctx.font = '400 24px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#86868b';
+    ctx.fillStyle = '#f5e6c8';
     ctx.fillText('Bridging Architectural Grandeur with Computational Intelligence', 960, 475);
 
-    // Separator line
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    // Separator line (Subtle Champagne Gold)
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.25)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(760, 520);
@@ -498,12 +512,12 @@ class MasterMotionGraphicsEngine {
       ctx.fillStyle = '#161617';
       this.roundRect(ctx, px, py, pw, ph, 20);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.strokeStyle = 'rgba(223, 183, 108, 0.2)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+      ctx.fillStyle = this.createGoldGradient(py + 25, py + 48);
       ctx.fillText(p.num, px + pw / 2, py + 45);
 
       ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
@@ -521,11 +535,11 @@ class MasterMotionGraphicsEngine {
 
     ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#e2d5c3';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('PORTFOLIO OVERVIEW • 2.37:1 NATIVE ARCHITECTURAL RATIO', 960, 118);
 
     ctx.font = '600 38px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = this.createGoldGradient(125, 165);
     ctx.fillText('Four Landmark Developments Across Mangaluru', 960, 162);
 
     const items = [
@@ -535,7 +549,7 @@ class MasterMotionGraphicsEngine {
         spec: 'RERA: PRM/KA/RERA/1251/305/PR/210219/003908 • 3.5M Sq. Ft.',
         img: this.assets.city,
         col: 0, row: 0,
-        highlight: '#0071e3'
+        highlight: '#dfb76c'
       },
       {
         title: 'Rohan Marina One',
@@ -543,7 +557,7 @@ class MasterMotionGraphicsEngine {
         spec: '100% Sea-Horizon Visibility • Coastal Wind Vector Modeling',
         img: this.assets.marina,
         col: 1, row: 0,
-        highlight: '#2997ff'
+        highlight: '#dfb76c'
       },
       {
         title: 'Rohan Square',
@@ -551,7 +565,7 @@ class MasterMotionGraphicsEngine {
         spec: 'NH-66 Arterial Gateway • Smart Micro-Grid Dual Power Backup',
         img: this.assets.square,
         col: 0, row: 1,
-        highlight: '#30d158'
+        highlight: '#dfb76c'
       },
       {
         title: 'Rohan Estate',
@@ -559,7 +573,7 @@ class MasterMotionGraphicsEngine {
         spec: 'Gated Hillside Sanctuary • IoT Subsoil Moisture Telemetry',
         img: this.assets.estate,
         col: 1, row: 1,
-        highlight: '#e2d5c3'
+        highlight: '#dfb76c'
       }
     ];
 
@@ -579,7 +593,7 @@ class MasterMotionGraphicsEngine {
       ctx.fillStyle = '#161617';
       this.roundRect(ctx, cx, cy, cardW, 375, 20);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.strokeStyle = 'rgba(223, 183, 108, 0.15)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
@@ -591,11 +605,11 @@ class MasterMotionGraphicsEngine {
       // Bottom Professional Spec Strip
       ctx.textAlign = 'left';
       ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#30d158';
+      ctx.fillStyle = '#dfb76c';
       ctx.fillText('RERA APPROVED', cx + 20, cy + imgH + 34);
 
       ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
+      ctx.fillStyle = '#f5e6c8';
       ctx.fillText(item.spec, cx + 138, cy + imgH + 34);
     });
   }
@@ -609,11 +623,11 @@ class MasterMotionGraphicsEngine {
 
     ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#0071e3';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('FLAGSHIP MIXED-USE TOWNSHIP • CENTRAL MANGALURU', 960, 118);
 
     ctx.font = '600 38px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = this.createGoldGradient(125, 165);
     ctx.fillText('Rohan City • Bejai Main Road, Mangaluru', 960, 160);
 
     // Hero 2.37:1 Banner Display (1480 px width -> 624 px height)
@@ -632,7 +646,7 @@ class MasterMotionGraphicsEngine {
     ctx.fillStyle = '#161617';
     this.roundRect(ctx, bannerX, trayY, bannerW, trayH, 20);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.18)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -666,7 +680,7 @@ class MasterMotionGraphicsEngine {
       ctx.textAlign = 'left';
 
       ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = idx === 0 ? '#30d158' : '#0071e3';
+      ctx.fillStyle = '#dfb76c';
       ctx.fillText(col.tag, cx, trayY + 38);
 
       ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
@@ -674,7 +688,7 @@ class MasterMotionGraphicsEngine {
       ctx.fillText(col.title, cx, trayY + 68);
 
       ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
+      ctx.fillStyle = '#f5e6c8';
       ctx.fillText(col.desc, cx, trayY + 98);
     });
   }
@@ -688,11 +702,11 @@ class MasterMotionGraphicsEngine {
 
     ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#2997ff';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('ULTRA-LUXURY COASTAL WATERFRONT • SURATHKAL', 960, 118);
 
     ctx.font = '600 38px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = this.createGoldGradient(125, 165);
     ctx.fillText('Rohan Marina One • Where Every Home Faces the Sea', 960, 160);
 
     const bannerW = 1480;
@@ -710,7 +724,7 @@ class MasterMotionGraphicsEngine {
     ctx.fillStyle = '#161617';
     this.roundRect(ctx, bannerX, trayY, bannerW, trayH, 20);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.18)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -743,7 +757,7 @@ class MasterMotionGraphicsEngine {
       ctx.textAlign = 'left';
 
       ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = idx === 0 ? '#2997ff' : '#e2d5c3';
+      ctx.fillStyle = '#dfb76c';
       ctx.fillText(col.tag, cx, trayY + 38);
 
       ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
@@ -751,7 +765,7 @@ class MasterMotionGraphicsEngine {
       ctx.fillText(col.title, cx, trayY + 68);
 
       ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
+      ctx.fillStyle = '#f5e6c8';
       ctx.fillText(col.desc, cx, trayY + 98);
     });
   }
@@ -765,11 +779,11 @@ class MasterMotionGraphicsEngine {
 
     ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#e2d5c3';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('COMPREHENSIVE ECOSYSTEM • COMMERCIAL HUB & HILLSIDE SANCTUARY', 960, 118);
 
     ctx.font = '600 38px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = this.createGoldGradient(125, 165);
     ctx.fillText('Rohan Square (Pumpwell) & Rohan Estate (Neermarga)', 960, 160);
 
     const bannerW = 810;
@@ -789,17 +803,17 @@ class MasterMotionGraphicsEngine {
     ctx.fillStyle = '#161617';
     this.roundRect(ctx, leftX, trayY, bannerW, trayH, 20);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.18)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
     ctx.textAlign = 'left';
     ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#30d158';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('READY TO MOVE IN • IMMEDIATE POSSESSION', leftX + 32, trayY + 40);
 
     ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#f5e6c8';
     ctx.fillText('Rohan Square • Capitanio, Pumpwell, Mangalore', leftX + 32, trayY + 75);
 
     const sqSpecs = [
@@ -811,9 +825,9 @@ class MasterMotionGraphicsEngine {
     sqSpecs.forEach((s, idx) => {
       const sy = trayY + 115 + idx * 30;
       ctx.font = '500 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
+      ctx.fillStyle = '#dfb76c';
       ctx.fillText(s.l + ':', leftX + 32, sy);
-      ctx.fillStyle = '#f5f5f7';
+      ctx.fillStyle = '#ffffff';
       ctx.fillText(s.v, leftX + 140, sy);
     });
 
@@ -826,17 +840,17 @@ class MasterMotionGraphicsEngine {
     ctx.fillStyle = '#161617';
     this.roundRect(ctx, rightX, trayY, bannerW, trayH, 20);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.18)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
     ctx.textAlign = 'left';
     ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#e2d5c3';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('LUSH GREEN HILLSIDE SANCTUARY • PLOTS FROM 5.5 CENTS', rightX + 32, trayY + 40);
 
     ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#f5e6c8';
     ctx.fillText('Rohan Estate • Neermarga Hills, Mangaluru', rightX + 32, trayY + 75);
 
     const estSpecs = [
@@ -848,9 +862,9 @@ class MasterMotionGraphicsEngine {
     estSpecs.forEach((s, idx) => {
       const sy = trayY + 115 + idx * 30;
       ctx.font = '500 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
+      ctx.fillStyle = '#dfb76c';
       ctx.fillText(s.l + ':', rightX + 32, sy);
-      ctx.fillStyle = '#f5f5f7';
+      ctx.fillStyle = '#ffffff';
       ctx.fillText(s.v, rightX + 140, sy);
     });
   }
@@ -864,15 +878,15 @@ class MasterMotionGraphicsEngine {
 
     ctx.textAlign = 'center';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#e2d5c3';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('OFFICIAL STRATEGIC ALLIANCE', 960, 120);
 
     ctx.font = '700 56px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = this.createGoldGradient(140, 195);
     ctx.fillText('The Future of Living Begins Today.', 960, 185);
 
     ctx.font = '400 20px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#86868b';
+    ctx.fillStyle = '#f5e6c8';
     ctx.fillText('Engineered to accelerate pre-sales velocity and empower NRI investors worldwide.', 960, 230);
 
     // 4 Mini 2.37:1 Panoramic Thumbnails in a Row
@@ -895,7 +909,7 @@ class MasterMotionGraphicsEngine {
       }
       ctx.textAlign = 'center';
       ctx.font = '500 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#86868b';
+      ctx.fillStyle = '#f5e6c8';
       ctx.fillText(m.label, mx + thumbW / 2, thumbY + thumbH + 24);
     });
 
@@ -908,18 +922,18 @@ class MasterMotionGraphicsEngine {
     ctx.fillStyle = '#161617';
     this.roundRect(ctx, signX, signY, signW, signH, 24);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.2)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
     // Left: HRL International
     ctx.textAlign = 'left';
     ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#0071e3';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('TECHNOLOGY PARTNER', signX + 60, signY + 45);
 
     ctx.font = '600 26px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#f5e6c8';
     ctx.fillText('Pavan Kumar Sadashiv', signX + 60, signY + 85);
 
     ctx.font = '400 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
@@ -927,7 +941,7 @@ class MasterMotionGraphicsEngine {
     ctx.fillText('HRL International Private Limited • AI Architect & MD', signX + 60, signY + 115);
 
     // Center Divider
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.2)';
     ctx.beginPath();
     ctx.moveTo(960, signY + 30);
     ctx.lineTo(960, signY + signH - 30);
@@ -936,11 +950,11 @@ class MasterMotionGraphicsEngine {
     // Right: Rohan Corporation
     ctx.textAlign = 'left';
     ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#e2d5c3';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('REAL ESTATE CONGLOMERATE', 1020, signY + 45);
 
     ctx.font = '600 26px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#f5e6c8';
     ctx.fillText('Rohan Monteiro', 1020, signY + 85);
 
     ctx.font = '400 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
@@ -949,14 +963,14 @@ class MasterMotionGraphicsEngine {
 
     // Bottom Action Pill
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(0, 113, 227, 0.12)';
+    ctx.fillStyle = 'rgba(223, 183, 108, 0.12)';
     this.roundRect(ctx, 640, 740, 640, 54, 27);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(0, 113, 227, 0.35)';
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.35)';
     ctx.stroke();
 
     ctx.font = '500 16px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#2997ff';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText('Phase 1 Pilot Sanction • Rohan City Drone & LiDAR Baseline Survey', 960, 773);
   }
 
@@ -970,17 +984,19 @@ class MasterMotionGraphicsEngine {
     ctx.textAlign = 'left';
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('HRL INTERNATIONAL / ROHAN CORPORATION', 60, 55);
+    ctx.fillText('HRL INTERNATIONAL', 60, 55);
+    ctx.fillStyle = '#dfb76c';
+    ctx.fillText(' / ROHAN CORPORATION', 60 + ctx.measureText('HRL INTERNATIONAL').width, 55);
 
     if (this.autoRun) {
-      ctx.fillStyle = '#30d158';
+      ctx.fillStyle = '#dfb76c';
       ctx.beginPath();
-      ctx.arc(385, 51, 3.5, 0, Math.PI * 2);
+      ctx.arc(430, 51, 3.5, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillStyle = '#30d158';
-      ctx.fillText('AUTO-RUN', 396, 55);
+      ctx.fillStyle = '#dfb76c';
+      ctx.fillText('AUTO-RUN', 440, 55);
     }
 
     ctx.font = '400 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
@@ -991,11 +1007,11 @@ class MasterMotionGraphicsEngine {
     const scene = this.scenes[this.currentSceneIndex];
     ctx.textAlign = 'right';
     ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#86868b';
+    ctx.fillStyle = '#dfb76c';
     ctx.fillText(`SCENE ${String(this.currentSceneIndex + 1).padStart(2, '0')} / 06`, 1860, 55);
 
     ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillStyle = '#0071e3';
+    ctx.fillStyle = '#f5e6c8';
     ctx.fillText(scene.title.toUpperCase(), 1860, 74);
   }
 

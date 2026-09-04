@@ -21,10 +21,22 @@
   --apple-blue: #0071e3;
   --apple-blue-hover: #0077ed;
   --apple-blue-link: #2997ff;
-  
-  --apple-titanium: #e2d5c3;
-  --apple-gold-gradient: linear-gradient(180deg, #f5f5f7 0%, #a1a1a6 100%);
-  --apple-titanium-gradient: linear-gradient(135deg, #f3e5ab 0%, #d4af37 60%, #aa820a 100%);
+  --apple-titanium: #dfb76c;
+  --apple-gold-gradient: linear-gradient(180deg, #ffffff 0%, #faeccd 40%, #e0b85a 75%, #9b7218 100%);
+  --apple-titanium-gradient: linear-gradient(135deg, #fff9e6 0%, #f5e6c8 25%, #dfb76c 60%, #aa820a 100%);
+
+  /* Premium Metallic & Champagne Gold Typography System */
+  --gold-primary: #dfb76c;
+  --gold-metallic: #d4af37;
+  --gold-champagne: #f5e6c8;
+  --gold-ivory: #fff9e6;
+  --gold-bronze: #aa820a;
+  --gold-glow: rgba(223, 183, 108, 0.28);
+  --gold-border: rgba(223, 183, 108, 0.35);
+  --gold-border-subtle: rgba(223, 183, 108, 0.15);
+  --gold-text-gradient: linear-gradient(135deg, #ffffff 0%, #f7e6c4 30%, #dfb76c 65%, #a67c1e 100%);
+  --gold-headline-gradient: linear-gradient(180deg, #ffffff 0%, #faeccd 40%, #e0b85a 75%, #9b7218 100%);
+  --gold-badge-bg: rgba(223, 183, 108, 0.12);
 
   /* Apple Text Hierarchy */
   --apple-text-primary: #f5f5f7;
@@ -110,13 +122,14 @@ body {
 }
 
 .apple-brand-divider {
-  color: #86868b;
-  font-weight: 300;
+  color: var(--gold-primary);
+  font-weight: 400;
   font-size: 12px;
 }
 
 .apple-brand-partner {
-  color: var(--apple-titanium);
+  color: var(--gold-champagne);
+  font-weight: 500;
 }
 
 .apple-nav-menu {
@@ -184,7 +197,8 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--apple-titanium);
+  color: var(--gold-primary);
+  text-shadow: 0 0 16px var(--gold-glow);
   margin-bottom: 14px;
 }
 
@@ -198,9 +212,23 @@ body {
 }
 
 .apple-headline-gradient {
-  background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
+  background: var(--gold-headline-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.gold-text-gradient {
+  background: var(--gold-text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-text {
+  color: var(--gold-primary);
+}
+
+.gold-text-champagne {
+  color: var(--gold-champagne);
 }
 
 .apple-hero-sub {
@@ -326,9 +354,11 @@ body {
 
 .apple-metric-num {
   font-size: 38px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
-  color: #ffffff;
+  background: var(--gold-text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .apple-metric-label {
@@ -509,16 +539,17 @@ body {
 
 .pro-meta-label {
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--apple-text-secondary);
+  letter-spacing: 0.06em;
+  color: var(--gold-champagne);
+  opacity: 0.95;
 }
 
 .pro-meta-value {
   font-size: 13px;
   font-weight: 600;
-  color: #f5f5f7;
+  color: #ffffff;
   margin-top: 2px;
 }
 
@@ -527,7 +558,8 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--apple-text-secondary);
+  color: var(--gold-primary);
+  text-shadow: 0 0 14px var(--gold-glow);
   margin-bottom: 8px;
 }
 
@@ -560,13 +592,13 @@ body {
 }
 
 .bento-spec-val {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: #ffffff;
 }
 
 .bento-spec-lbl {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--apple-text-tertiary);
   margin-top: 2px;
 }
@@ -581,14 +613,15 @@ body {
 .rera-pill-apple {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+  padding: 5px 14px;
   border-radius: var(--apple-radius-pill);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  background: rgba(48, 209, 88, 0.15);
-  color: #30d158;
-  border: 1px solid rgba(48, 209, 88, 0.3);
+  background: var(--gold-badge-bg);
+  color: var(--gold-champagne);
+  border: 1px solid var(--gold-border);
+  box-shadow: 0 0 14px rgba(223, 183, 108, 0.12);
 }
 
 /* ==========================================================================
@@ -741,7 +774,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-size: 52px;
   font-weight: 700;
   letter-spacing: -0.025em;
-  color: #ffffff;
+  background: var(--gold-headline-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   line-height: 1.1;
   margin: 6px 0;
 }
@@ -769,7 +804,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .stat-unit-val {
   font-size: 20px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--gold-champagne);
   margin-top: 4px;
 }
 
@@ -811,13 +846,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--apple-text-secondary);
+  color: var(--gold-primary);
 }
 
 .apple-sig-name {
   font-size: 22px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--gold-champagne);
   margin: 4px 0;
 }
 
@@ -1066,7 +1101,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .property-subnav-title {
   font-size: 17px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--gold-champagne);
   letter-spacing: -0.01em;
 }
 
@@ -1085,7 +1120,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .property-subnav-links a:hover {
-  color: #ffffff;
+  color: var(--gold-champagne);
 }
 
 .property-specs-grid-4 {
@@ -1107,14 +1142,16 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--apple-titanium);
+  color: var(--gold-primary);
   margin-bottom: 8px;
 }
 
 .pro-spec-title {
   font-size: 22px;
   font-weight: 600;
-  color: #ffffff;
+  background: var(--gold-text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   line-height: 1.2;
 }
 
@@ -1148,6 +1185,40 @@ input[type="range"]::-webkit-slider-thumb:hover {
   color: #ffffff;
 }
 
+.unit-badge {
+  display: inline-block;
+  background: var(--gold-badge-bg);
+  color: var(--gold-champagne);
+  border: 1px solid var(--gold-border);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: var(--apple-radius-pill);
+  margin-bottom: 10px;
+}
+
+.unit-dims {
+  font-size: 13px;
+  color: var(--gold-champagne);
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.unit-price-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--apple-text-secondary);
+}
+
+.unit-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  margin: 4px 0 12px;
+}
+
 .unit-area {
   font-size: 14px;
   color: var(--apple-text-secondary);
@@ -1172,7 +1243,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .unit-feature-list li::before {
   content: "•";
-  color: var(--apple-blue);
+  color: var(--gold-primary);
   font-size: 16px;
 }
 
@@ -1183,7 +1254,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   margin: 30px 0;
 }
 
-.connect-item {
+.connect-item, .connect-card {
   background: var(--apple-card);
   padding: 18px 24px;
   border-radius: 16px;
@@ -1201,7 +1272,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .connect-dist {
   font-size: 14px;
-  color: var(--apple-blue);
+  color: var(--gold-primary);
   font-weight: 600;
 }
 
