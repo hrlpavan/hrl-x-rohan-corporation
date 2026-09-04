@@ -81,10 +81,33 @@ class MasterMotionGraphicsEngine {
 
     this.currentSceneIndex = 0;
     this.currentVoiceSceneIndex = -1;
+    this.autoRun = true;
 
     this.initAudioEngine();
     this.bindUI();
     this.render();
+
+    // Auto-Run immediately upon launch
+    setTimeout(() => {
+      this.play();
+    }, 200);
+
+    // Smoothly unlock audio if browser autoplay policy delays Web Audio until gesture
+    const unlockAudio = () => {
+      if (this.audioCtx && this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+        if (this.musicEnabled && this.isPlaying) this.startSoundtrack();
+      }
+      if (this.voiceEnabled && this.isPlaying && window.speechSynthesis && !window.speechSynthesis.speaking) {
+        this.speakScene(this.currentSceneIndex);
+      }
+      window.removeEventListener('pointerdown', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+    };
+    window.addEventListener('pointerdown', unlockAudio);
+    window.addEventListener('keydown', unlockAudio);
+    window.addEventListener('click', unlockAudio);
   }
 
   loadImage(src) {
@@ -202,6 +225,15 @@ class MasterMotionGraphicsEngine {
         const rect = this.progressBarContainer.getBoundingClientRect();
         const pos = (e.clientX - rect.left) / rect.width;
         this.seekTo(pos * this.duration);
+      });
+    }
+
+    this.toggleAutoBtn = document.getElementById('toggleAutoBtn');
+    if (this.toggleAutoBtn) {
+      this.toggleAutoBtn.addEventListener('click', () => {
+        this.autoRun = !this.autoRun;
+        this.toggleAutoBtn.textContent = `Auto: ${this.autoRun ? 'ON' : 'OFF'}`;
+        this.toggleAutoBtn.style.color = this.autoRun ? '#2997ff' : '#86868b';
       });
     }
 
@@ -357,8 +389,15 @@ class MasterMotionGraphicsEngine {
     if (this.isPlaying) {
       this.currentTime += delta;
       if (this.currentTime >= this.duration) {
-        this.currentTime = this.duration;
-        this.pause();
+        if (this.autoRun) {
+          this.currentTime = 0;
+          this.currentSceneIndex = 0;
+          this.currentVoiceSceneIndex = -1;
+          this.speakScene(0);
+        } else {
+          this.currentTime = this.duration;
+          this.pause();
+        }
       }
       this.updateSceneIndex();
     }
@@ -988,6 +1027,17 @@ class MasterMotionGraphicsEngine {
     ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillStyle = '#ffffff';
     ctx.fillText('HRL INTERNATIONAL / ROHAN CORPORATION', 60, 55);
+
+    if (this.autoRun) {
+      ctx.fillStyle = '#30d158';
+      ctx.beginPath();
+      ctx.arc(385, 51, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillStyle = '#30d158';
+      ctx.fillText('AUTO-RUN', 396, 55);
+    }
 
     ctx.font = '400 11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillStyle = '#86868b';
