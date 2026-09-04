@@ -1,11 +1,21 @@
 # HRL International × Rohan Corporation
 
 [![PropTech Platform](https://img.shields.io/badge/Platform-Smart_PropTech_%26_Digital_Twin-d4af37?style=for-the-badge)](https://hrlpavan.github.io/hrl-x-rohan-corporation/)
+[![4K Explainer Video](https://img.shields.io/badge/Watch-4K_Explainer_Video-ef4444?style=for-the-badge)](https://hrlpavan.github.io/hrl-x-rohan-corporation/video.html)
 [![RERA Karnataka](https://img.shields.io/badge/Statutory-RERA_Karnataka_Compliant-10b981?style=for-the-badge)](https://rera.karnataka.gov.in)
 [![GitHub Pages](https://img.shields.io/badge/Deployment-GitHub_Pages-38bdf8?style=for-the-badge)](https://hrlpavan.github.io/hrl-x-rohan-corporation/)
 [![License](https://img.shields.io/badge/License-Proprietary_IP-a855f7?style=for-the-badge)](#statutory-governance--intellectual-property)
 
 Official technological platform and strategic joint initiative uniting **HRL International Private Limited** (visual computing, edge artificial intelligence, and software systems) and **Rohan Corporation** (premier real estate conglomerate and urban infrastructure builder in Mangaluru, Karnataka).
+
+---
+
+## 🎬 Master Explainer Presentation & Video Theater
+
+Experience the **HRL International × Rohan Corporation** vision through our interactive **4K 60FPS Video Theater**:
+- **Live Video Player**: [hrlpavan.github.io/hrl-x-rohan-corporation/video.html](https://hrlpavan.github.io/hrl-x-rohan-corporation/video.html)
+- **Master Script & Storyboard**: [`docs/PROJECT_EXPLAINER_VIDEO_SCRIPT.md`](docs/PROJECT_EXPLAINER_VIDEO_SCRIPT.md)
+- **Built-in Video Exporter**: Record & download a high-definition `.webm` video directly to your desktop via the in-browser MediaRecorder engine.
 
 ---
 
@@ -40,12 +50,15 @@ hrl-x-rohan-corporation/
 ├── docs/
 │   ├── EQUIPMENT_SPECIFICATION.md # Hardware inventory, drones & edge IoT specs
 │   ├── PARTNERSHIP_CHARTER.md   # Executive vision, pillars & mutual charter
+│   ├── PROJECT_EXPLAINER_VIDEO_SCRIPT.md # Master timecoded video script & storyboard
 │   ├── PROJECT_STARTUP_BLUEPRINT.md # 16-week operational rollout & 7-day checklist
 │   ├── PROJECT_TOTAL_EXPENSE.md # Comprehensive financial schedule & budget
 │   ├── PROPTECH_ARCHITECTURE.md # System blueprint, digital twins & edge IoT
 │   └── STATUTORY_COMPLIANCE.md  # RERA standards, DPDP Act 2023 & legal index
 ├── src/
 │   ├── index.html               # Luxury PropTech web application & showcase
+│   ├── video.html               # 4K Cinematic Explainer Video Theater & Exporter
+│   ├── video-engine.js          # 60FPS canvas motion graphics & Web Audio engine
 │   ├── styles.css               # Obsidian & Champagne Gold design system
 │   └── app.js                   # Interactive unit calculator, filters, canvas sim
 ├── .gitignore                   # Standard clean gitignore

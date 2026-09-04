@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Official Explainer Video | HRL International × Rohan Corporation</title>
+  <meta name="description" content="Cinematic explainer video presenting the HRL International × Rohan Corporation PropTech and Smart Real Estate Platform.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Dedicated Video Theater Styles */
+    .video-page {
+      background-color: #06070a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .theater-container {
+      width: 92%;
+      max-width: 1200px;
+      margin: 30px auto 60px;
+      flex-grow: 1;
+    }
+
+    .video-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .video-title-bar h1 {
+      font-size: 1.8rem;
+    }
+
+    .video-player-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #020408;
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
+    }
+
+    #videoCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Video Overlay & Big Play Button */
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(8, 9, 13, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .video-overlay.hidden {
+      display: none;
+    }
+
+    .big-play-btn {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: var(--gold-gradient);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 35px rgba(212, 175, 55, 0.6);
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .big-play-btn svg {
+      width: 36px;
+      height: 36px;
+      fill: #0b0c10;
+      margin-left: 4px;
+    }
+
+    .big-play-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .overlay-text {
+      margin-top: 18px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.05em;
+    }
+
+    .overlay-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Subtitles / Closed Captions */
+    .closed-captions {
+      position: absolute;
+      bottom: 65px;
+      left: 5%;
+      right: 5%;
+      text-align: center;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .caption-text {
+      display: inline-block;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      max-width: 900px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+
+    /* Custom Player Controls Bar */
+    .player-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(180deg, transparent 0%, rgba(5, 6, 8, 0.95) 100%);
+      padding: 12px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+      transition: opacity 0.3s;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--gold-gradient);
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+      position: relative;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .ctrl-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      padding: 6px;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+
+    .ctrl-btn:hover {
+      color: var(--gold-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .time-display {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    /* Chapter Navigation Bar */
+    .chapter-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .chapter-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .chapter-pill.active, .chapter-pill:hover {
+      background: var(--gold-gradient);
+      color: #0b0c10;
+      border-color: transparent;
+    }
+
+    .video-actions-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .action-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .record-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #ef4444;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+
+    .pulse-record {
+      width: 8px;
+      height: 8px;
+      background-color: #ef4444;
+      border-radius: 50%;
+      animation: pulse 1s infinite;
+    }
+  </style>
+</head>
+<body class="video-page">
+
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-combo">
+        <div class="brand-badge hrl">HRL™</div>
+        <span class="cross-symbol">×</span>
+        <div class="brand-badge rohan">ROHAN</div>
+        <span class="brand-subtext">CINEMATIC SHOWCASE</span>
+      </a>
+      
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline btn-sm">← Back to Portal</a>
+        <a href="index.html#booking" class="btn btn-gold btn-sm">Book VIP Tour</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Video Theater Main -->
+  <main class="theater-container">
+    <div class="video-title-bar">
+      <div>
+        <div class="badge-pill gold-pill">
+          <span>OFFICIAL EXPLAINER PRESENTATION • 4K 60 FPS</span>
+        </div>
+        <h1>Bridging Civil Grandeur with <span class="text-gradient">Computational Intelligence</span></h1>
+      </div>
+      <div class="action-badge-group">
+        <button class="btn btn-outline btn-sm" id="downloadScriptBtn" onclick="window.open('https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/PROJECT_EXPLAINER_VIDEO_SCRIPT.md', '_blank')">
+          📄 View Script Dossier
+        </button>
+        <button class="btn btn-gold btn-sm" id="recordVideoBtn">
+          🎥 Record & Export Video (.webm)
+        </button>
+      </div>
+    </div>
+
+    <!-- 16:9 Video Canvas Player -->
+    <div class="video-player-frame" id="playerFrame">
+      <canvas id="videoCanvas" width="1920" height="1080"></canvas>
+
+      <!-- Closed Captions Subtitle Display -->
+      <div class="closed-captions" id="ccBox">
+        <span class="caption-text" id="captionText">Click Play to start the HRL International × Rohan Corporation presentation.</span>
+      </div>
+
+      <!-- Play Overlay Trigger -->
+      <div class="video-overlay" id="playOverlay">
+        <button class="big-play-btn" id="bigPlayBtn" aria-label="Play Video">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div class="overlay-text">Watch Master Explainer Presentation</div>
+        <div class="overlay-sub">Full Audio Narration & Ambient Score (2m 30s)</div>
+      </div>
+
+      <!-- Custom Player Controls Bar -->
+      <div class="player-controls" id="playerControls">
+        <div class="progress-bar-container" id="progressBarContainer">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+        <div class="controls-row">
+          <div class="controls-left">
+            <button class="ctrl-btn" id="playPauseBtn" title="Play/Pause">
+              <span id="playIcon">▶</span>
+            </button>
+            <button class="ctrl-btn" id="replayBtn" title="Restart Video">↺</button>
+            <span class="time-display" id="timeDisplay">00:00 / 02:30</span>
+          </div>
+
+          <div class="controls-right">
+            <button class="ctrl-btn" id="toggleAudioBtn" title="Soundtrack Audio">🎵 Music: ON</button>
+            <button class="ctrl-btn" id="toggleVoiceBtn" title="Voiceover Narration">🎙️ Voice: ON</button>
+            <button class="ctrl-btn" id="toggleCCBtn" title="Closed Captions">💬 CC: ON</button>
+            <button class="ctrl-btn" id="fullscreenBtn" title="Toggle Fullscreen">⛶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chapter Navigation -->
+    <div class="chapter-bar">
+      <button class="chapter-pill active" data-time="0">1. The Genesis (0:00)</button>
+      <button class="chapter-pill" data-time="25">2. Landmark Portfolio (0:25)</button>
+      <button class="chapter-pill" data-time="55">3. 3D Digital Twin (0:55)</button>
+      <button class="chapter-pill" data-time="85">4. Edge IoT & Privacy (1:25)</button>
+      <button class="chapter-pill" data-time="115">5. Financial & NRI Model (1:55)</button>
+      <button class="chapter-pill" data-time="135">6. Blueprint & Finale (2:15)</button>
+    </div>
+
+    <!-- Video Metadata Footer Strip -->
+    <div class="video-actions-strip">
+      <div>
+        <strong style="color: #ffffff;">HRL International × Rohan Corporation Joint Initiative</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+          Featuring Rohan City (Bejai), Rohan Crown (Kadri), Rohan Square (Pumpwell), and Rohan Estate (Neermarga).
+        </p>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <span id="recordingStatus" class="record-indicator d-none">
+          <span class="pulse-record"></span> Capturing HD Video Stream...
+        </span>
+        <a href="index.html#booking" class="btn btn-gold btn-sm">Schedule Private VIP Consultation</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="video-engine.js"></script>
+</body>
+</html>
