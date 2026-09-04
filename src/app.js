@@ -344,27 +344,36 @@ function initModal() {
 /* 5. Booking Form Submission                                                 */
 /* -------------------------------------------------------------------------- */
 function initBookingForm() {
-  const form = document.getElementById('tourBookingForm');
+  const form = document.getElementById('tourBookingForm') || document.getElementById('propertyBookingForm');
   const successBox = document.getElementById('formSuccess');
-  const submitBtn = document.getElementById('submitBtn');
+  const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
   if (!form) return;
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Transmitting VIP Registration...';
+    const originalText = submitBtn ? submitBtn.textContent : 'Submit';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Transmitting VIP Registration...';
+    }
 
     setTimeout(() => {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Confirm VIP Appointment';
-      successBox.classList.remove('d-none');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '✓ Request Successfully Registered';
+      }
+      if (successBox) {
+        successBox.classList.remove('d-none');
+        setTimeout(() => successBox.classList.add('d-none'), 7000);
+      } else {
+        alert('Thank you. Your VIP inspection request has been registered with HRL × Rohan Corporation.');
+      }
       form.reset();
-
       setTimeout(() => {
-        successBox.classList.add('d-none');
-      }, 7000);
-    }, 1000);
+        if (submitBtn) submitBtn.textContent = originalText;
+      }, 4000);
+    }, 800);
   });
 }
 
