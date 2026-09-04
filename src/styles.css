@@ -1889,3 +1889,173 @@ input[type="range"]::-webkit-slider-thumb:hover {
   }
 }
 
+/* ==========================================================================
+   Executive Profit & Loss (P&L) Profile System
+   ========================================================================== */
+.pnl-section {
+  background: #08080a;
+  border-top: 1px solid var(--apple-border-subtle);
+  border-bottom: 1px solid var(--apple-border-subtle);
+  padding: 80px 0;
+}
+
+.pnl-container-card {
+  background: var(--apple-card);
+  border-radius: var(--apple-radius-bento);
+  border: 1px solid rgba(223, 183, 108, 0.25);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  margin-top: 36px;
+}
+
+.pnl-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 30px;
+}
+
+.pnl-view-switcher {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(223, 183, 108, 0.2);
+  border-radius: 980px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.pnl-view-btn {
+  background: transparent;
+  border: none;
+  color: var(--apple-text-secondary);
+  font-family: var(--apple-font);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 980px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pnl-view-btn:hover {
+  color: #ffffff;
+}
+
+.pnl-view-btn.active {
+  background: rgba(223, 183, 108, 0.2);
+  color: var(--gold-champagne);
+  box-shadow: inset 0 0 0 1px rgba(223, 183, 108, 0.4);
+}
+
+.pnl-grid-split {
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr;
+  gap: 36px;
+  align-items: start;
+}
+
+.pnl-chart-box {
+  background: rgba(14, 14, 17, 0.7);
+  border: 1px solid rgba(223, 183, 108, 0.18);
+  border-radius: var(--apple-radius-card);
+  padding: 24px;
+}
+
+.pnl-table-wrap {
+  overflow-x: auto;
+}
+
+.pnl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--apple-font);
+  font-size: 13px;
+}
+
+.pnl-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--apple-text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+}
+
+.pnl-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.pnl-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pnl-table .pnl-num {
+  text-align: right;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.pnl-credit {
+  color: #30d158;
+}
+
+.pnl-debit {
+  color: #ff453a;
+}
+
+.pnl-highlight {
+  color: var(--gold-champagne);
+  font-weight: 600;
+}
+
+.pnl-row-subtotal td {
+  border-top: 1px solid rgba(223, 183, 108, 0.3);
+  border-bottom: 1px solid rgba(223, 183, 108, 0.3);
+  font-weight: 600;
+  background: rgba(223, 183, 108, 0.05);
+}
+
+.pnl-row-net td {
+  border-top: 2px solid var(--gold-primary);
+  border-bottom: 2px solid var(--gold-primary);
+  font-weight: 700;
+  font-size: 14px;
+  background: rgba(223, 183, 108, 0.08);
+}
+
+.pnl-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.pnl-tag-alpha {
+  background: rgba(223, 183, 108, 0.2);
+  color: var(--gold-champagne);
+  border: 1px solid rgba(223, 183, 108, 0.35);
+}
+
+.pnl-tag-rec {
+  background: rgba(48, 209, 88, 0.15);
+  color: #30d158;
+  border: 1px solid rgba(48, 209, 88, 0.3);
+}
+
+@media (max-width: 992px) {
+  .pnl-grid-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+

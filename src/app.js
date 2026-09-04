@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVentureSimulator();
   initVentureTabs();
   initProjectFinanceVisualizers();
+  initPnlProfile();
 });
 
 /* -------------------------------------------------------------------------- */
@@ -87,18 +88,20 @@ function initCalculator() {
   const chartTitle = document.getElementById('mortgageChartTitle');
   const btnAmort = document.getElementById('chartViewAmort');
   const btnWealth = document.getElementById('chartViewWealth');
+  const btnPnl = document.getElementById('chartViewPnl');
   const splitPrincipalBar = document.getElementById('splitPrincipalBar');
   const splitInterestBar = document.getElementById('splitInterestBar');
   const splitPrincipalPercent = document.getElementById('splitPrincipalPercent');
   const splitInterestPercent = document.getElementById('splitInterestPercent');
 
-  let currentMode = 'amort'; // 'amort' or 'wealth'
+  let currentMode = 'amort'; // 'amort', 'wealth', or 'pnl'
 
   if (btnAmort && btnWealth) {
     btnAmort.addEventListener('click', () => {
       currentMode = 'amort';
       btnAmort.classList.add('active');
       btnWealth.classList.remove('active');
+      if (btnPnl) btnPnl.classList.remove('active');
       if (chartTitle) chartTitle.textContent = 'Equity Amortization Curve';
       calculate();
     });
@@ -106,9 +109,20 @@ function initCalculator() {
       currentMode = 'wealth';
       btnWealth.classList.add('active');
       btnAmort.classList.remove('active');
+      if (btnPnl) btnPnl.classList.remove('active');
       if (chartTitle) chartTitle.textContent = '5-Year Wealth Trajectory';
       calculate();
     });
+    if (btnPnl) {
+      btnPnl.addEventListener('click', () => {
+        currentMode = 'pnl';
+        btnPnl.classList.add('active');
+        btnAmort.classList.remove('active');
+        btnWealth.classList.remove('active');
+        if (chartTitle) chartTitle.textContent = 'Annual Cash Flow P&L Statement';
+        calculate();
+      });
+    }
   }
 
   function calculate() {
@@ -289,7 +303,7 @@ function initCalculator() {
       ctx.fillStyle = '#ffe5a3';
       ctx.fill();
 
-    } else {
+    } else if (data.mode === 'wealth') {
       // 5-Year Wealth Trajectory Mode
       const years = [0, 1, 2, 3, 4, 5];
       const appreciation = years.map(y => data.propertyPrice * Math.pow(1.08, y));
@@ -363,6 +377,63 @@ function initCalculator() {
         const x = padLeft + (idx / 5) * plotW;
         ctx.fillText(`Yr ${y}`, x, height - 8);
       });
+
+    } else if (data.mode === 'pnl') {
+      // 3. Annual Cash Flow P&L Statement Mode for Unit
+      const grossRent = data.annualRentalYield; // 5%
+      const annualAppreciation = data.propertyPrice * 0.08; // 8% CAGR
+      const interestAnnual = data.principal * (data.monthlyRate * 12);
+      const maintenanceAnnual = data.propertyPrice * 0.005;
+      const taxAnnual = data.propertyPrice * 0.0025;
+      const netCash = grossRent - (interestAnnual + maintenanceAnnual + taxAnnual);
+      const totalWealthAnnual = netCash + annualAppreciation;
+
+      const pnlBars = [
+        { label: 'Gross Rent', val: grossRent, color: '#30d158' },
+        { label: 'Loan Int.', val: -interestAnnual, color: '#ff453a' },
+        { label: 'HOA/Tax', val: -(maintenanceAnnual + taxAnnual), color: '#ff453a' },
+        { label: 'Net Cash', val: netCash, color: netCash >= 0 ? '#30d158' : '#ff453a' },
+        { label: '8% Equity', val: annualAppreciation, color: '#dfb76c' },
+        { label: 'Total Wealth', val: totalWealthAnnual, color: '#ffe5a3', isNet: true }
+      ];
+
+      const maxVal = Math.max(...pnlBars.map(b => Math.abs(b.val))) * 1.35;
+
+      const colWidth = Math.min(plotW / (pnlBars.length * 1.35), 44);
+      const spacing = (plotW - colWidth * pnlBars.length) / (pnlBars.length - 1);
+
+      pnlBars.forEach((b, idx) => {
+        const x = padLeft + idx * (colWidth + spacing);
+        const absVal = Math.abs(b.val);
+        const barH = Math.max((absVal / maxVal) * plotH, 4);
+        const topY = padTop + plotH - barH;
+
+        ctx.fillStyle = b.color;
+        ctx.beginPath();
+        if (typeof ctx.roundRect === 'function') {
+          ctx.roundRect(x, topY, colWidth, barH, 4);
+        } else {
+          ctx.rect(x, topY, colWidth, barH);
+        }
+        ctx.fill();
+
+        ctx.fillStyle = b.val < 0 ? '#ff453a' : '#dfb76c';
+        ctx.font = '600 8.5px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(formatCompact(b.val), x + colWidth / 2, topY - 5);
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.font = '500 8px -apple-system, sans-serif';
+        ctx.fillText(b.label, x + colWidth / 2, height - 8);
+      });
+
+      // Y-axis Labels
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.font = '500 10px -apple-system, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(formatCompact(maxVal), padLeft - 6, padTop + 10);
+      ctx.fillText(formatCompact(maxVal / 2), padLeft - 6, padTop + plotH / 2 + 3);
+      ctx.fillText('₹0', padLeft - 6, padTop + plotH);
     }
   }
 
@@ -1503,4 +1574,413 @@ function initEstateFinanceChart() {
 
   window.addEventListener('resize', draw);
   draw();
+}
+
+/* -------------------------------------------------------------------------- */
+/* 10. Executive Profit & Loss (P&L) Profile System                            */
+/* -------------------------------------------------------------------------- */
+function initPnlProfile() {
+  const pnlSection = document.getElementById('pnl-profile');
+  if (!pnlSection) return;
+
+  const btnDeveloper = document.getElementById('pnlBtnDeveloper');
+  const btnInvestor = document.getElementById('pnlBtnInvestor');
+  const titleElem = document.getElementById('pnlActiveTitle');
+  const baseLabel = document.getElementById('pnlPortfolioBaseLabel');
+  const marginBadge = document.getElementById('pnlNetMarginBadge');
+  const tableBody = document.getElementById('pnlTableBody');
+  const canvas = document.getElementById('pnlWaterfallCanvas');
+
+  const portfolioRange = document.getElementById('portfolioRange');
+  const priceRange = document.getElementById('priceRange');
+  const rateRange = document.getElementById('rateRange');
+
+  let activeMode = 'developer'; // 'developer' or 'investor'
+
+  function renderDeveloperPnl() {
+    const cr = portfolioRange ? parseFloat(portfolioRange.value) : 1500;
+    if (titleElem) titleElem.textContent = 'Developer Venture P&L Statement';
+    if (baseLabel) baseLabel.textContent = `₹ ${cr.toLocaleString('en-IN')} Crores GDV Portfolio`;
+
+    // Dynamic metrics
+    const gdvGain = cr * 0.142; // +14.2% AI dynamic tranche alpha
+    const forexGain = (cr * 0.65) * 0.037; // +3.7% NRI forex recapture
+    const grossRevLegacy = cr;
+    const grossRevHrl = cr + gdvGain + forexGain;
+
+    const epcLegacy = cr * 0.44; // 44.0%
+    const epcHrl = cr * 0.415; // 41.5% (-2.5% MIVAN / supply chain optimization)
+
+    const landLegacy = cr * 0.20; // 20%
+    const landHrl = cr * 0.18; // 18% (-2.0% clearance savings)
+
+    const salesLegacy = cr * 0.055; // 5.5%
+    const salesHrl = cr * 0.022; // 2.2% AI Concierge
+
+    const financeLegacy = cr * 0.08; // 8.0%
+    const financeHrl = cr * 0.045; // 4.5% 21-day escrow cycle
+
+    const outflowsLegacy = epcLegacy + landLegacy + salesLegacy + financeLegacy;
+    const outflowsHrl = epcHrl + landHrl + salesHrl + financeHrl;
+
+    const ebitdaLegacy = grossRevLegacy - outflowsLegacy;
+    const ebitdaHrl = grossRevHrl - outflowsHrl;
+
+    const marginLegacy = (ebitdaLegacy / grossRevLegacy) * 100;
+    const marginHrl = (ebitdaHrl / grossRevHrl) * 100;
+    const marginLift = marginHrl - marginLegacy;
+
+    if (marginBadge) {
+      marginBadge.textContent = `${marginHrl.toFixed(1)}% Net Margin (+${marginLift.toFixed(1)}% Lift)`;
+    }
+
+    if (tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td><strong>Gross Sales Realization (Base Portfolio GDV)</strong></td>
+          <td style="text-align: right;">₹ ${cr.toFixed(1)} Cr</td>
+          <td style="text-align: right; color: #ffffff;">₹ ${cr.toFixed(1)} Cr</td>
+          <td style="text-align: right;"><span class="pnl-alpha-dash">—</span></td>
+        </tr>
+        <tr>
+          <td>Algorithmic Dynamic Pricing (+14.2% AI Tranche Lift)</td>
+          <td style="text-align: right; color: rgba(255,255,255,0.4);">₹ 0.0 Cr (Flat)</td>
+          <td style="text-align: right; color: var(--gold-primary);">+₹ ${gdvGain.toFixed(1)} Cr</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${gdvGain.toFixed(1)} Cr (+14.2%)</span></td>
+        </tr>
+        <tr>
+          <td>NRI Direct Forex Settlement (+3.7% Arbitrage Hedged)</td>
+          <td style="text-align: right; color: #ff453a;">-₹ ${forexGain.toFixed(1)} Cr (Leakage)</td>
+          <td style="text-align: right; color: #30d158;">+₹ ${forexGain.toFixed(1)} Cr (Recaptured)</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${forexGain.toFixed(1)} Cr (Protected)</span></td>
+        </tr>
+        <tr class="pnl-row-subtotal">
+          <td><strong>Subtotal: Effective Gross Revenue</strong></td>
+          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${grossRevLegacy.toFixed(1)} Cr</td>
+          <td style="text-align: right; color: var(--gold-champagne);"><strong>₹ ${grossRevHrl.toFixed(1)} Cr</strong></td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(grossRevHrl - grossRevLegacy).toFixed(1)} Cr (+${(((grossRevHrl - grossRevLegacy) / grossRevLegacy) * 100).toFixed(1)}%)</span></td>
+        </tr>
+        <tr>
+          <td>Civil & Structural EPC Hard Costs (MIVAN / IoT Precast)</td>
+          <td style="text-align: right; color: #ff453a;">-₹ ${epcLegacy.toFixed(1)} Cr (44.0%)</td>
+          <td style="text-align: right; color: #ff6961;">-₹ ${epcHrl.toFixed(1)} Cr (41.5%)</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(epcLegacy - epcHrl).toFixed(1)} Cr (-2.5% Optimized)</span></td>
+        </tr>
+        <tr>
+          <td>Land Acquisition, Entitlements & Fast-Track RERA</td>
+          <td style="text-align: right; color: #ff453a;">-₹ ${landLegacy.toFixed(1)} Cr (20.0%)</td>
+          <td style="text-align: right; color: #ff6961;">-₹ ${landHrl.toFixed(1)} Cr (18.0%)</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(landLegacy - landHrl).toFixed(1)} Cr (-2.0% Expedited)</span></td>
+        </tr>
+        <tr>
+          <td>Sales, Institutional Marketing & Broker Commission</td>
+          <td style="text-align: right; color: #ff453a;">-₹ ${salesLegacy.toFixed(1)} Cr (5.5%)</td>
+          <td style="text-align: right; color: #ff6961;">-₹ ${salesHrl.toFixed(1)} Cr (2.2%)</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(salesLegacy - salesHrl).toFixed(1)} Cr (AI Concierge -60%)</span></td>
+        </tr>
+        <tr>
+          <td>Construction Finance & Escrow Holdback Carrying Cost</td>
+          <td style="text-align: right; color: #ff453a;">-₹ ${financeLegacy.toFixed(1)} Cr (8.0%)</td>
+          <td style="text-align: right; color: #ff6961;">-₹ ${financeHrl.toFixed(1)} Cr (4.5%)</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(financeLegacy - financeHrl).toFixed(1)} Cr (21-Day Turnaround)</span></td>
+        </tr>
+        <tr class="pnl-row-subtotal">
+          <td><strong>Total Capital Outflows / COGS</strong></td>
+          <td style="text-align: right; color: #ff453a;"><strong>-₹ ${outflowsLegacy.toFixed(1)} Cr</strong></td>
+          <td style="text-align: right; color: #ff6961;"><strong>-₹ ${outflowsHrl.toFixed(1)} Cr</strong></td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(outflowsLegacy - outflowsHrl).toFixed(1)} Cr Saved</span></td>
+        </tr>
+        <tr class="pnl-row-net">
+          <td><strong>Net Developer Operating Margin (EBITDA)</strong></td>
+          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${ebitdaLegacy.toFixed(1)} Cr (${marginLegacy.toFixed(1)}%)</td>
+          <td style="text-align: right; color: var(--gold-primary);"><strong>₹ ${ebitdaHrl.toFixed(1)} Cr (${marginHrl.toFixed(1)}%)</strong></td>
+          <td style="text-align: right;"><span class="pnl-tag-alpha">+${marginLift.toFixed(1)}% Alpha Expansion</span></td>
+        </tr>
+      `;
+    }
+
+    if (canvas) {
+      drawDeveloperPnlChart(canvas, cr, gdvGain, forexGain, epcHrl, landHrl, salesHrl + financeHrl, ebitdaHrl);
+    }
+  }
+
+  function renderInvestorPnl() {
+    const priceLakhs = priceRange ? parseFloat(priceRange.value) : 85;
+    const rate = rateRange ? parseFloat(rateRange.value) : 8.5;
+    if (titleElem) titleElem.textContent = 'Private Investor Unit Cashflow P&L Statement';
+    if (baseLabel) baseLabel.textContent = `₹ ${priceLakhs.toFixed(1)} Lakhs Luxury Unit Model`;
+
+    // Legacy unmanaged vs HRL PropTech managed
+    const rentalLegacy = priceLakhs * 0.032; // 3.2%
+    const rentalHrl = priceLakhs * 0.050; // 5.0%
+
+    const appreciationLegacy = priceLakhs * 0.055; // 5.5%
+    const appreciationHrl = priceLakhs * 0.080; // 8.0%
+
+    // 80% LTV Loan interest
+    const principalLakhs = priceLakhs * 0.80;
+    const interestLegacy = principalLakhs * (rate / 100);
+    const interestHrl = principalLakhs * ((rate - 0.5) / 100); // Institutional bank tie-up preferential rate (-50 bps)
+
+    const maintLegacy = priceLakhs * 0.007; // Standard grid & maintenance
+    const maintHrl = priceLakhs * 0.0048; // -32% solar micro-grid savings
+
+    const tax = priceLakhs * 0.0025;
+
+    const netOperatingLegacy = rentalLegacy - (interestLegacy + maintLegacy + tax);
+    const netOperatingHrl = rentalHrl - (interestHrl + maintHrl + tax);
+
+    const totalWealthLegacy = netOperatingLegacy + appreciationLegacy;
+    const totalWealthHrl = netOperatingHrl + appreciationHrl;
+    const wealthLift = totalWealthHrl - totalWealthLegacy;
+
+    if (marginBadge) {
+      marginBadge.textContent = `+₹ ${totalWealthHrl.toFixed(2)}L / Yr Total Wealth (+${wealthLift.toFixed(2)}L Lift)`;
+    }
+
+    if (tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td><strong>Gross Annual Rental Inflow</strong></td>
+          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${rentalLegacy.toFixed(2)} Lakhs (3.2%)</td>
+          <td style="text-align: right; color: #30d158;">₹ ${rentalHrl.toFixed(2)} Lakhs (5.0%)</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(rentalHrl - rentalLegacy).toFixed(2)}L / yr (+56%)</span></td>
+        </tr>
+        <tr>
+          <td>Capital Appreciation (1-Year Projected CAGR)</td>
+          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${appreciationLegacy.toFixed(2)} Lakhs (5.5%)</td>
+          <td style="text-align: right; color: var(--gold-primary);">₹ ${appreciationHrl.toFixed(2)} Lakhs (8.0%)</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(appreciationHrl - appreciationLegacy).toFixed(2)}L / yr Lift</span></td>
+        </tr>
+        <tr class="pnl-row-subtotal">
+          <td><strong>Subtotal: Gross Wealth Accumulation</strong></td>
+          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${(rentalLegacy + appreciationLegacy).toFixed(2)} Lakhs</td>
+          <td style="text-align: right; color: var(--gold-champagne);"><strong>₹ ${(rentalHrl + appreciationHrl).toFixed(2)} Lakhs</strong></td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${((rentalHrl + appreciationHrl) - (rentalLegacy + appreciationLegacy)).toFixed(2)} Lakhs</span></td>
+        </tr>
+        <tr>
+          <td>Mortgage Interest Deductions (Section 24b)</td>
+          <td style="text-align: right; color: #ff453a;">-₹ ${interestLegacy.toFixed(2)} Lakhs (${rate}%)</td>
+          <td style="text-align: right; color: #ff6961;">-₹ ${interestHrl.toFixed(2)} Lakhs (${(rate - 0.5).toFixed(1)}%)</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(interestLegacy - interestHrl).toFixed(2)}L (Preferential Rate)</span></td>
+        </tr>
+        <tr>
+          <td>Society Maintenance & Micro-Grid Solar Energy</td>
+          <td style="text-align: right; color: #ff453a;">-₹ ${maintLegacy.toFixed(2)} Lakhs</td>
+          <td style="text-align: right; color: #ff6961;">-₹ ${maintHrl.toFixed(2)} Lakhs</td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(maintLegacy - maintHrl).toFixed(2)}L (-32% Saved)</span></td>
+        </tr>
+        <tr>
+          <td>Municipal Property Taxes (MCC E-Khata Sync)</td>
+          <td style="text-align: right; color: #ff453a;">-₹ ${tax.toFixed(2)} Lakhs</td>
+          <td style="text-align: right; color: #ff6961;">-₹ ${tax.toFixed(2)} Lakhs</td>
+          <td style="text-align: right;"><span class="pnl-alpha-dash">Instant E-Khata</span></td>
+        </tr>
+        <tr class="pnl-row-subtotal">
+          <td><strong>Total Annual Carrying Costs</strong></td>
+          <td style="text-align: right; color: #ff453a;"><strong>-₹ ${(interestLegacy + maintLegacy + tax).toFixed(2)} Lakhs</strong></td>
+          <td style="text-align: right; color: #ff6961;"><strong>-₹ ${(interestHrl + maintHrl + tax).toFixed(2)} Lakhs</strong></td>
+          <td style="text-align: right;"><span class="pnl-credit">+₹ ${((interestLegacy + maintLegacy + tax) - (interestHrl + maintHrl + tax)).toFixed(2)}L Saved</span></td>
+        </tr>
+        <tr class="pnl-row-net">
+          <td><strong>Net Annual Wealth Created (Cashflow + Equity)</strong></td>
+          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${totalWealthLegacy.toFixed(2)} Lakhs</td>
+          <td style="text-align: right; color: #30d158;"><strong>₹ ${totalWealthHrl.toFixed(2)} Lakhs / Yr</strong></td>
+          <td style="text-align: right;"><span class="pnl-tag-alpha">+₹ ${wealthLift.toFixed(2)}L / Yr Alpha</span></td>
+        </tr>
+      `;
+    }
+
+    if (canvas) {
+      drawInvestorPnlChart(canvas, rentalHrl, appreciationHrl, interestHrl, maintHrl + tax, totalWealthHrl);
+    }
+  }
+
+  function drawDeveloperPnlChart(canvas, cr, gdvGain, forexGain, epc, land, salesFin, netEbitda) {
+    const dpi = setupCanvasDPI(canvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padLeft = 48;
+    const padRight = 16;
+    const padTop = 24;
+    const padBottom = 28;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    const bars = [
+      { label: 'Base GDV', val: cr, color: 'rgba(255, 255, 255, 0.45)', isOutflow: false },
+      { label: '+14% AI', val: gdvGain, color: '#dfb76c', isOutflow: false },
+      { label: '+FX Hedged', val: forexGain, color: '#30d158', isOutflow: false },
+      { label: 'EPC Costs', val: epc, color: '#ff453a', isOutflow: true },
+      { label: 'Land & RERA', val: land, color: '#ff6961', isOutflow: true },
+      { label: 'Sales/Debt', val: salesFin, color: '#ff3b30', isOutflow: true },
+      { label: 'Net EBITDA', val: netEbitda, color: '#dfb76c', isOutflow: false, isTotal: true }
+    ];
+
+    const maxVal = Math.max(...bars.map(b => b.val), cr * 1.1) * 1.18;
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    for (let i = 0; i <= 3; i++) {
+      const y = padTop + (plotH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    const barWidth = Math.min(plotW / (bars.length * 1.4), 32);
+    const spacing = (plotW - barWidth * bars.length) / (bars.length - 1);
+
+    bars.forEach((b, i) => {
+      const x = padLeft + i * (barWidth + spacing);
+      const barH = Math.max((b.val / maxVal) * plotH, 4);
+      const y = padTop + plotH - barH;
+
+      ctx.fillStyle = b.color;
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, barWidth, barH, 4);
+      } else {
+        ctx.rect(x, y, barWidth, barH);
+      }
+      ctx.fill();
+
+      // Bar Value
+      ctx.fillStyle = b.isOutflow ? '#ff6961' : (b.isTotal ? '#ffe5a3' : '#ffffff');
+      ctx.font = '600 8.5px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      const prefix = b.isOutflow ? '-₹' : (b.isTotal ? '₹' : (i === 0 ? '₹' : '+₹'));
+      ctx.fillText(`${prefix}${b.val.toFixed(0)}Cr`, x + barWidth / 2, y - 6);
+
+      // Label
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.font = '500 8px -apple-system, sans-serif';
+      ctx.fillText(b.label, x + barWidth / 2, height - 8);
+    });
+
+    // Y labels
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '500 9px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`₹${Math.round(maxVal)}Cr`, padLeft - 6, padTop + 8);
+    ctx.fillText(`₹${Math.round(maxVal / 2)}Cr`, padLeft - 6, padTop + plotH / 2 + 3);
+    ctx.fillText('₹0', padLeft - 6, padTop + plotH);
+  }
+
+  function drawInvestorPnlChart(canvas, rent, appreciation, interest, maintTax, netWealth) {
+    const dpi = setupCanvasDPI(canvas);
+    if (!dpi) return;
+    const { ctx, width, height } = dpi;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padLeft = 48;
+    const padRight = 16;
+    const padTop = 24;
+    const padBottom = 28;
+    const plotW = width - padLeft - padRight;
+    const plotH = height - padTop - padBottom;
+
+    const bars = [
+      { label: 'Rental Inflow', val: rent, color: '#30d158', isOutflow: false },
+      { label: '8% CAGR Gain', val: appreciation, color: '#dfb76c', isOutflow: false },
+      { label: 'Mortgage Int.', val: interest, color: '#ff453a', isOutflow: true },
+      { label: 'HOA & Tax', val: maintTax, color: '#ff6961', isOutflow: true },
+      { label: 'Net Annual Wealth', val: netWealth, color: '#30d158', isOutflow: false, isTotal: true }
+    ];
+
+    const maxVal = Math.max(...bars.map(b => b.val)) * 1.25;
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    for (let i = 0; i <= 3; i++) {
+      const y = padTop + (plotH / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(width - padRight, y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    const barWidth = Math.min(plotW / (bars.length * 1.5), 36);
+    const spacing = (plotW - barWidth * bars.length) / (bars.length - 1);
+
+    bars.forEach((b, i) => {
+      const x = padLeft + i * (barWidth + spacing);
+      const barH = Math.max((b.val / maxVal) * plotH, 4);
+      const y = padTop + plotH - barH;
+
+      ctx.fillStyle = b.color;
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, barWidth, barH, 4);
+      } else {
+        ctx.rect(x, y, barWidth, barH);
+      }
+      ctx.fill();
+
+      // Bar Value
+      ctx.fillStyle = b.isOutflow ? '#ff6961' : (b.isTotal ? '#30d158' : '#ffe5a3');
+      ctx.font = '600 8.5px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      const prefix = b.isOutflow ? '-₹' : '+₹';
+      ctx.fillText(`${prefix}${b.val.toFixed(2)}L`, x + barWidth / 2, y - 6);
+
+      // Label
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.font = '500 8px -apple-system, sans-serif';
+      ctx.fillText(b.label, x + barWidth / 2, height - 8);
+    });
+
+    // Y labels
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '500 9px -apple-system, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`₹${maxVal.toFixed(1)}L`, padLeft - 6, padTop + 8);
+    ctx.fillText(`₹${(maxVal / 2).toFixed(1)}L`, padLeft - 6, padTop + plotH / 2 + 3);
+    ctx.fillText('₹0', padLeft - 6, padTop + plotH);
+  }
+
+  function update() {
+    if (activeMode === 'developer') {
+      renderDeveloperPnl();
+    } else {
+      renderInvestorPnl();
+    }
+  }
+
+  if (btnDeveloper && btnInvestor) {
+    btnDeveloper.addEventListener('click', () => {
+      activeMode = 'developer';
+      btnDeveloper.classList.add('active');
+      btnInvestor.classList.remove('active');
+      update();
+    });
+
+    btnInvestor.addEventListener('click', () => {
+      activeMode = 'investor';
+      btnInvestor.classList.add('active');
+      btnDeveloper.classList.remove('active');
+      update();
+    });
+  }
+
+  // Listen to portfolio and calculator slider changes
+  if (portfolioRange) portfolioRange.addEventListener('input', update);
+  if (priceRange) priceRange.addEventListener('input', update);
+  if (rateRange) rateRange.addEventListener('input', update);
+
+  window.addEventListener('resize', update);
+
+  // Initial draw
+  update();
 }

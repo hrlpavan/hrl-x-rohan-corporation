@@ -26,6 +26,7 @@
           <li><a href="rohan-square.html">Rohan Square</a></li>
           <li><a href="rohan-estate.html">Rohan Estate</a></li>
           <li><a href="#hrl-core" style="color: var(--gold-primary); font-weight: 600;">HRL 19™</a></li>
+          <li><a href="#pnl-profile" style="color: var(--gold-champagne); font-weight: 600;">P&L Profile</a></li>
           <li><a href="video.html">Watch Film</a></li>
         </ul>
       </nav>
@@ -1147,6 +1148,7 @@
               <div class="chart-segmented-control">
                 <button class="chart-segment-btn active" id="chartViewAmort" type="button">Equity Curve</button>
                 <button class="chart-segment-btn" id="chartViewWealth" type="button">5-Yr Wealth</button>
+                <button class="chart-segment-btn" id="chartViewPnl" type="button">Annual P&L</button>
               </div>
             </div>
             <div class="chart-canvas-wrap" style="height: 180px;">
@@ -1185,6 +1187,83 @@
           </div>
 
           <a href="#booking" class="btn-apple" style="width: 100%;">Inquire for Terms</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Executive Profit & Loss (P&L) Profile Section -->
+  <section class="section pnl-section" id="pnl-profile">
+    <div class="container">
+      <div class="apple-section-header">
+        <div class="apple-eyebrow">Institutional Financial Intelligence</div>
+        <h2 class="apple-section-title">Executive Profit & Loss (P&L) Profile.</h2>
+        <p class="apple-section-sub">
+          Transparent institutional financial statement comparing legacy real estate margin drag against HRL International™ 19-Pillar Autonomous Venture Architecture.
+        </p>
+      </div>
+
+      <div class="pnl-container-card">
+        <div class="pnl-header-bar">
+          <div>
+            <span class="chart-title-tag" id="pnlActiveTitle">Developer Venture P&L Statement</span>
+            <div style="font-size: 13px; color: var(--apple-text-secondary); margin-top: 4px;">
+              Active Portfolio Base: <strong id="pnlPortfolioBaseLabel" style="color: #ffffff;">₹ 1,500 Crores GDV</strong>
+            </div>
+          </div>
+
+          <div class="pnl-view-switcher">
+            <button class="pnl-view-btn active" id="pnlBtnDeveloper" type="button">Developer Venture P&L</button>
+            <button class="pnl-view-btn" id="pnlBtnInvestor" type="button">Investor Unit Cashflow P&L</button>
+          </div>
+        </div>
+
+        <div class="pnl-grid-split">
+          <!-- Left: P&L Cash Inflow vs Outflow Waterfall Chart -->
+          <div class="pnl-chart-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold-champagne); font-weight: 600;">
+                Cash Inflow vs Outflow Waterfall
+              </span>
+              <span style="font-size: 11px; color: #30d158; font-weight: 600;" id="pnlNetMarginBadge">
+                38.1% Net Margin (+15.7% Lift)
+              </span>
+            </div>
+            <div class="chart-canvas-wrap" style="height: 280px;">
+              <canvas id="pnlWaterfallCanvas"></canvas>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--apple-text-secondary); margin-top: 14px; flex-wrap: wrap; gap: 8px;">
+              <span style="display: flex; align-items: center; gap: 5px;">
+                <span style="width: 8px; height: 8px; background: #30d158; border-radius: 2px;"></span>
+                Revenue Inflows
+              </span>
+              <span style="display: flex; align-items: center; gap: 5px;">
+                <span style="width: 8px; height: 8px; background: #ff453a; border-radius: 2px;"></span>
+                Direct Outflows & Expenses
+              </span>
+              <span style="display: flex; align-items: center; gap: 5px;">
+                <span style="width: 8px; height: 8px; background: var(--gold-primary); border-radius: 2px;"></span>
+                Net Operating Margin
+              </span>
+            </div>
+          </div>
+
+          <!-- Right: Audited Ledger Table -->
+          <div class="pnl-table-wrap">
+            <table class="pnl-table" id="pnlLedgerTable">
+              <thead>
+                <tr>
+                  <th>Financial Line Item</th>
+                  <th style="text-align: right;">Legacy Real Estate</th>
+                  <th style="text-align: right;">HRL Venture Architecture</th>
+                  <th style="text-align: right;">Net Alpha / Variance</th>
+                </tr>
+              </thead>
+              <tbody id="pnlTableBody">
+                <!-- Populated dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -1330,6 +1409,7 @@
             <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/EQUIPMENT_SPECIFICATION.md" target="_blank">Equipment Specification</a></li>
             <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/PROJECT_TOTAL_EXPENSE.md" target="_blank">Project Total Expense</a></li>
             <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/PARTNERSHIP_CHARTER.md" target="_blank">Partnership Charter</a></li>
+            <li><a href="#pnl-profile" style="color: var(--gold-champagne); font-weight: 600;">Executive P&L Statement Profile</a></li>
             <li><a href="https://github.com/hrlpavan/hrl-x-rohan-corporation/blob/main/docs/STATUTORY_COMPLIANCE.md" target="_blank">RERA & Statutory Notice</a></li>
           </ul>
         </div>
