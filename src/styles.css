@@ -1003,7 +1003,7 @@ body::before {
    Apple Card / Wallet-Style Financial Simulator
    ========================================================================== */
 .apple-calc-card {
-  background: linear-gradient(180deg, rgba(26, 26, 32, 0.8) 0%, rgba(14, 14, 18, 0.95) 100%);
+  background: linear-gradient(180deg, rgba(26, 26, 32, 0.82) 0%, rgba(14, 14, 18, 0.96) 100%);
   border-radius: var(--apple-radius-bento);
   border: 1px solid rgba(223, 183, 108, 0.22);
   box-shadow: 
@@ -1011,7 +1011,7 @@ body::before {
     0 0 35px -8px rgba(223, 183, 108, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.05fr 1fr;
   overflow: hidden;
   position: relative;
 }
@@ -1027,16 +1027,82 @@ body::before {
 }
 
 .calc-sliders-col {
-  padding: 48px;
+  padding: 36px 38px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 18px;
+}
+
+/* Quick Portfolio Tier Presets */
+.calc-presets-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.calc-presets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.calc-presets-lbl {
+  font-family: var(--apple-font);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--gold-champagne);
+}
+
+.calc-presets-sub {
+  font-family: var(--apple-font);
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+}
+
+.calc-presets-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.calc-preset-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(223, 183, 108, 0.2);
+  border-radius: 8px; /* Apple squircle */
+  padding: 6px 12px;
+  font-family: var(--apple-font);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #f5f5f7;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.calc-preset-pill:hover {
+  background: rgba(223, 183, 108, 0.12);
+  border-color: rgba(223, 183, 108, 0.45);
+  transform: translateY(-1px);
+}
+
+.calc-preset-pill.active {
+  background: linear-gradient(135deg, rgba(223, 183, 108, 0.26) 0%, rgba(223, 183, 108, 0.12) 100%);
+  border-color: rgba(223, 183, 108, 0.55);
+  color: var(--gold-champagne);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(223, 183, 108, 0.3);
+  font-weight: 600;
 }
 
 .apple-field {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .apple-field-header {
@@ -1046,15 +1112,17 @@ body::before {
 }
 
 .apple-field-label {
-  font-size: 15px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--apple-text-secondary);
 }
 
 .apple-field-val {
-  font-size: 19px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 input[type="range"] {
@@ -1068,8 +1136,8 @@ input[type="range"] {
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #ffffff;
   cursor: pointer;
@@ -1081,9 +1149,135 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.1);
 }
 
+/* Institutional Capital Outlay & Indian Tax Shield Card */
+.calc-tax-card {
+  background: linear-gradient(180deg, rgba(20, 20, 26, 0.78) 0%, rgba(12, 12, 16, 0.94) 100%);
+  border: 1px solid rgba(223, 183, 108, 0.2);
+  border-radius: 14px; /* Apple squircle */
+  padding: 18px 20px;
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.calc-tax-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(223, 183, 108, 0.45) 50%, transparent 100%);
+  opacity: 0.75;
+}
+
+.calc-tax-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.calc-tax-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--apple-font);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gold-champagne);
+}
+
+.calc-tax-dot {
+  width: 5px;
+  height: 5px;
+  background: #30d158;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #30d158;
+}
+
+.calc-tax-badge {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gold-primary);
+  background: rgba(223, 183, 108, 0.1);
+  border: 1px solid rgba(223, 183, 108, 0.25);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.calc-tax-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.calc-tax-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+
+.calc-tax-item.calc-tax-hero {
+  background: linear-gradient(135deg, rgba(223, 183, 108, 0.1) 0%, rgba(16, 16, 22, 0.85) 100%);
+  border-color: rgba(223, 183, 108, 0.35);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.calc-tax-lbl {
+  font-family: var(--apple-font);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #86868b;
+}
+
+.calc-tax-val {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", monospace;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.calc-tax-sub {
+  font-family: var(--apple-font);
+  font-size: 10px;
+  color: var(--apple-text-secondary);
+}
+
+.calc-tax-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--apple-font);
+  font-size: 10.5px;
+  color: #86868b;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .calc-display-col {
   background: linear-gradient(180deg, rgba(16, 16, 20, 0.92) 0%, rgba(10, 10, 13, 0.98) 100%);
-  padding: 48px;
+  padding: 36px 38px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1091,52 +1285,55 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .display-hero-num {
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
 
 .display-label-sub {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--apple-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 .display-large-num {
-  font-size: 52px;
+  font-size: 48px;
   font-weight: 700;
   letter-spacing: -0.025em;
   background: var(--gold-headline-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.1;
-  margin: 6px 0;
+  margin: 4px 0;
 }
 
 .display-note {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--apple-text-tertiary);
 }
 
 .display-grid-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  padding: 24px 0;
+  gap: 16px;
+  padding: 16px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .stat-unit-lbl {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--apple-text-secondary);
 }
 
 .stat-unit-val {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 19px;
+  font-weight: 700;
   color: var(--gold-champagne);
-  margin-top: 4px;
+  margin-top: 3px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ==========================================================================

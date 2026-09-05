@@ -84,6 +84,15 @@ function initCalculator() {
   const yieldOutput = document.getElementById('yieldOutput');
   const appreciationOutput = document.getElementById('appreciationOutput');
 
+  // Capital Outlay & Indian Tax Shield Elements
+  const calcStampVal = document.getElementById('calcStampVal');
+  const calcUpfrontVal = document.getElementById('calcUpfrontVal');
+  const calcTaxSavingsVal = document.getElementById('calcTaxSavingsVal');
+  const calcTaxMoSub = document.getElementById('calcTaxMoSub');
+  const calcNetEmiVal = document.getElementById('calcNetEmiVal');
+  const calcLtvVal = document.getElementById('calcLtvVal');
+  const presetPills = document.querySelectorAll('.calc-preset-pill');
+
   // Chart UI Elements
   const chartCanvas = document.getElementById('mortgageChartCanvas');
   const chartTitle = document.getElementById('mortgageChartTitle');
@@ -163,6 +172,23 @@ function initCalculator() {
     if (interestOutput) interestOutput.textContent = formatCurrency(totalInterest);
     if (yieldOutput) yieldOutput.textContent = formatCurrency(annualRentalYield);
     if (appreciationOutput) appreciationOutput.textContent = formatCurrency(fiveYearAppreciation);
+
+    // Calculate Capital Outlay & Indian Tax Shield Metrics
+    const stampDuty = propertyPrice * 0.066; // 6.6% Karnataka Stamp Duty + Registration
+    const upfrontOutlay = downAmount + stampDuty;
+    const annualInterestDeduction = Math.min(200000, principal * (rateAnnual / 100));
+    const annualPrincipalDeduction = Math.min(150000, emi * 12 * 0.35);
+    const taxSavingsAnnual = (annualInterestDeduction + annualPrincipalDeduction) * 0.30;
+    const taxSavingsMonthly = taxSavingsAnnual / 12;
+    const netEffectiveEmi = Math.max(0, emi - taxSavingsMonthly);
+    const ltvRatio = propertyPrice > 0 ? Math.round((principal / propertyPrice) * 100) : 80;
+
+    if (calcStampVal) calcStampVal.textContent = formatCurrency(stampDuty);
+    if (calcUpfrontVal) calcUpfrontVal.textContent = formatCurrency(upfrontOutlay);
+    if (calcTaxSavingsVal) calcTaxSavingsVal.textContent = `${formatCurrency(taxSavingsAnnual)} / yr`;
+    if (calcTaxMoSub) calcTaxMoSub.textContent = `-₹ ${Math.round(taxSavingsMonthly).toLocaleString('en-IN')} / mo deduction`;
+    if (calcNetEmiVal) calcNetEmiVal.textContent = `₹ ${Math.round(netEffectiveEmi).toLocaleString('en-IN')}`;
+    if (calcLtvVal) calcLtvVal.textContent = `${ltvRatio}% Bank Funded`;
 
     // Update Principal vs Interest Split Bar
     const totalOutflow = principal + totalInterest;
@@ -456,6 +482,32 @@ function initCalculator() {
   [priceRange, downRange, tenureRange, rateRange].forEach(input => {
     input.addEventListener('input', calculate);
   });
+
+  // Quick Portfolio Tier Presets
+  if (presetPills && presetPills.length > 0) {
+    presetPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const p = parseFloat(pill.getAttribute('data-price'));
+        if (priceRange && !isNaN(p)) {
+          priceRange.value = p;
+          presetPills.forEach(item => item.classList.remove('active'));
+          pill.classList.add('active');
+          calculate();
+        }
+      });
+    });
+
+    priceRange.addEventListener('input', () => {
+      const currentPrice = parseFloat(priceRange.value);
+      presetPills.forEach(pill => {
+        if (parseFloat(pill.getAttribute('data-price')) === currentPrice) {
+          pill.classList.add('active');
+        } else {
+          pill.classList.remove('active');
+        }
+      });
+    });
+  }
 
   window.addEventListener('resize', calculate);
   calculate();

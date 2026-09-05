@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HRL International × Rohan Corporation</title>
   <meta name="description" content="Civil grandeur meets computational intelligence. The official joint PropTech platform uniting HRL International and Rohan Corporation.">
-  <link rel="stylesheet" href="styles.css?v=20260906_detailing_v10">
+  <link rel="stylesheet" href="styles.css?v=20260906_calc_balanced_v11">
   <!-- Critical CAD Workstation Obsidian-Gold Styles (Guaranteed Zero-Cache Failure) -->
   <style id="cad-workstation-critical-css">
     .cad-workstation-box {
@@ -1293,8 +1293,22 @@
       </div>
 
       <div class="apple-calc-card">
-        <!-- Sliders Column -->
+        <!-- Sliders & Financial Structuring Column -->
         <div class="calc-sliders-col">
+          <!-- Quick Portfolio Tier Presets Bar -->
+          <div class="calc-presets-bar">
+            <div class="calc-presets-header">
+              <span class="calc-presets-lbl">Quick Portfolio Presets</span>
+              <span class="calc-presets-sub">Select asset tier to simulate</span>
+            </div>
+            <div class="calc-presets-pills">
+              <button class="calc-preset-pill" data-price="35" type="button">Rohan Estate • ₹35L</button>
+              <button class="calc-preset-pill" data-price="65" type="button">Rohan Square • ₹65L</button>
+              <button class="calc-preset-pill active" data-price="85" type="button">Rohan City • ₹85L</button>
+              <button class="calc-preset-pill" data-price="180" type="button">Marina One • ₹1.8Cr</button>
+            </div>
+          </div>
+
           <div class="apple-field">
             <div class="apple-field-header">
               <label class="apple-field-label" for="priceRange">Property Value</label>
@@ -1311,7 +1325,7 @@
             <input type="range" id="downRange" min="10" max="60" step="5" value="20">
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
             <div class="apple-field">
               <div class="apple-field-header">
                 <label class="apple-field-label" for="tenureRange">Tenure</label>
@@ -1326,6 +1340,45 @@
                 <span class="apple-field-val" id="rateVal">8.5%</span>
               </div>
               <input type="range" id="rateRange" min="7.0" max="12.0" step="0.1" value="8.5">
+            </div>
+          </div>
+
+          <!-- Institutional Capital Outlay & Indian Tax Shield Card -->
+          <div class="calc-tax-card">
+            <div class="calc-tax-header">
+              <div class="calc-tax-title">
+                <span class="calc-tax-dot"></span>
+                Capital Outlay & Tax Shield
+              </div>
+              <span class="calc-tax-badge">Sec 24(b) & 80C</span>
+            </div>
+
+            <div class="calc-tax-grid">
+              <div class="calc-tax-item">
+                <span class="calc-tax-lbl">Stamp & Reg. (6.6%)</span>
+                <div class="calc-tax-val" id="calcStampVal">₹ 5.61 Lakhs</div>
+                <span class="calc-tax-sub">Karnataka Statutory Outlay</span>
+              </div>
+              <div class="calc-tax-item">
+                <span class="calc-tax-lbl">Total Day-1 Capital</span>
+                <div class="calc-tax-val" id="calcUpfrontVal" style="color: #ffffff;">₹ 22.61 Lakhs</div>
+                <span class="calc-tax-sub">Down Payment + Reg. Outlay</span>
+              </div>
+              <div class="calc-tax-item">
+                <span class="calc-tax-lbl">Annual Tax Shield</span>
+                <div class="calc-tax-val" id="calcTaxSavingsVal" style="color: #30d158;">₹ 1.05 Lakhs / yr</div>
+                <span class="calc-tax-sub" id="calcTaxMoSub">-₹ 8,750 / mo deduction</span>
+              </div>
+              <div class="calc-tax-item calc-tax-hero">
+                <span class="calc-tax-lbl">Net Effective Outflow</span>
+                <div class="calc-tax-val" id="calcNetEmiVal" style="color: var(--gold-champagne);">₹ 50,295</div>
+                <span class="calc-tax-sub" style="color: var(--gold-primary);">Real out-of-pocket EMI</span>
+              </div>
+            </div>
+
+            <div class="calc-tax-footer">
+              <span>LTV Ratio: <strong id="calcLtvVal" style="color: #ffffff;">80% Bank Funded</strong></span>
+              <span>Amortization Basis: <strong style="color: #ffffff;">Reducing Balance</strong></span>
             </div>
           </div>
         </div>
@@ -1841,6 +1894,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=20260906_detailing_v10"></script>
+  <script src="app.js?v=20260906_calc_balanced_v11"></script>
 </body>
 </html>
