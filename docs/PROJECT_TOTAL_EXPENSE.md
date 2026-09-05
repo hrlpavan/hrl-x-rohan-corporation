@@ -4,7 +4,7 @@
 - **HRL International Private Limited** (Managing Director: Pavan Kumar Sadashiv)
 - **Rohan Corporation** (Founder & Chairman: Rohan Monteiro, Mangaluru, Karnataka)  
 **Statutory Financial Framework:** General Financial Rules (GFR 2017), Karnataka RERA, and FEMA Guidelines  
-**Audited Platform URL:** `http://localhost:3000`  
+**Live Platform URL (GitHub Pages):** `https://hrlpavan.github.io/hrl-x-rohan-corporation/`  
 **Repository:** `https://github.com/hrlpavan/hrl-x-rohan-corporation`
 
 ---

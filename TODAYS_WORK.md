@@ -2,8 +2,8 @@
 **Date:** September 5, 2026  
 **Sprint Version:** v3.4 Enterprise Global Capital Edition  
 **Repository:** `hrl-x-rohan-corporation`  
-**Platform URL:** `http://localhost:3000`  
-**Git Remote:** `origin/main` (`https://github.com/PavanKumarS-dev/rohan-corporation.git`)
+**Platform URL (Live):** `https://hrlpavan.github.io/hrl-x-rohan-corporation/`  
+**Git Remote:** `origin/main` (`https://github.com/hrlpavan/hrl-x-rohan-corporation.git`)
 
 ---
 
