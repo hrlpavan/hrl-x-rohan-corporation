@@ -2370,18 +2370,188 @@ input[type="range"]::-webkit-slider-thumb:hover {
   box-shadow: inset 0 0 0 1px rgba(223, 183, 108, 0.4);
 }
 
-.pnl-grid-split {
+/* Structured Parametric Slots Stack */
+.pnl-slots-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.pnl-slot-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pnl-slot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pnl-slot-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pnl-slot-pill {
+  font-family: var(--apple-font);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold-champagne);
+  display: inline-flex;
+  align-items: center;
+}
+
+.pnl-slot-heading {
+  font-family: var(--apple-font);
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.pnl-slot-desc {
+  font-family: var(--apple-font);
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.pnl-slot-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pnl-net-margin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #30d158;
+  background: rgba(48, 209, 88, 0.12);
+  border: 1px solid rgba(48, 209, 88, 0.3);
+  padding: 5px 12px;
+  border-radius: 8px; /* Apple squircle */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+}
+
+/* Slot 01 Layout: Canvas + Executive KPI Column */
+.pnl-chart-layout {
   display: grid;
-  grid-template-columns: 1.1fr 1.4fr;
-  gap: 36px;
-  align-items: start;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 30px;
+  align-items: center;
+}
+
+.pnl-chart-canvas-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pnl-canvas-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.pnl-chart-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+}
+
+.pnl-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.pnl-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Slot 01 KPI Panel */
+.pnl-chart-kpi-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pnl-kpi-card {
+  background: rgba(14, 14, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px; /* Apple squircle */
+  padding: 15px 18px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.pnl-kpi-card:hover {
+  border-color: rgba(223, 183, 108, 0.35);
+  transform: translateY(-1px);
+}
+
+.pnl-kpi-card.pnl-kpi-hero {
+  background: linear-gradient(135deg, rgba(223, 183, 108, 0.09) 0%, rgba(14, 14, 18, 0.85) 100%);
+  border: 1px solid rgba(223, 183, 108, 0.35);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 16px rgba(223, 183, 108, 0.1);
+}
+
+.pnl-kpi-lbl {
+  font-family: var(--apple-font);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #86868b;
+  margin-bottom: 4px;
+}
+
+.pnl-kpi-val {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pnl-kpi-sub {
+  font-family: var(--apple-font);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .pnl-chart-box {
   background: linear-gradient(180deg, rgba(20, 20, 26, 0.8) 0%, rgba(12, 12, 15, 0.94) 100%);
   border: 1px solid rgba(223, 183, 108, 0.22);
   border-radius: var(--apple-radius-card);
-  padding: 24px;
+  padding: 26px 28px;
   box-shadow: 
     0 16px 36px -10px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -2404,7 +2574,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: linear-gradient(180deg, rgba(20, 20, 26, 0.85) 0%, rgba(12, 12, 16, 0.96) 100%);
   border: 1px solid rgba(223, 183, 108, 0.22);
   border-radius: var(--apple-radius-card);
-  padding: 24px;
+  padding: 26px 28px;
   box-shadow: 
     0 16px 40px -10px rgba(0, 0, 0, 0.75),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -2656,8 +2826,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 @media (max-width: 992px) {
-  .pnl-grid-split {
+  .pnl-chart-layout {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 

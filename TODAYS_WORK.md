@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `HEAD` | `feat(pnl)` | Restructure P&L section into dual parametric slots (Slot 01: Macro Waterfall Visualizer + KPI panel; Slot 02: Full-width Audited Pro-Forma Ledger with zero truncation). |
 | `b48df20` | `style(squircle)` | Transform running header live badge and ticker deltas into authentic Apple squircle chips (continuous curvature, 8px/6px radius, frosted dark glass, gold champagne rim, zero boxy boundaries). |
 | `2e62ff8` | `style(apple)` | Purge AI-generated themes and neon washes; enforce authentic Apple Premium UI/UX design system across market ticker and terminal. |
 | `303d98b` | `feat(ticker)` | Ultra-premium market ticker tape redesign with pill badges and arrow direction synchronization. |
@@ -212,6 +213,27 @@ Over the course of this single-day sprint, the platform was elevated from an ear
   - Upgraded `.ticker-delta` to matching Apple squircle curvature (`border-radius: 6px;`).
   - Replaced hardcoded absolute fade apron with dynamic hardware-accelerated bilateral alpha gradient mask (`-webkit-mask-image: linear-gradient(90deg, transparent 0%, black 28px, black calc(100% - 28px), transparent 100%)`) on `.ticker-viewport`, ensuring marquee text dissolves seamlessly right behind the squircle chip without visual collision or clipping.
   - Bumped portal cache busters to `?v=20260905_squircle_v8` across all 6 portal pages.
+
+### Milestone 15: Restructure P&L Terminal into Dual Parametric Slots (Macro Synthesis & Full-Width Audit)
+- **Root-Cause Resolution of User Snapshot Defect (`media_1788634533695.png`):**
+  - Diagnosed critical information density mismatch: placing the compact "small info" Waterfall chart parallel to the exhaustive "large info" Audited Pro-Forma Ledger in a 2-column grid (`1.1fr 1.4fr`) compressed the ledger into a narrow 540px width.
+  - This severely clipped the 3rd column header (`HRL VENTURE ARCHITE...`) and completely chopped off the 4th column (`Net Alpha / Variance Expansion` with `+20.7% Alpha Expansion` badge) offscreen.
+- **Architectural Separation into Dedicated Parametric Slots (`.pnl-slots-stack`):**
+  - **Parametric Slot 01: Macro Capital Synthesis (`.pnl-chart-box`)**:
+    - Dedicated executive visualizer featuring the responsive **Cash Inflow vs Outflow Waterfall** canvas (`#pnlWaterfallCanvas`) on the left (60% width), with proportional bar scaling (`28px` to `44px`) and centered symmetry.
+    - Integrated with a sleek **Executive Capital Variance Panel** on the right (40% width) featuring 3 dynamic KPI chips:
+      - *Effective Gross Inflows*: `₹ 1,750.0 Cr` (`+16.7% AI & FX Lift`)
+      - *Total Outflows & COGS*: `-₹ 993.9 Cr` (`Saved -₹ 168.6 Cr via EPC MIVAN & Fast Escrow`)
+      - *Net Operating EBITDA*: `₹ 756.1 Cr` (`43.2% Margin • +20.7% Alpha Lift vs 22.5% Legacy`)
+  - **Parametric Slot 02: Full-Width Master Audited Pro-Forma Ledger (`.pnl-ledger-box`)**:
+    - Expands to **100% full container width** (~1100px), granting expansive horizontal breathing room for the multi-column financial statement.
+    - All 4 columns now display with generous widths (`38%`, `20%`, `22%`, `20%`):
+      - Line item titles like `Algorithmic Dynamic Pricing (+14.2% AI Tranche Lift)` render with zero awkward wrapping.
+      - Column headers `HRL VENTURE ARCHITECTURE` and `NET ALPHA / VARIANCE` are 100% visible with zero truncation.
+      - The `+20.7% Alpha Expansion` pill badge renders on a single line with generous padding, zero clipping, and zero horizontal scrollbar on desktop.
+- **Dynamic Parametric Synchronization**:
+  - Both Slot 01 (Waterfall + KPIs) and Slot 02 (Audited Ledger) are seamlessly bound to the Developer / Investor mode switcher (`#pnlBtnDeveloper`, `#pnlBtnInvestor`) and sliders (`#portfolioRange`, `#priceRange`, `#rateRange`).
+  - Cache busters bumped to `?v=20260906_pnl_slots_v9` across all portal pages.
 
 ---
 

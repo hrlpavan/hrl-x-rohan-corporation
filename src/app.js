@@ -2561,6 +2561,32 @@ function initPnlProfile() {
       `;
     }
 
+    const kpiInflows = document.getElementById('pnlKpiInflows');
+    const kpiOutflows = document.getElementById('pnlKpiOutflows');
+    const kpiEbitda = document.getElementById('pnlKpiEbitda');
+
+    if (kpiInflows) {
+      kpiInflows.innerHTML = `
+        <div class="pnl-kpi-lbl">Effective Gross Inflows</div>
+        <div class="pnl-kpi-val" style="color: #ffffff;">₹ ${grossRevHrl.toFixed(1)} Cr</div>
+        <div class="pnl-kpi-sub" style="color: #30d158;">+₹ ${(grossRevHrl - grossRevLegacy).toFixed(1)} Cr (+${(((grossRevHrl - grossRevLegacy) / grossRevLegacy) * 100).toFixed(1)}%) AI Pricing & FX Lift</div>
+      `;
+    }
+    if (kpiOutflows) {
+      kpiOutflows.innerHTML = `
+        <div class="pnl-kpi-lbl">Total Capital Outflows / COGS</div>
+        <div class="pnl-kpi-val" style="color: #ff6961;">-₹ ${outflowsHrl.toFixed(1)} Cr</div>
+        <div class="pnl-kpi-sub" style="color: #30d158;">Saved -₹ ${(outflowsLegacy - outflowsHrl).toFixed(1)} Cr via EPC & Fast-Track RERA</div>
+      `;
+    }
+    if (kpiEbitda) {
+      kpiEbitda.innerHTML = `
+        <div class="pnl-kpi-lbl">Net Operating EBITDA</div>
+        <div class="pnl-kpi-val" style="color: var(--gold-champagne);">₹ ${ebitdaHrl.toFixed(1)} Cr</div>
+        <div class="pnl-kpi-sub" style="color: var(--gold-primary);">${marginHrl.toFixed(1)}% Margin (+${marginLift.toFixed(1)}% Alpha Lift vs ${marginLegacy.toFixed(1)}% Legacy)</div>
+      `;
+    }
+
     if (canvas) {
       drawDeveloperPnlChart(canvas, cr, gdvGain, forexGain, epcHrl, landHrl, salesHrl + financeHrl, ebitdaHrl);
     }
@@ -2664,6 +2690,32 @@ function initPnlProfile() {
       `;
     }
 
+    const kpiInflows = document.getElementById('pnlKpiInflows');
+    const kpiOutflows = document.getElementById('pnlKpiOutflows');
+    const kpiEbitda = document.getElementById('pnlKpiEbitda');
+
+    if (kpiInflows) {
+      kpiInflows.innerHTML = `
+        <div class="pnl-kpi-lbl">Gross Annual Inflows</div>
+        <div class="pnl-kpi-val" style="color: #ffffff;">₹ ${(rentalHrl + appreciationHrl).toFixed(2)} Lakhs</div>
+        <div class="pnl-kpi-sub" style="color: #30d158;">+5.0% Rental Yield + 8.0% Projected Appreciation</div>
+      `;
+    }
+    if (kpiOutflows) {
+      kpiOutflows.innerHTML = `
+        <div class="pnl-kpi-lbl">Annual Carrying Costs</div>
+        <div class="pnl-kpi-val" style="color: #ff6961;">-₹ ${(interestHrl + maintHrl + tax).toFixed(2)} Lakhs</div>
+        <div class="pnl-kpi-sub" style="color: #30d158;">Saved -32% HOA via Solar & Pref. Loan Rate</div>
+      `;
+    }
+    if (kpiEbitda) {
+      kpiEbitda.innerHTML = `
+        <div class="pnl-kpi-lbl">Net Annual Wealth Created</div>
+        <div class="pnl-kpi-val" style="color: #30d158; font-weight: 800;">₹ ${totalWealthHrl.toFixed(2)} Lakhs / Yr</div>
+        <div class="pnl-kpi-sub" style="color: #30d158;">+₹ ${wealthLift.toFixed(2)} Lakhs / Yr Alpha Lift over Legacy</div>
+      `;
+    }
+
     if (canvas) {
       drawInvestorPnlChart(canvas, rentalHrl, appreciationHrl, interestHrl, maintHrl + tax, totalWealthHrl);
     }
@@ -2708,11 +2760,13 @@ function initPnlProfile() {
     }
     ctx.setLineDash([]);
 
-    const barWidth = Math.min(plotW / (bars.length * 1.4), 32);
-    const spacing = (plotW - barWidth * bars.length) / (bars.length - 1);
+    const barWidth = Math.min(Math.max(plotW / (bars.length * 1.8), 28), 44);
+    const totalBarsWidth = barWidth * bars.length;
+    const spacing = Math.max((plotW - totalBarsWidth) / (bars.length - 1), 12);
+    const startX = padLeft + Math.max(0, (plotW - (totalBarsWidth + spacing * (bars.length - 1))) / 2);
 
     bars.forEach((b, i) => {
-      const x = padLeft + i * (barWidth + spacing);
+      const x = startX + i * (barWidth + spacing);
       const barH = Math.max((b.val / maxVal) * plotH, 4);
       const y = padTop + plotH - barH;
 
@@ -2727,14 +2781,14 @@ function initPnlProfile() {
 
       // Bar Value
       ctx.fillStyle = b.isOutflow ? '#ff6961' : (b.isTotal ? '#ffe5a3' : '#ffffff');
-      ctx.font = '600 8.5px -apple-system, sans-serif';
+      ctx.font = '600 9px -apple-system, sans-serif';
       ctx.textAlign = 'center';
       const prefix = b.isOutflow ? '-₹' : (b.isTotal ? '₹' : (i === 0 ? '₹' : '+₹'));
       ctx.fillText(`${prefix}${b.val.toFixed(0)}Cr`, x + barWidth / 2, y - 6);
 
       // Label
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-      ctx.font = '500 8px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+      ctx.font = '500 8.5px -apple-system, sans-serif';
       ctx.fillText(b.label, x + barWidth / 2, height - 8);
     });
 
@@ -2784,11 +2838,13 @@ function initPnlProfile() {
     }
     ctx.setLineDash([]);
 
-    const barWidth = Math.min(plotW / (bars.length * 1.5), 36);
-    const spacing = (plotW - barWidth * bars.length) / (bars.length - 1);
+    const barWidth = Math.min(Math.max(plotW / (bars.length * 2.0), 32), 52);
+    const totalBarsWidth = barWidth * bars.length;
+    const spacing = Math.max((plotW - totalBarsWidth) / (bars.length - 1), 16);
+    const startX = padLeft + Math.max(0, (plotW - (totalBarsWidth + spacing * (bars.length - 1))) / 2);
 
     bars.forEach((b, i) => {
-      const x = padLeft + i * (barWidth + spacing);
+      const x = startX + i * (barWidth + spacing);
       const barH = Math.max((b.val / maxVal) * plotH, 4);
       const y = padTop + plotH - barH;
 
@@ -2803,14 +2859,14 @@ function initPnlProfile() {
 
       // Bar Value
       ctx.fillStyle = b.isOutflow ? '#ff6961' : (b.isTotal ? '#30d158' : '#ffe5a3');
-      ctx.font = '600 8.5px -apple-system, sans-serif';
+      ctx.font = '600 9px -apple-system, sans-serif';
       ctx.textAlign = 'center';
       const prefix = b.isOutflow ? '-₹' : '+₹';
       ctx.fillText(`${prefix}${b.val.toFixed(2)}L`, x + barWidth / 2, y - 6);
 
       // Label
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-      ctx.font = '500 8px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+      ctx.font = '500 8.5px -apple-system, sans-serif';
       ctx.fillText(b.label, x + barWidth / 2, height - 8);
     });
 
