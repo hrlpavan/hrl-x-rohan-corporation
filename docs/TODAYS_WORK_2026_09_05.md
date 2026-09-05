@@ -19,7 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
-| `HEAD` | `feat(pnl)` | Restructure P&L section into dual parametric slots (Slot 01: Macro Waterfall Visualizer + KPI panel; Slot 02: Full-width Audited Pro-Forma Ledger with zero truncation). |
+| `a9526f6` | `feat(pnl)` | Restructure P&L section into dual parametric slots (Slot 01: Macro Waterfall Visualizer + KPI panel; Slot 02: Full-width Audited Pro-Forma Ledger with zero truncation). |
 | `b48df20` | `style(squircle)` | Transform running header live badge and ticker deltas into authentic Apple squircle chips (continuous curvature, 8px/6px radius, frosted dark glass, gold champagne rim, zero boxy boundaries). |
 | `2e62ff8` | `style(apple)` | Purge AI-generated themes and neon washes; enforce authentic Apple Premium UI/UX design system across market ticker and terminal. |
 | `303d98b` | `feat(ticker)` | Ultra-premium market ticker tape redesign with pill badges and arrow direction synchronization. |
