@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `048b9d6` | `feat(cad)`  | Upgrade CAD workstation to executive obsidian-gold UI with Retina HiDPI, marble veining, TV blueprint wireframe, and critical inline styles. |
 | `29ff239` | `feat(cad)`  | Integrate advanced 3D interior CAD suite demo with furniture meshes, architectural dimensions, and multi-mode lighting physics. |
 | `438dda4` | `feat(video)`| Decouple captions from video canvas into dedicated standalone caption footer to prevent covering information tray. |
 | `f98bf2d` | `fix(video)` | Resolve diagonal left-edge image crop by correcting clipRoundedRect path and adopting native roundRect. |
@@ -132,19 +133,28 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 ### Milestone 11: Advanced 3D Architectural CAD Interior Suite Visualizer
 - **Unit 1402: 3BHK Master Living & Balcony Suite:** Built a comprehensive, high-precision isometric interior CAD computing engine rendered on HTML5 Canvas.
+- **Executive CAD Workstation Top Bar (`.cad-workstation-bar`):**
+  - Replaced floating elements with a dedicated, institutional-grade brushed titanium and obsidian glass toolbar (`rgba(12, 12, 16, 0.98)` with 1px gold hairline accent).
+  - Active 60 FPS pulsating emerald telemetry indicator (`.cad-pulse-led`).
+  - Frosted glass segmented switcher with micro SVG architectural icons (Isometric Room & Skyscraper Tower) and champagne gold active states (`#ffe5a3` with `0 0 14px rgba(223, 183, 108, 0.28)` glow).
+  - **Zero-Cache Immunity:** Inlined critical workstation CSS directly in `<head>` and applied `?v=20260905_cad_v4` cache-busting queries across all 6 portal pages.
+- **Hardware-Accelerated Retina HiDPI Display:**
+  - Automated `devicePixelRatio` 2x/3x scaling via `ctx.setTransform(dpr, 0, 0, dpr, 0, 0)`.
+  - Guarantees pin-sharp, anti-aliased CAD vectors and typography on 4K/Retina displays.
 - **Precision CAD Geometry & Materials:**
-  - Structural sub-floor foundation slab and Italian Statuario marble floor with metric tile joint grid.
-  - Cantilevered terrace balcony with teak plank decking, step-down, and frameless structural glass balustrade.
+  - Structural sub-floor foundation slab and Italian Statuario marble floor with organic stone veining curves and metric tile joint grid.
+  - Cantilevered terrace balcony with teak plank decking, step-down, frameless structural glass balustrade, and coastal sea sightline horizon gradient.
   - Rear acoustic fluted dark timber wall with vertical CAD grooves and inset Statuario marble feature panel.
-  - Wall-mounted 75" OLED display with live telemetry graphics, floating credenza, and warm concealed LED cove lighting.
+  - Wall-mounted 75" OLED display with live mini BIM CAD blueprint wireframe floorplan.
   - Panoramic acoustic sliding glass balcony portal with diagonal specular reflections.
   - Precision isometric furniture meshes: L-shaped sectional lounge sofa with cushions, dual sculptural cocktail tables (marble + nested bronze glass), architectural arc floor lamp, and indoor botanical planter.
-- **Architectural CAD Dimension Lines:** Metric dimension arrows and clear height labels: `↔ 5.40m [LIVING AXIS]`, `↕ 4.20m [DEPTH]`, `↕ 2.10m [TERRACE]`, `↑ 3.15m CLEAR`.
+- **Architectural CAD Dimension Lines & Material Chips:**
+  - Metric dimension arrows and clear height labels: `↔ 5.40m [LIVING AXIS]`, `↕ 4.20m [DEPTH]`, `↕ 2.10m [TERRACE]`, `↑ 3.15m CLEAR`.
+  - Floating CAD BIM material specification chips: `[M-01: STATUARIO MARBLE]`, `[W-02: FLUTED WALNUT]`, `[G-01: LOW-E DGU]`.
 - **Dynamic Physical Lighting Simulation:**
   - **Daylight (5600K):** 145° midday sunbeam shaft, crisp geometric floor shadow projections, ambient natural light.
   - **Golden Hour (3200K):** 260° low-angle golden sunset flood across balcony and living room floor.
-  - **Night (3000K):** Recessed ceiling spotlight cones, warm concealed LED cove backlighting, and glowing OLED display bloom.
-- **Apple-Grade Segmented Model Switcher:** Added interactive `[3D Interior CAD Suite]` (default active) vs `[Tower Exterior Twin]` switcher within the Visual Computing HUD, allowing instant toggling between micro interior CAD floorplans and macro structural tower massing.
+  - **Night (3000K):** 4 photometric ceiling spotlight downlight cones, warm concealed LED cove backlighting, and glowing OLED display bloom.
 - **Real-Time Orbit Telemetry:** Real-time mouse tilt and camera orbit angles tracked and displayed in the HUD telemetry overlay.
 
 ---
