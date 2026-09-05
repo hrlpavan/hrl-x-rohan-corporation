@@ -5,7 +5,7 @@
 **Resolution**: 4K UHD (3840 × 2160) / 1080p (1920 × 1080) at 60 FPS  
 **Target Audience**: Prospective Luxury Homebuyers, Commercial Tenants, Global NRI Investors & Strategic Partners  
 **Audio Score**: Cinematic Obsidian & Gold Ambient Electronic Chords, Sub-bass swell, Crisp Spatial Audio  
-**Narrator Tone**: Authoritative, visionary, refined, executive British/International English  
+**Narrator Tone**: Warm, articulate, refined, polite executive female voice (Samantha)  
 
 ---
 

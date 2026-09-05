@@ -107,12 +107,10 @@ class MasterMotionGraphicsEngine {
 
     this.currentSceneIndex = 0;
     this.currentVoiceSceneIndex = -1;
-    this.currentNarrator = 'samantha'; // Default to polite, warm female executive voice
+    this.currentNarrator = 'samantha'; // Exclusively polite, warm female executive voice
     this.currentActiveAudio = null;
     this.narratorPool = {
-      daniel: [],
-      samantha: [],
-      rishi: []
+      samantha: []
     };
 
     this.initAudioEngine();
@@ -168,8 +166,8 @@ class MasterMotionGraphicsEngine {
       console.warn('Web Audio API not supported', e);
     }
 
-    // Pre-instantiate and preload studio narrator audio tracks for all personas
-    const narrators = ['daniel', 'samantha', 'rishi'];
+    // Pre-instantiate and preload polite female studio narrator audio tracks
+    const narrators = ['samantha'];
     narrators.forEach(narrator => {
       this.narratorPool[narrator] = [];
       for (let s = 0; s < 6; s++) {
@@ -303,18 +301,30 @@ class MasterMotionGraphicsEngine {
     utterance.pitch = 0.98;
 
     const voices = window.speechSynthesis.getVoices();
-    let preferred = null;
+    // Strictly filter for polite female voices — eliminate all male voices
+    const femaleVoices = voices.filter(v => {
+      const name = v.name.toLowerCase();
+      const isMale = name.includes('male') || name.includes('daniel') || name.includes('oliver') ||
+                     name.includes('george') || name.includes('rishi') || name.includes('aman') ||
+                     name.includes('fred') || name.includes('alex') || name.includes('david') ||
+                     name.includes('arthur') || name.includes('tom') || name.includes('albert');
+      return !isMale;
+    });
 
-    if (this.currentNarrator === 'samantha') {
-      preferred = voices.find(v => (v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Karen') || v.name.includes('Zira') || (v.lang.includes('en-US') && !v.name.includes('Daniel'))));
-    } else if (this.currentNarrator === 'rishi') {
-      preferred = voices.find(v => (v.lang.includes('en-IN') || v.lang.includes('en_IN') || v.name.includes('Rishi') || v.name.includes('Veena') || v.name.includes('India')));
-    } else { // daniel (British)
-      preferred = voices.find(v => (v.lang.includes('en-GB') || v.lang.includes('en_GB') || v.name.includes('Daniel') || v.name.includes('Oliver') || v.name.includes('George')));
-    }
+    let preferred = femaleVoices.find(v => (
+      v.name.includes('Samantha') ||
+      v.name.includes('Victoria') ||
+      v.name.includes('Karen') ||
+      v.name.includes('Zira') ||
+      v.name.includes('Moira') ||
+      v.name.includes('Fiona') ||
+      v.name.includes('Tessa') ||
+      v.name.includes('Veena') ||
+      v.name.includes('Tara')
+    ));
 
     if (!preferred) {
-      preferred = voices.find(v => v.lang.includes('en'));
+      preferred = femaleVoices[0] || voices.find(v => !v.name.toLowerCase().includes('daniel') && !v.name.toLowerCase().includes('rishi'));
     }
 
     if (preferred) utterance.voice = preferred;
@@ -324,17 +334,12 @@ class MasterMotionGraphicsEngine {
   }
 
   setNarrator(narratorName) {
-    if (!['daniel', 'samantha', 'rishi'].includes(narratorName)) return;
-    this.currentNarrator = narratorName;
-
-    const labels = {
-      samantha: 'Studio Master: Samantha (Polite Female Narration)',
-      daniel: 'Studio Master: Daniel (UK Executive)',
-      rishi: 'Studio Master: Rishi (IN Executive)'
-    };
+    // Exclusively polite female narration
+    this.currentNarrator = 'samantha';
+    const label = 'Studio Master: Samantha (Polite Female Narration)';
 
     document.querySelectorAll('.voice-segment-btn').forEach(btn => {
-      if (btn.getAttribute('data-voice') === narratorName) {
+      if (btn.getAttribute('data-voice') === 'samantha') {
         btn.classList.add('active');
       } else {
         btn.classList.remove('active');
@@ -342,29 +347,26 @@ class MasterMotionGraphicsEngine {
     });
 
     if (this.toggleNarratorBtn) {
-      this.toggleNarratorBtn.textContent = labels[this.currentNarrator];
+      this.toggleNarratorBtn.textContent = label;
     }
     const badge = document.getElementById('activeVoiceBadge');
     if (badge) {
-      badge.textContent = labels[this.currentNarrator];
+      badge.textContent = label;
     }
 
     const speakerTag = document.querySelector('.sub-speaker-tag');
     if (speakerTag) {
-      const speakerNames = { samantha: 'Samantha', daniel: 'Daniel', rishi: 'Rishi' };
-      speakerTag.textContent = speakerNames[this.currentNarrator] || 'Samantha';
+      speakerTag.textContent = 'Samantha';
     }
 
-    // Immediately switch narration to selected persona
+    // Trigger current scene narration
     if (this.isPlaying && this.voiceEnabled) {
       this.speakScene(this.currentSceneIndex);
     }
   }
 
   toggleNarrator() {
-    const list = ['daniel', 'samantha', 'rishi'];
-    const idx = list.indexOf(this.currentNarrator);
-    this.setNarrator(list[(idx + 1) % list.length]);
+    this.setNarrator('samantha');
   }
 
   /* -------------------------------------------------------------------------- */
