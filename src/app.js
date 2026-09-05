@@ -3298,39 +3298,7 @@ function initStockMarketTerminal() {
     return `$ ${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
-  // Streaming AI Wash & Telemetry Data Dictionary
-  const aiWashTelemetry = [
-    {
-      isAi: true,
-      id: 'ai-yield',
-      tag: 'AI YIELD WASH',
-      text: 'Rohan Marina One Yield Alpha',
-      highlight: '+14.8% Projected IRR'
-    },
-    {
-      isAi: true,
-      id: 'ai-escrow',
-      tag: 'AI ESCROW ARBITRAGE',
-      text: 'GCC Remittance Spot Lock Active',
-      highlight: 'AED/INR 23.53'
-    },
-    {
-      isAi: true,
-      id: 'ai-bim',
-      tag: 'AI BIM TELEMETRY',
-      text: '4D RTK Drone LiDAR Compresses EPC Variance',
-      highlight: '-22.0%'
-    },
-    {
-      isAi: true,
-      id: 'ai-fii',
-      tag: 'AI CAPITAL SYNTHESIS',
-      text: 'Institutional Inflow Coastal Karnataka',
-      highlight: '+22.4% YoY'
-    }
-  ];
-
-  // Populate Global Running Ticker Tape with Ambient AI Wash
+  // Populate Global Running Ticker Tape (Apple Premium UI)
   function populateTickerTape() {
     if (!globalTickerTrack) return;
     const allMarketItems = [
@@ -3340,32 +3308,8 @@ function initStockMarketTerminal() {
       ...universalMarketData.commodities
     ];
 
-    // Interleave AI wash telemetry after every 4 market instruments
-    const interleavedList = [];
-    let aiIndex = 0;
-    allMarketItems.forEach((item, idx) => {
-      interleavedList.push(item);
-      if ((idx + 1) % 4 === 0) {
-        interleavedList.push(aiWashTelemetry[aiIndex % aiWashTelemetry.length]);
-        aiIndex++;
-      }
-    });
-
     function createTickerHtml(list) {
       return list.map(item => {
-        if (item.isAi) {
-          return `
-            <a href="#stockmarket" class="ticker-ai-item" data-ai-id="${item.id}" title="Jump to AI Capital Synthesis Terminal">
-              <span class="ticker-ai-tag">
-                <span class="ticker-ai-sparkle">✦</span>
-                <span>${item.tag}</span>
-              </span>
-              <span class="ticker-ai-text">${item.text} <strong class="ticker-ai-highlight">${item.highlight}</strong></span>
-            </a>
-            <span class="ticker-sep" aria-hidden="true">✦</span>
-          `;
-        }
-
         const isUp = item.changePercent >= 0;
         const arrow = isUp ? '▲' : '▼';
         const deltaClass = isUp ? 'delta-up' : 'delta-down';
@@ -3382,27 +3326,13 @@ function initStockMarketTerminal() {
       }).join('');
     }
 
-    globalTickerTrack.innerHTML = createTickerHtml(interleavedList) + createTickerHtml(interleavedList);
+    globalTickerTrack.innerHTML = createTickerHtml(allMarketItems) + createTickerHtml(allMarketItems);
 
     globalTickerTrack.querySelectorAll('.ticker-item').forEach(el => {
       el.addEventListener('click', () => {
         const u = el.getAttribute('data-universe');
         const id = el.getAttribute('data-id');
         if (u && id) selectAsset(u, id);
-      });
-    });
-
-    globalTickerTrack.querySelectorAll('.ticker-ai-item').forEach(el => {
-      el.addEventListener('click', () => {
-        const term = document.getElementById('stockmarket');
-        if (term) {
-          term.scrollIntoView({ behavior: 'smooth' });
-          const strip = term.querySelector('.terminal-ai-wash-strip');
-          if (strip) {
-            strip.classList.add('tick-flash-green');
-            setTimeout(() => strip.classList.remove('tick-flash-green'), 1500);
-          }
-        }
       });
     });
   }
