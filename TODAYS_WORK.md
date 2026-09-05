@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `b90f66f` | `feat(video)`| Auto-sync captions sentence-by-sentence with speech, set female polite voice (Samantha) default, and clean scene typography. |
 | `7b2674d` | `branding`| Scale logo size and navbar height (56px nav, 48px vector SVG logo) for enhanced brand visibility and legibility. |
 | `b9d037e` | `branding`| Remove all borders, box-shadows, and frames from brand logo on top navigation per client brand guidelines. |
 | `c93a723` | `branding`| Implement official Rohan Corporation brand guidelines logo on top navigation across all portals. |
@@ -117,6 +118,13 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 - **Ambient Mesh Illumination:** Fixed subtle astronomical radial mesh illumination (`radial-gradient(ellipse at 50% -80px, rgba(223,183,108,0.09) 0%, transparent 70%)`) to create deep architectural depth.
 - **Continuous Edge-Dissolving Ticker Tape:** Enhanced `#globalMarketTicker` with linear gradient backgrounds and bilateral alpha masks (`mask-image: linear-gradient(90deg, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%)`).
 - **Interactive Metallic Gold CTAs:** Integrated `.btn-apple-gold` with multi-stop brushed metallic gold gradients, 1px inset top specular highlight, and deep gold shadow elevation.
+
+### Milestone 10: Master Explainer Video Refinement & Real-Time Caption Synchronization
+- **Default Polite Female Narration (Samantha):** Selected high-fidelity female studio persona (`Samantha`) as the default voice across the Master Video Explainer, delivering a warm, articulate, and polite executive briefing.
+- **Hardware-Locked Real-Time Caption Auto-Sync:** Integrated sentence-level cues with exact timestamps across all 6 scenes. Timeline clock is hardware-synchronized to `scene.start + audio.currentTime`, guaranteeing zero clock drift and instantaneous caption switching sentence-by-sentence.
+- **Apple-Grade Floating Subtitle Pill:** Redesigned subtitle container into an ultra-clean, frosted glass capsule (`rgba(10, 10, 14, 0.90)` with 24px blur, gold border accent, and dynamic speaker identification badge).
+- **Typography & Visual De-Cluttering:** Deepened central radial vignette in Scene 1 to completely isolate foreground titles from background photography text, eliminating visual clashes and ensuring maximum legibility.
+- **Streamlined 2-Minute Presentation:** Re-paced the presentation to an exact 2:00 timeline (Genesis 0:00, Portfolio 0:20, Rohan City 0:45, Marina One 1:06, Square & Estate 1:26, Partnership 1:44).
 
 ---
 
