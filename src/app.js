@@ -487,11 +487,29 @@ function initCanvasSimulator() {
   let lastTime = performance.now();
   let fps = '60.0';
 
+  // Hardware-Accelerated Retina DPI Support
+  let logicalW = 560;
+  let logicalH = 340;
+
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    logicalW = rect.width > 0 ? rect.width : 560;
+    logicalH = 340;
+    canvas.width = Math.round(logicalW * dpr);
+    canvas.height = Math.round(logicalH * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
   // Interactive subtle parallax on mouse move
   canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
-    targetMouse.x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-    targetMouse.y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    const w = rect.width || logicalW;
+    const h = rect.height || logicalH;
+    targetMouse.x = ((e.clientX - rect.left) / w - 0.5) * 2;
+    targetMouse.y = ((e.clientY - rect.top) / h - 0.5) * 2;
   });
 
   canvas.addEventListener('mouseleave', () => {
@@ -536,10 +554,14 @@ function initCanvasSimulator() {
     if (cadViewInteriorBtn && cadViewExteriorBtn) {
       if (cadView === 'interior') {
         cadViewInteriorBtn.classList.add('active');
+        cadViewInteriorBtn.setAttribute('aria-selected', 'true');
         cadViewExteriorBtn.classList.remove('active');
+        cadViewExteriorBtn.setAttribute('aria-selected', 'false');
       } else {
         cadViewExteriorBtn.classList.add('active');
+        cadViewExteriorBtn.setAttribute('aria-selected', 'true');
         cadViewInteriorBtn.classList.remove('active');
+        cadViewInteriorBtn.setAttribute('aria-selected', 'false');
       }
     }
     updateTelemetryText();
@@ -686,6 +708,25 @@ function initCanvasSimulator() {
       ctx.stroke();
     }
 
+    // Statuario Marble Delicate Organic Vein Lines (Subtle Luxury Stone Shading)
+    ctx.strokeStyle = mode === 'sunset' ? 'rgba(255, 190, 120, 0.14)' : 'rgba(200, 215, 235, 0.18)';
+    ctx.lineWidth = 0.7;
+    const mv1 = project(-55, -45, 1.1, cx, cy);
+    const mvC1 = project(-25, -15, 1.1, cx, cy);
+    const mv2 = project(15, -35, 1.1, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(mv1.x, mv1.y);
+    ctx.quadraticCurveTo(mvC1.x, mvC1.y, mv2.x, mv2.y);
+    ctx.stroke();
+
+    const mv3 = project(-10, 5, 1.1, cx, cy);
+    const mvC2 = project(25, 25, 1.1, cx, cy);
+    const mv4 = project(55, 10, 1.1, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(mv3.x, mv3.y);
+    ctx.quadraticCurveTo(mvC2.x, mvC2.y, mv4.x, mv4.y);
+    ctx.stroke();
+
     // 3. Cantilevered Balcony Timber Decking (+40 to +75 on Y, step-down of 1 unit)
     drawIsoBlock(-80, 40, -1, 160, 36, 1, cx, cy, '#1c1510', '#100c08', '#080604', 'rgba(223, 183, 108, 0.2)');
     ctx.strokeStyle = 'rgba(160, 110, 50, 0.35)';
@@ -743,21 +784,38 @@ function initCanvasSimulator() {
     // 75" 4K OLED Ultra-Thin Display Panel
     drawIsoBlock(-26, -58.5, 26, 52, 1, 32, cx, cy, '#020305', '#020305', '#05070a', '#dfb76c');
 
-    // Screen Digital Twin Telemetry Graphics
+    // Screen Digital Twin Telemetry Graphics & BIM Blueprint
     const tvTL = project(-24, -58, 54, cx, cy);
     const tvBR = project(24, -58, 28, cx, cy);
     const tvW = Math.abs(tvBR.x - tvTL.x);
     const tvH = Math.abs(tvBR.y - tvTL.y);
-    ctx.fillStyle = 'rgba(6, 10, 16, 0.95)';
+    ctx.fillStyle = 'rgba(4, 7, 12, 0.98)';
     ctx.fillRect(tvTL.x, tvTL.y, tvW, tvH);
+
+    // Miniature BIM CAD Blueprint Grid on OLED Display
+    ctx.strokeStyle = 'rgba(41, 151, 255, 0.18)';
+    ctx.lineWidth = 0.5;
+    for (let gy = tvTL.y + 4; gy < tvTL.y + tvH - 4; gy += 5) {
+      ctx.beginPath();
+      ctx.moveTo(tvTL.x + 4, gy);
+      ctx.lineTo(tvTL.x + tvW - 4, gy);
+      ctx.stroke();
+    }
+    // Blueprint Wall Vectors
     ctx.strokeStyle = '#2997ff';
     ctx.lineWidth = 0.9;
+    ctx.strokeRect(tvTL.x + 6, tvTL.y + 5, tvW - 12, tvH - 10);
+    ctx.strokeStyle = '#dfb76c';
+    ctx.strokeRect(tvTL.x + 10, tvTL.y + 8, tvW * 0.45, tvH * 0.45);
+
+    // Mini Telemetry Indicator
+    ctx.fillStyle = '#30d158';
     ctx.beginPath();
-    ctx.moveTo(tvTL.x + 8, tvTL.y + tvH * 0.6);
-    ctx.lineTo(tvTL.x + tvW * 0.35, tvTL.y + tvH * 0.4);
-    ctx.lineTo(tvTL.x + tvW * 0.6, tvTL.y + tvH * 0.65);
-    ctx.lineTo(tvTL.x + tvW - 8, tvTL.y + tvH * 0.3);
-    ctx.stroke();
+    ctx.arc(tvTL.x + 10, tvTL.y + tvH - 7, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = '600 6.5px -apple-system, BlinkMacSystemFont, "SF Mono", monospace';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+    ctx.fillText('BIM v4.2 LIVE', tvTL.x + 15, tvTL.y + tvH - 5);
 
     // Floating Media Console Credenza
     drawIsoBlock(-34, -58, 8, 68, 10, 9, cx, cy, '#18202d', '#101520', '#0a0d14', 'rgba(223, 183, 108, 0.4)');
@@ -810,6 +868,16 @@ function initCanvasSimulator() {
     ctx.beginPath();
     ctx.moveTo(balP4.x, balP4.y);
     ctx.lineTo(balP3.x, balP3.y);
+    ctx.stroke();
+
+    // Horizon Sea Sightline Gradient beyond Balcony Glass
+    const seaP1 = project(-80, 75, 12, cx, cy);
+    const seaP2 = project(80, 75, 12, cx, cy);
+    ctx.strokeStyle = mode === 'sunset' ? 'rgba(255, 160, 80, 0.4)' : (mode === 'night' ? 'rgba(41, 151, 255, 0.25)' : 'rgba(100, 190, 255, 0.35)');
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(seaP1.x, seaP1.y);
+    ctx.lineTo(seaP2.x, seaP2.y);
     ctx.stroke();
 
     // Outdoor Balcony Lounger / Sunbed
@@ -912,6 +980,23 @@ function initCanvasSimulator() {
       ctx.closePath();
       ctx.fill();
     } else {
+      // 4 Photometric Downward Ceiling Spotlights
+      [-50, -15, 20, 55].forEach(spotX => {
+        const lightP = project(spotX, -20, 78, cx, cy);
+        const floorP = project(spotX, -20, 1, cx, cy);
+        const spotGrad = ctx.createLinearGradient(lightP.x, lightP.y, floorP.x, floorP.y);
+        spotGrad.addColorStop(0, 'rgba(255, 225, 160, 0.22)');
+        spotGrad.addColorStop(0.7, 'rgba(255, 225, 160, 0.06)');
+        spotGrad.addColorStop(1, 'transparent');
+        ctx.fillStyle = spotGrad;
+        ctx.beginPath();
+        ctx.moveTo(lightP.x, lightP.y);
+        ctx.lineTo(floorP.x - 24, floorP.y + 6);
+        ctx.lineTo(floorP.x + 24, floorP.y - 6);
+        ctx.closePath();
+        ctx.fill();
+      });
+
       const spot1 = project(0, 0, 0, cx, cy);
       const spotGrad = ctx.createRadialGradient(spot1.x, spot1.y, 4, spot1.x, spot1.y, 55);
       spotGrad.addColorStop(0, 'rgba(255, 230, 180, 0.35)');
@@ -992,28 +1077,38 @@ function initCanvasSimulator() {
     ctx.textAlign = 'right';
     ctx.fillText('↑ 3.15m CLEAR', dimH1.x - 6, (dimH1.y + dimH2.y) / 2);
 
+    // Floating Architectural Material Flags
+    ctx.font = '600 7.5px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+    ctx.fillStyle = 'rgba(223, 183, 108, 0.85)';
+    const tag1 = project(-55, 15, 2, cx, cy);
+    ctx.fillText('[M-01: STATUARIO MARBLE]', tag1.x, tag1.y);
+    const tag2 = project(-70, -60, 48, cx, cy);
+    ctx.fillText('[W-02: FLUTED WALNUT]', tag2.x, tag2.y);
+    const tag3 = project(24, 75, 14, cx, cy);
+    ctx.fillText('[G-01: LOW-E DGU]', tag3.x, tag3.y);
+
     // 15. Technical Architectural HUD Headers
     ctx.font = '600 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
     ctx.fillStyle = 'rgba(223, 183, 108, 0.95)';
     ctx.textAlign = 'left';
-    ctx.fillText('ROHAN CITY INTERIOR CAD • 12°52\'N 74°50\'E', 16, 22);
+    ctx.fillText('ROHAN CITY INTERIOR CAD • 12°52\'N 74°50\'E', 16, 20);
 
     ctx.font = '400 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.fillText('SUITE 1402 (3BHK MASTER LIVING & BALCONY) | SCALE 1:50', 16, 36);
+    ctx.fillText('SUITE 1402 (3BHK MASTER LIVING & BALCONY) | SCALE 1:50', 16, 34);
 
     ctx.textAlign = 'right';
     ctx.fillStyle = '#30d158';
-    ctx.fillText(`${fps} FPS`, canvas.width - 16, 22);
+    ctx.fillText(`${fps} FPS`, logicalW - 16, 20);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
-    ctx.fillText('ACOUSTIC: 48 dB | THERMAL: 94.2%', canvas.width - 16, 36);
+    ctx.fillText('ACOUSTIC: 48 dB | THERMAL: 94.2%', logicalW - 16, 34);
 
     // Bottom telemetry
     const deg = Math.round((rotAngle + mouseOffset.x * 0.20) * 180 / Math.PI);
     const pitchDeg = Math.round((0.52 + mouseOffset.y * 0.08) * 100);
     ctx.textAlign = 'left';
-    ctx.fillStyle = 'rgba(223, 183, 108, 0.7)';
-    ctx.fillText(`ORBIT: ${deg}° | PITCH: ${pitchDeg}% | MOVE CURSOR TO ROTATE 3D CAD`, 16, canvas.height - 14);
+    ctx.fillStyle = 'rgba(223, 183, 108, 0.85)';
+    ctx.fillText(`ORBIT: ${deg}° | PITCH: ${pitchDeg}% | REAL-TIME MOUSE TILT & ROTATION`, 16, logicalH - 12);
   }
 
   /* -------------------------------------------------------------------------- */
@@ -1130,9 +1225,9 @@ function initCanvasSimulator() {
 
     ctx.textAlign = 'right';
     ctx.fillStyle = '#30d158';
-    ctx.fillText(`${fps} FPS`, canvas.width - 16, 22);
+    ctx.fillText(`${fps} FPS`, logicalW - 16, 22);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-    ctx.fillText('HARDWARE ACCELERATED', canvas.width - 16, 36);
+    ctx.fillText('HARDWARE ACCELERATED', logicalW - 16, 36);
   }
 
   function draw() {
@@ -1148,10 +1243,10 @@ function initCanvasSimulator() {
     mouseOffset.x += (targetMouse.x - mouseOffset.x) * 0.08;
     mouseOffset.y += (targetMouse.y - mouseOffset.y) * 0.08;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, logicalW, logicalH);
 
     // Atmospheric Backdrop
-    const sky = ctx.createRadialGradient(canvas.width / 2, canvas.height * 0.4, 40, canvas.width / 2, canvas.height / 2, canvas.width);
+    const sky = ctx.createRadialGradient(logicalW / 2, logicalH * 0.4, 40, logicalW / 2, logicalH / 2, logicalW);
     if (mode === 'day') {
       sky.addColorStop(0, '#101a28');
       sky.addColorStop(0.6, '#080d15');
@@ -1166,10 +1261,10 @@ function initCanvasSimulator() {
       sky.addColorStop(1, '#000000');
     }
     ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, logicalW, logicalH);
 
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2 + 30;
+    const cx = logicalW / 2;
+    const cy = 195;
 
     if (cadView === 'interior') {
       drawInteriorCAD(cx, cy, now);
