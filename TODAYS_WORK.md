@@ -19,7 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
-| `PENDING` | `branding`| Implement official Rohan Corporation brand guidelines logo on top navigation across all portals. |
+| `c93a723` | `branding`| Implement official Rohan Corporation brand guidelines logo on top navigation across all portals. |
 | `4f142f2` | `docs` | Update audited and documentation URLs to live GitHub Pages domain (`https://hrlpavan.github.io/hrl-x-rohan-corporation/`). |
 | `45b4204` | `perf(scroll)`| Eliminate scroll lag with GPU composited ambient mesh and pause canvas draw loop when off-screen. |
 | `9df4425` | `feat(v3.5)` | Deploy ultra-luxury premium gradient architecture, specular lighting hairlines, edge-dissolving ticker tape, and ambient mesh illumination. |
