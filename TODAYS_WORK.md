@@ -250,6 +250,32 @@ Over the course of this single-day sprint, the platform was elevated from an ear
   - **CSS Syntax Repair:** Restored missing `@media (max-width: 992px)` declaration before line 1967, ensuring 100% perfect brace balance (437 open, 437 close).
   - Bumped portal cache busters to `?v=20260906_detailing_v10` across all 6 portal pages.
 
+### Milestone 17: Version 3.9 — Calculator Spatial Rebalance & Institutional Tax Shield Suite
+- **Root-Cause Diagnosis of User Snapshot Defect (`media_1788636180282.png`):**
+  - The snapshot revealed a severe spatial imbalance inside `.apple-calc-card`:
+    - **Left Column (`.calc-sliders-col`):** Held only 3 input slider groups taking ~180px height. Because CSS Grid stretched both columns to match the taller right column (~650px), the left column exhibited a **massive ~450px empty black void** below the sliders.
+    - **Right Column (`.calc-display-col`):** Densely packed with the primary EMI number (`₹ 60,060`), interactive 3-mode financial graph, 4 stat cards, and primary booking CTA button.
+  - The disproportionate height made the calculator feel incomplete and wasted valuable screen estate.
+- **Architectural & Spatial Rebalance Solutions:**
+  - **Quick Portfolio Tier Presets Bar (`.calc-presets-bar`):**
+    - Built responsive Apple squircle pill selectors for instant one-touch portfolio simulation:
+      - `Rohan Estate • ₹35L`
+      - `Rohan Square • ₹65L`
+      - `Rohan City • ₹85L` (Default active)
+      - `Marina One • ₹1.8Cr`
+    - Bi-directionally synchronized with the property price range slider and all downstream amortization equations.
+  - **All-Inclusive Capital Outlay & Indian Tax Shield Suite (`.calc-tax-card`):**
+    - Converted the wasted empty space into high-utility real estate financial intelligence:
+      - **Karnataka Statutory Stamp & Registration (6.6%):** Real-time statutory outlay modeling (`calcStampVal`).
+      - **Total Day-1 Capital Required:** Combined down payment + registration fees (`calcUpfrontVal`).
+      - **Annual Tax Shield (Sec 24b & 80C):** Models up to ₹2.0L interest deduction (Sec 24b) and ₹1.5L principal repayment deduction (Sec 80C) at the 30% income tax slab (`calcTaxSavingsVal`, `calcTaxMoSub`).
+      - **Net Effective Outflow:** Real out-of-pocket EMI net of monthly tax shield savings (`calcNetEmiVal`).
+      - **LTV Ratio:** Dynamic loan-to-value bank funding percentage indicator (`calcLtvVal`).
+  - **Balanced Column Symmetry:**
+    - Adjusted grid columns to `1.05fr 1fr` with tighter padding (`36px 38px`), bringing both left and right columns into harmonious vertical balance (~550px).
+  - **Portal Cache Busters:**
+    - Bumped to `?v=20260906_calc_balanced_v11` across all 6 portal pages (`index.html`, `rohan-estate.html`, `rohan-square.html`, `rohan-city.html`, `rohan-marina-one.html`, `video.html`).
+
 ---
 
 ## 4. Documentation Repository Updates
