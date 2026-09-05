@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `867bf31` | `feat(audio)`| Purge male voices, enforce exclusively polite female narration (Samantha) across all explainer assets and fallbacks. |
 | `b90f66f` | `feat(video)`| Auto-sync captions sentence-by-sentence with speech, set female polite voice (Samantha) default, and clean scene typography. |
 | `7b2674d` | `branding`| Scale logo size and navbar height (56px nav, 48px vector SVG logo) for enhanced brand visibility and legibility. |
 | `b9d037e` | `branding`| Remove all borders, box-shadows, and frames from brand logo on top navigation per client brand guidelines. |
