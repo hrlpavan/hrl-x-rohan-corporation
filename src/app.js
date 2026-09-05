@@ -731,7 +731,26 @@ function initCanvasSimulator() {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
     ctx.fillText('HARDWARE ACCELERATED', canvas.width - 16, 36);
 
-    requestAnimationFrame(draw);
+    if (isCanvasVisible) {
+      animationFrameId = requestAnimationFrame(draw);
+    }
+  }
+
+  let isCanvasVisible = true;
+  let animationFrameId = null;
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const wasVisible = isCanvasVisible;
+        isCanvasVisible = entry.isIntersecting;
+        if (!wasVisible && isCanvasVisible) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = requestAnimationFrame(draw);
+        }
+      });
+    }, { threshold: 0.05 });
+    observer.observe(canvas);
   }
 
   draw();
