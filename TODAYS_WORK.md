@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `41bae5a` | `style(pnl)` | Elevate audited ledger to luxury institutional terminal with pill badges, card encapsulation, and refined typography. |
 | `c31cd3a` | `fix(cad)`  | Resolve 3D perspective projection, solid face rendering, 3D foliage, and dimension badge collisions. |
 | `048b9d6` | `feat(cad)`  | Upgrade CAD workstation to executive obsidian-gold UI with Retina HiDPI, marble veining, TV blueprint wireframe, and critical inline styles. |
 | `29ff239` | `feat(cad)`  | Integrate advanced 3D interior CAD suite demo with furniture meshes, architectural dimensions, and multi-mode lighting physics. |
@@ -157,6 +158,21 @@ Over the course of this single-day sprint, the platform was elevated from an ear
   - **Golden Hour (3200K):** 260° low-angle golden sunset flood across balcony and living room floor.
   - **Night (3000K):** 4 photometric ceiling spotlight downlight cones, warm concealed LED cove backlighting, and glowing OLED display bloom.
 - **Real-Time Orbit Telemetry:** Real-time mouse tilt and camera orbit angles tracked and displayed in the HUD telemetry overlay.
+
+### Milestone 12: Executive Audited P&L Pro-Forma Ledger Card Redesign & Terminal UI
+- **Root-Cause Resolution of User Snapshot Defect:**
+  - Diagnosed jagged rectangular box borders around `+20.7% Alpha Expansion` caused by an unpadded inline span wrapping across table lines, combined with harsh 2px solid yellow table borders and intersecting vertical column borders.
+- **Card Encapsulation (`.pnl-ledger-box`):**
+  - Encapsulated the ledger table within an institutional-grade obsidian card matching `.pnl-chart-box`, featuring a top specular champagne hairline, frosted glass background (`rgba(20, 20, 26, 0.85)`), and institutional header with live compliance badge (`RERA & IFRS Compliant` with pulsating emerald LED).
+- **Luminous Champagne Hairlines & Soft Column Tinting:**
+  - Replaced harsh 2px yellow borders with refined 1px champagne hairlines (`rgba(223, 183, 108, 0.55)`).
+  - Replaced hard vertical borders on the 3rd column with a soft warm background tint (`rgba(223, 183, 108, 0.035)`) and delicate hairlines (`rgba(223, 183, 108, 0.12)`).
+- **Institutional Alpha Expansion Pill Badge (`.pnl-pill-alpha`):**
+  - Engineered a bespoke pill badge with `display: inline-flex; border-radius: 9999px; white-space: nowrap;` featuring champagne gold gradient fill (`rgba(223, 183, 108, 0.28)`), crisp border, and ambient gold glow (`box-shadow: 0 0 14px rgba(223, 183, 108, 0.2)`). It is physically impossible for the text or border to wrap or render as broken boxes.
+- **Clear Data Hierarchy & Tabular Numeric Formatting:**
+  - Applied `.pnl-cell-val` and `.pnl-cell-sub` components to separate primary currency values from secondary percentage badges with clean typographic distinction.
+  - Formatted the EBITDA hero values (`₹ 756.1 Cr` in bold champagne gold with text glow) and added glowing status bullets.
+  - Enforced `white-space: nowrap;` and explicit column widths to prevent awkward wrapping across all viewport sizes.
 
 ---
 
