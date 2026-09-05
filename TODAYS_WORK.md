@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `29ff239` | `feat(cad)`  | Integrate advanced 3D interior CAD suite demo with furniture meshes, architectural dimensions, and multi-mode lighting physics. |
 | `438dda4` | `feat(video)`| Decouple captions from video canvas into dedicated standalone caption footer to prevent covering information tray. |
 | `f98bf2d` | `fix(video)` | Resolve diagonal left-edge image crop by correcting clipRoundedRect path and adopting native roundRect. |
 | `867bf31` | `feat(audio)`| Purge male voices, enforce exclusively polite female narration (Samantha) across all explainer assets and fallbacks. |
@@ -128,6 +129,23 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 - **Apple-Grade Floating Subtitle Pill:** Redesigned subtitle container into an ultra-clean, frosted glass capsule (`rgba(10, 10, 14, 0.90)` with 24px blur, gold border accent, and dynamic speaker identification badge).
 - **Typography & Visual De-Cluttering:** Deepened central radial vignette in Scene 1 to completely isolate foreground titles from background photography text, eliminating visual clashes and ensuring maximum legibility.
 - **Streamlined 2-Minute Presentation:** Re-paced the presentation to an exact 2:00 timeline (Genesis 0:00, Portfolio 0:20, Rohan City 0:45, Marina One 1:06, Square & Estate 1:26, Partnership 1:44).
+
+### Milestone 11: Advanced 3D Architectural CAD Interior Suite Visualizer
+- **Unit 1402: 3BHK Master Living & Balcony Suite:** Built a comprehensive, high-precision isometric interior CAD computing engine rendered on HTML5 Canvas.
+- **Precision CAD Geometry & Materials:**
+  - Structural sub-floor foundation slab and Italian Statuario marble floor with metric tile joint grid.
+  - Cantilevered terrace balcony with teak plank decking, step-down, and frameless structural glass balustrade.
+  - Rear acoustic fluted dark timber wall with vertical CAD grooves and inset Statuario marble feature panel.
+  - Wall-mounted 75" OLED display with live telemetry graphics, floating credenza, and warm concealed LED cove lighting.
+  - Panoramic acoustic sliding glass balcony portal with diagonal specular reflections.
+  - Precision isometric furniture meshes: L-shaped sectional lounge sofa with cushions, dual sculptural cocktail tables (marble + nested bronze glass), architectural arc floor lamp, and indoor botanical planter.
+- **Architectural CAD Dimension Lines:** Metric dimension arrows and clear height labels: `↔ 5.40m [LIVING AXIS]`, `↕ 4.20m [DEPTH]`, `↕ 2.10m [TERRACE]`, `↑ 3.15m CLEAR`.
+- **Dynamic Physical Lighting Simulation:**
+  - **Daylight (5600K):** 145° midday sunbeam shaft, crisp geometric floor shadow projections, ambient natural light.
+  - **Golden Hour (3200K):** 260° low-angle golden sunset flood across balcony and living room floor.
+  - **Night (3000K):** Recessed ceiling spotlight cones, warm concealed LED cove backlighting, and glowing OLED display bloom.
+- **Apple-Grade Segmented Model Switcher:** Added interactive `[3D Interior CAD Suite]` (default active) vs `[Tower Exterior Twin]` switcher within the Visual Computing HUD, allowing instant toggling between micro interior CAD floorplans and macro structural tower massing.
+- **Real-Time Orbit Telemetry:** Real-time mouse tilt and camera orbit angles tracked and displayed in the HUD telemetry overlay.
 
 ---
 
