@@ -110,37 +110,59 @@
       margin-top: 4px;
     }
 
-    /* Subtitles Box */
-    .apple-subtitles {
-      position: absolute;
-      bottom: 70px;
-      left: 0;
-      right: 0;
+    /* Separate Dedicated Caption Footer */
+    .theater-stage {
+      width: 100%;
+      position: relative;
+    }
+
+    .theater-stage:fullscreen {
+      width: 100vw;
+      height: 100vh;
+      background: #000000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .theater-stage:fullscreen .video-viewport-frame {
+      width: min(100%, calc((100vh - 120px) * 16 / 9));
+      aspect-ratio: 16 / 9;
+      height: auto;
+    }
+
+    .theater-stage:fullscreen .caption-standalone-footer {
+      width: min(100%, calc((100vh - 120px) * 16 / 9));
+      margin-top: 14px;
+    }
+
+    .caption-standalone-footer {
+      width: 100%;
+      margin: 16px 0 10px 0;
       display: flex;
       justify-content: center;
-      pointer-events: none;
-      z-index: 25;
-      padding: 0 20px;
       transition: opacity 0.3s ease;
     }
 
-    .subtitle-pill {
+    .caption-footer-card {
+      width: 100%;
+      max-width: 1020px;
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      background: rgba(10, 10, 14, 0.90);
+      justify-content: center;
+      gap: 16px;
+      background: rgba(14, 14, 20, 0.90);
       backdrop-filter: saturate(180%) blur(24px);
       -webkit-backdrop-filter: saturate(180%) blur(24px);
-      border: 1px solid rgba(223, 183, 108, 0.35);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(223, 183, 108, 0.2);
+      border: 1px solid rgba(223, 183, 108, 0.32);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(223, 183, 108, 0.2);
       color: #ffffff;
-      padding: 10px 24px;
-      border-radius: 9999px;
-      font-size: 15px;
-      font-weight: 500;
-      line-height: 1.45;
-      max-width: 860px;
-      letter-spacing: -0.01em;
+      padding: 13px 26px;
+      border-radius: var(--apple-radius-pill);
+      min-height: 52px;
       text-align: center;
       transition: all 0.25s ease;
     }
@@ -151,11 +173,20 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      padding: 3px 9px;
+      padding: 4px 10px;
       background: rgba(223, 183, 108, 0.14);
       border-radius: 9999px;
       border: 1px solid rgba(223, 183, 108, 0.35);
       white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .caption-body {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      color: #f5f5f7;
     }
 
     /* Player Controls */
@@ -316,61 +347,64 @@
       </div>
     </div>
 
-    <!-- 16:9 Video Canvas Frame -->
-    <div class="video-viewport-frame" id="playerFrame">
-      <div class="cinema-ambient-glow"></div>
-      <canvas id="videoCanvas" width="1920" height="1080"></canvas>
+    <!-- Theater Stage with Separate Dedicated Caption Footer -->
+    <div class="theater-stage" id="theaterStage">
+      <!-- 16:9 Video Canvas Frame -->
+      <div class="video-viewport-frame" id="playerFrame">
+        <div class="cinema-ambient-glow"></div>
+        <canvas id="videoCanvas" width="1920" height="1080"></canvas>
 
-      <!-- Subtitles -->
-      <div class="apple-subtitles" id="ccBox">
-        <div class="subtitle-pill" id="subtitlePill">
-          <span class="sub-speaker-tag">Samantha</span>
-          <span id="captionText">Select Play to start the presentation.</span>
-        </div>
-      </div>
-
-      <!-- Play Overlay -->
-      <div class="apple-video-overlay" id="playOverlay">
-        <div class="apple-play-circle" id="bigPlayBtn">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        </div>
-        <div class="overlay-caption">Watch the Master Presentation</div>
-        <div class="overlay-duration">Full Audio Narration & Procedural Score • 2m 00s</div>
-      </div>
-
-      <!-- Player Controls -->
-      <div class="apple-player-controls" id="playerControls">
-        <div class="timeline-bar-bg" id="progressBarContainer">
-          <div class="timeline-bar-fill" id="progressBarFill"></div>
+        <!-- Play Overlay -->
+        <div class="apple-video-overlay" id="playOverlay">
+          <div class="apple-play-circle" id="bigPlayBtn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="overlay-caption">Watch the Master Presentation</div>
+          <div class="overlay-duration">Full Audio Narration & Procedural Score • 2m 00s</div>
         </div>
 
-        <div class="controls-flex-row">
-          <div class="controls-group">
-            <button class="apple-ctrl-btn" id="playPauseBtn" title="Play/Pause">
-              <span id="playIcon">Play</span>
-            </button>
-            <button class="apple-ctrl-btn" id="replayBtn" title="Restart">Replay</button>
-            <span class="time-readout" id="timeDisplay">00:00 / 02:00</span>
+        <!-- Player Controls -->
+        <div class="apple-player-controls" id="playerControls">
+          <div class="timeline-bar-bg" id="progressBarContainer">
+            <div class="timeline-bar-fill" id="progressBarFill"></div>
           </div>
 
-          <div class="controls-group">
-            <button class="apple-ctrl-btn" id="toggleAutoBtn" style="color: #2997ff;">Auto: ON</button>
-            <button class="apple-ctrl-btn" id="toggleAudioBtn">Music: ON</button>
-            <button class="apple-ctrl-btn" id="toggleVoiceBtn">Voice: ON</button>
-            
-            <!-- Female Studio Voice Badge -->
-            <div class="apple-voice-switcher" id="voiceSegmentedControl" title="Polite Female Executive Narration Active">
-              <button class="voice-segment-btn active" data-voice="samantha" style="cursor: default; display: inline-flex; align-items: center; gap: 6px;">
-                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #30d158; box-shadow: 0 0 6px #30d158;"></span>
-                Samantha (Polite Female Voice)
+          <div class="controls-flex-row">
+            <div class="controls-group">
+              <button class="apple-ctrl-btn" id="playPauseBtn" title="Play/Pause">
+                <span id="playIcon">Play</span>
               </button>
+              <button class="apple-ctrl-btn" id="replayBtn" title="Restart">Replay</button>
+              <span class="time-readout" id="timeDisplay">00:00 / 02:00</span>
             </div>
 
-            <button class="apple-ctrl-btn" id="toggleCCBtn">Subtitles: ON</button>
-            <button class="apple-ctrl-btn" id="fullscreenBtn" title="Fullscreen">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-            </button>
+            <div class="controls-group">
+              <button class="apple-ctrl-btn" id="toggleAutoBtn" style="color: #2997ff;">Auto: ON</button>
+              <button class="apple-ctrl-btn" id="toggleAudioBtn">Music: ON</button>
+              <button class="apple-ctrl-btn" id="toggleVoiceBtn">Voice: ON</button>
+              
+              <!-- Female Studio Voice Badge -->
+              <div class="apple-voice-switcher" id="voiceSegmentedControl" title="Polite Female Executive Narration Active">
+                <button class="voice-segment-btn active" data-voice="samantha" style="cursor: default; display: inline-flex; align-items: center; gap: 6px;">
+                  <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #30d158; box-shadow: 0 0 6px #30d158;"></span>
+                  Samantha (Polite Female Voice)
+                </button>
+              </div>
+
+              <button class="apple-ctrl-btn" id="toggleCCBtn">Subtitles: ON</button>
+              <button class="apple-ctrl-btn" id="fullscreenBtn" title="Fullscreen">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              </button>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Separate Dedicated Caption Footer -->
+      <div class="caption-standalone-footer" id="ccBox">
+        <div class="caption-footer-card">
+          <span class="sub-speaker-tag">Samantha</span>
+          <span class="caption-body" id="captionText">Select Play to start the presentation.</span>
         </div>
       </div>
     </div>

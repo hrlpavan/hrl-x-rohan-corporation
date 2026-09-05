@@ -461,13 +461,13 @@ class MasterMotionGraphicsEngine {
         this.ccEnabled = !this.ccEnabled;
         this.toggleCCBtn.textContent = `Subtitles: ${this.ccEnabled ? 'ON' : 'OFF'}`;
         const ccBox = document.getElementById('ccBox');
-        if (ccBox) ccBox.style.display = this.ccEnabled ? 'block' : 'none';
+        if (ccBox) ccBox.style.display = this.ccEnabled ? 'flex' : 'none';
       });
     }
 
     if (this.fullscreenBtn) {
       this.fullscreenBtn.addEventListener('click', () => {
-        const frame = document.getElementById('playerFrame');
+        const frame = document.getElementById('theaterStage') || document.getElementById('playerFrame');
         if (!document.fullscreenElement) {
           frame.requestFullscreen().catch(err => console.log(err));
         } else {
