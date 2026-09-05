@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `PENDING` | `branding`| Scale logo size and navbar height (56px nav, 48px vector SVG logo) for enhanced brand visibility and legibility. |
 | `b9d037e` | `branding`| Remove all borders, box-shadows, and frames from brand logo on top navigation per client brand guidelines. |
 | `c93a723` | `branding`| Implement official Rohan Corporation brand guidelines logo on top navigation across all portals. |
 | `4f142f2` | `docs` | Update audited and documentation URLs to live GitHub Pages domain (`https://hrlpavan.github.io/hrl-x-rohan-corporation/`). |

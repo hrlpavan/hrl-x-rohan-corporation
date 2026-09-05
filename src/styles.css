@@ -118,9 +118,9 @@ body::before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 44px;
+  height: 56px;
   z-index: 9999;
-  background: rgba(12, 12, 16, 0.88);
+  background: rgba(12, 12, 16, 0.90);
   backdrop-filter: saturate(180%) blur(16px);
   -webkit-backdrop-filter: saturate(180%) blur(16px);
   border-bottom: 1px solid rgba(223, 183, 108, 0.18);
@@ -156,7 +156,7 @@ body::before {
 }
 
 .rohan-brand-logo-top {
-  height: 38px;
+  height: 48px;
   width: auto;
   aspect-ratio: 105 / 155;
   object-fit: contain;
@@ -167,11 +167,14 @@ body::before {
   border-radius: 0 !important;
   background: transparent !important;
   image-rendering: -webkit-optimize-contrast;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
 }
 
 .apple-brandmark:hover .rohan-brand-logo-top {
   border: none !important;
   box-shadow: none !important;
+  transform: scale(1.04);
 }
 
 .apple-nav-menu {
@@ -1245,7 +1248,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .property-sticky-subnav {
   position: sticky;
-  top: 44px;
+  top: 56px;
   z-index: 900;
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: saturate(180%) blur(20px);
@@ -2322,10 +2325,10 @@ input[type="range"]::-webkit-slider-thumb:hover {
    Universal Stock Market & Global Capital Terminal System
    ========================================================================== */
 
-/* Global Running Ticker Tape (Fixed under 44px Apple Nav) */
+/* Global Running Ticker Tape (Fixed under 56px Apple Nav) */
 .global-market-ticker-wrap {
   position: fixed;
-  top: 44px;
+  top: 56px;
   left: 0;
   width: 100%;
   height: 32px;
