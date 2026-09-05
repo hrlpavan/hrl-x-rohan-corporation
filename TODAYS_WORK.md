@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `438dda4` | `feat(video)`| Decouple captions from video canvas into dedicated standalone caption footer to prevent covering information tray. |
 | `f98bf2d` | `fix(video)` | Resolve diagonal left-edge image crop by correcting clipRoundedRect path and adopting native roundRect. |
 | `867bf31` | `feat(audio)`| Purge male voices, enforce exclusively polite female narration (Samantha) across all explainer assets and fallbacks. |
 | `b90f66f` | `feat(video)`| Auto-sync captions sentence-by-sentence with speech, set female polite voice (Samantha) default, and clean scene typography. |
