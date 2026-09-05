@@ -235,6 +235,21 @@ Over the course of this single-day sprint, the platform was elevated from an ear
   - Both Slot 01 (Waterfall + KPIs) and Slot 02 (Audited Ledger) are seamlessly bound to the Developer / Investor mode switcher (`#pnlBtnDeveloper`, `#pnlBtnInvestor`) and sliders (`#portfolioRange`, `#priceRange`, `#rateRange`).
   - Cache busters bumped to `?v=20260906_pnl_slots_v9` across all portal pages.
 
+### Milestone 16: Version 3.8 — Refined Apple Industrial Detailing & Zero-Nesting Bento Architecture
+- **Root-Cause Diagnosis of User Snapshot Defect (`media_1788635269285.png`):**
+  - The vertical crop highlighted three critical detailing defects:
+    1. **"Box-in-a-Box" Russian Doll Nesting:** Outer `.pnl-container-card` had a glowing gold border, drop shadow, and 40px padding, enclosing inner slot cards that *also* had their own glowing gold borders and shadows. This resulted in an unsightly 30-40px double-border gap and concentric curved corner clashes.
+    2. **Colliding Horizontal Hairlines:** Header border and ledger table header lines sat right next to each other (~4px apart), producing an unaligned, jarring double-line artifact.
+    3. **Missing Outer Media Query & Raw Table Radiuses:** Table rows and header cells lacked rounded outer corners, causing sharp corners to clip against rounded card frames.
+- **Flawless Apple Bento Architecture & Surgical Detailing Fixes:**
+  - **Flat Sovereign Bento Cards:** Stripped redundant border, background, and padding from outer `.pnl-container-card` (`background: transparent; border: none; padding: 0; box-shadow: none;`). Transformed Slot 01 (`.pnl-chart-box`) and Slot 02 (`.pnl-ledger-box`) into two sovereign Apple Bento Cards (`border-radius: var(--apple-radius-bento); padding: 32px 36px; border: 1px solid rgba(223, 183, 108, 0.24)`), sitting flush with the container grid margins.
+  - **Single Unified Control Bar (`.pnl-header-bar`):** Styled as a floating Apple frosted glass bar (`background: rgba(18, 18, 24, 0.7); backdrop-filter: blur(20px); border-radius: 16px;`) hosting the active title and segmented squircle switcher with zero nested card conflicts.
+  - **Enclosed Matrix Frame for Ledger Table (`.pnl-table-wrap`):** Wrapped table in a dedicated 14px rounded frosted container (`background: rgba(10, 10, 14, 0.55); border: 1px solid rgba(223, 183, 108, 0.16); border-radius: 14px;`).
+  - **Eliminated Hairline Collision:** Re-spaced slot header (`margin-bottom: 24px; padding-bottom: 18px;`) and added matching rounded corners to table header (`border-top-left-radius: 13px; border-top-right-radius: 13px;`) and net total rows (`border-bottom-left-radius: 13px; border-bottom-right-radius: 13px;`).
+  - **Recessed Surface Plate for Waterfall Canvas (`.pnl-canvas-wrap`):** Added dark recessed plate (`background: rgba(10, 10, 14, 0.55); border: 1px solid rgba(223, 183, 108, 0.14); border-radius: 16px;`).
+  - **CSS Syntax Repair:** Restored missing `@media (max-width: 992px)` declaration before line 1967, ensuring 100% perfect brace balance (437 open, 437 close).
+  - Bumped portal cache busters to `?v=20260906_detailing_v10` across all 6 portal pages.
+
 ---
 
 ## 4. Documentation Repository Updates
