@@ -113,26 +113,49 @@
     /* Subtitles Box */
     .apple-subtitles {
       position: absolute;
-      bottom: 64px;
-      left: 6%;
-      right: 6%;
-      text-align: center;
+      bottom: 70px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
       pointer-events: none;
-      z-index: 5;
+      z-index: 25;
+      padding: 0 20px;
+      transition: opacity 0.3s ease;
     }
 
     .subtitle-pill {
-      display: inline-block;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #f5f5f7;
-      padding: 10px 22px;
-      border-radius: var(--apple-radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(10, 10, 14, 0.90);
+      backdrop-filter: saturate(180%) blur(24px);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      border: 1px solid rgba(223, 183, 108, 0.35);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(223, 183, 108, 0.2);
+      color: #ffffff;
+      padding: 10px 24px;
+      border-radius: 9999px;
       font-size: 15px;
+      font-weight: 500;
       line-height: 1.45;
       max-width: 860px;
       letter-spacing: -0.01em;
+      text-align: center;
+      transition: all 0.25s ease;
+    }
+
+    .sub-speaker-tag {
+      color: var(--gold-primary);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 9px;
+      background: rgba(223, 183, 108, 0.14);
+      border-radius: 9999px;
+      border: 1px solid rgba(223, 183, 108, 0.35);
+      white-space: nowrap;
     }
 
     /* Player Controls */
@@ -278,7 +301,7 @@
       <div>
         <div class="apple-eyebrow" style="display: flex; align-items: center; gap: 8px;">
           Master Presentation • 4K 60 FPS
-          <span class="rera-pill-apple" id="activeVoiceBadge" style="background: rgba(223, 183, 108, 0.12); border: 1px solid rgba(223, 183, 108, 0.35); color: #dfb76c; font-size: 11px; padding: 3px 10px; border-radius: 9999px; letter-spacing: 0.04em;">Studio Master: Daniel (UK Executive)</span>
+          <span class="rera-pill-apple" id="activeVoiceBadge" style="background: rgba(223, 183, 108, 0.12); border: 1px solid rgba(223, 183, 108, 0.35); color: #dfb76c; font-size: 11px; padding: 3px 10px; border-radius: 9999px; letter-spacing: 0.04em;">Studio Master: Samantha (Polite Female Narration)</span>
         </div>
         <h1 class="theater-title">Civil Grandeur. <span class="apple-headline-gradient">Computational Power.</span></h1>
       </div>
@@ -300,7 +323,10 @@
 
       <!-- Subtitles -->
       <div class="apple-subtitles" id="ccBox">
-        <span class="subtitle-pill" id="captionText">Select play to start the presentation.</span>
+        <div class="subtitle-pill" id="subtitlePill">
+          <span class="sub-speaker-tag">Samantha</span>
+          <span id="captionText">Select Play to start the presentation.</span>
+        </div>
       </div>
 
       <!-- Play Overlay -->
@@ -309,7 +335,7 @@
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         </div>
         <div class="overlay-caption">Watch the Master Presentation</div>
-        <div class="overlay-duration">Full Audio Narration & Procedural Score • 2m 30s</div>
+        <div class="overlay-duration">Full Audio Narration & Procedural Score • 2m 00s</div>
       </div>
 
       <!-- Player Controls -->
@@ -324,7 +350,7 @@
               <span id="playIcon">Play</span>
             </button>
             <button class="apple-ctrl-btn" id="replayBtn" title="Restart">Replay</button>
-            <span class="time-readout" id="timeDisplay">00:00 / 02:30</span>
+            <span class="time-readout" id="timeDisplay">00:00 / 02:00</span>
           </div>
 
           <div class="controls-group">
@@ -334,9 +360,9 @@
             
             <!-- Apple Executive Studio Persona Switcher -->
             <div class="apple-voice-switcher" id="voiceSegmentedControl" title="Select Executive Studio Persona">
-              <button class="voice-segment-btn active" data-voice="daniel">UK Studio</button>
-              <button class="voice-segment-btn" data-voice="samantha">US Studio</button>
-              <button class="voice-segment-btn" data-voice="rishi">IN Studio</button>
+              <button class="voice-segment-btn active" data-voice="samantha">Samantha (Female)</button>
+              <button class="voice-segment-btn" data-voice="daniel">Daniel (UK)</button>
+              <button class="voice-segment-btn" data-voice="rishi">Rishi (IN)</button>
             </div>
 
             <button class="apple-ctrl-btn" id="toggleCCBtn">Subtitles: ON</button>
@@ -351,11 +377,11 @@
     <!-- Chapter Navigation Bar -->
     <div class="apple-chapter-bar">
       <button class="chapter-tab chapter-pill active" data-time="0">1. Genesis (0:00)</button>
-      <button class="chapter-tab chapter-pill" data-time="25">2. Portfolio (0:25)</button>
-      <button class="chapter-tab chapter-pill" data-time="55">3. Rohan City (0:55)</button>
-      <button class="chapter-tab chapter-pill" data-time="85">4. Marina One (1:25)</button>
-      <button class="chapter-tab chapter-pill" data-time="115">5. Square & Estate (1:55)</button>
-      <button class="chapter-tab chapter-pill" data-time="135">6. Next Steps (2:15)</button>
+      <button class="chapter-tab chapter-pill" data-time="20">2. Portfolio (0:20)</button>
+      <button class="chapter-tab chapter-pill" data-time="45">3. Rohan City (0:45)</button>
+      <button class="chapter-tab chapter-pill" data-time="66">4. Marina One (1:06)</button>
+      <button class="chapter-tab chapter-pill" data-time="86">5. Square & Estate (1:26)</button>
+      <button class="chapter-tab chapter-pill" data-time="104">6. Partnership (1:44)</button>
     </div>
 
     <!-- Theater Footer Action Card -->

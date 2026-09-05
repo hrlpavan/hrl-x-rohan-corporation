@@ -16,7 +16,7 @@ class MasterMotionGraphicsEngine {
   constructor() {
     this.canvas = document.getElementById('videoCanvas');
     this.ctx = this.canvas.getContext('2d');
-    this.duration = 150; // 2 minutes 30 seconds
+    this.duration = 120; // Exact 2 minutes 00 seconds synchronized to narration pacing
     this.currentTime = 0;
     this.isPlaying = false;
     this.musicEnabled = true;
@@ -34,55 +34,80 @@ class MasterMotionGraphicsEngine {
       estate: this.loadImage('assets/images/rohan-estate-neermarga.jpg')
     };
 
-    // Master Script & Scene Milestones
+    // Master Script & Scene Milestones with Precise Word/Sentence Cues for Auto-Sync
     this.scenes = [
       {
         id: 'genesis',
         start: 0,
-        end: 25,
+        end: 20,
         title: 'Genesis & Shared Vision',
-        script: "For over thirty years, Rohan Corporation has sculpted the skyline of Mangaluru with trusted architectural landmarks. Today, that physical grandeur unites with computational intelligence. Welcome to the HRL International and Rohan Corporation Smart PropTech Platform."
+        script: "For over thirty years, Rohan Corporation has sculpted the skyline of Mangaluru with trusted architectural landmarks. Today, that physical grandeur unites with computational intelligence. Welcome to the HRL International and Rohan Corporation Smart PropTech Platform.",
+        cues: [
+          { start: 0.0, end: 6.8, text: "For over thirty years, Rohan Corporation has sculpted the skyline of Mangaluru with trusted architectural landmarks." },
+          { start: 6.8, end: 11.2, text: "Today, that physical grandeur unites with computational intelligence." },
+          { start: 11.2, end: 17.5, text: "Welcome to the HRL International & Rohan Corporation Smart PropTech Platform." }
+        ]
       },
       {
         id: 'portfolio',
-        start: 25,
-        end: 55,
+        start: 20,
+        end: 45,
         title: 'Flagship Developments Portfolio',
-        script: "Our joint initiative powers Rohan Corporation's premier developments: Rohan City at Bejai, Rohan Marina One at Surathkal beach, Rohan Square at Pumpwell, and the hillside paradise of Rohan Estate at Neermarga. Each project is fully RERA approved and engineered for generational permanence."
+        script: "Our joint initiative powers Rohan Corporation's premier developments: Rohan City at Bejai, Rohan Marina One at Surathkal beach, Rohan Square at Pumpwell, and the hillside paradise of Rohan Estate at Neermarga. Each project is fully RERA approved and engineered for generational permanence.",
+        cues: [
+          { start: 0.0, end: 12.2, text: "Our joint initiative powers Rohan Corporation's premier developments: Rohan City, Marina One, Rohan Square, and Rohan Estate." },
+          { start: 12.2, end: 22.5, text: "Each project is fully RERA approved and engineered for generational permanence." }
+        ]
       },
       {
         id: 'rohan_city',
-        start: 55,
-        end: 85,
+        start: 45,
+        end: 66,
         title: 'Rohan City: Digital Twin & Simulation',
-        script: "At Rohan City on Bejai Main Road, over 3.5 million square feet of commercial and residential space comes alive inside the browser. Prospective buyers can explore photorealistic digital twins, inspect sunlight on living balconies, and tour retail plazas at sixty frames per second."
+        script: "At Rohan City on Bejai Main Road, over 3.5 million square feet of commercial and residential space comes alive inside the browser. Prospective buyers can explore photorealistic digital twins, inspect sunlight on living balconies, and tour retail plazas at sixty frames per second.",
+        cues: [
+          { start: 0.0, end: 8.0, text: "At Rohan City on Bejai Main Road, over 3.5 million square feet of space comes alive inside the browser." },
+          { start: 8.0, end: 18.0, text: "Prospective buyers can explore photorealistic digital twins, inspect sunlight on balconies, and tour retail plazas at 60 FPS." }
+        ]
       },
       {
         id: 'rohan_marina',
-        start: 85,
-        end: 115,
+        start: 66,
+        end: 86,
         title: 'Rohan Marina One: Sea-Facing Innovation',
-        script: "At Rohan Marina One in Surathkal, where every home faces the sea, our visual computing engine models panoramic ocean horizons, coastal breeze vectors, and unobstructed sunset vistas, enabling seamless remote reservations for NRI families across the globe."
+        script: "At Rohan Marina One in Surathkal, where every home faces the sea, our visual computing engine models panoramic ocean horizons, coastal breeze vectors, and unobstructed sunset vistas, enabling seamless remote reservations for NRI families across the globe.",
+        cues: [
+          { start: 0.0, end: 8.0, text: "At Rohan Marina One in Surathkal, where every home faces the sea, our visual computing engine models ocean horizons and breeze vectors," },
+          { start: 8.0, end: 17.0, text: "enabling seamless remote reservations for NRI families across the globe." }
+        ]
       },
       {
         id: 'square_estate',
-        start: 115,
-        end: 135,
+        start: 86,
+        end: 104,
         title: 'Rohan Square & Rohan Estate: Smart Ecosystems',
-        script: "From corporate suites and ready-to-move-in homes at Rohan Square Pumpwell, to serene hillside plotted enclaves with subsoil telemetry at Rohan Estate Neermarga, intelligent edge sensors provide real-time assurance with zero cloud privacy risks."
+        script: "From corporate suites and ready-to-move-in homes at Rohan Square Pumpwell, to serene hillside plotted enclaves with subsoil telemetry at Rohan Estate Neermarga, intelligent edge sensors provide real-time assurance with zero cloud privacy risks.",
+        cues: [
+          { start: 0.0, end: 8.5, text: "From corporate suites at Rohan Square Pumpwell to hillside plotted enclaves at Rohan Estate Neermarga," },
+          { start: 8.5, end: 14.5, text: "intelligent edge sensors provide real-time assurance with zero cloud privacy risks." }
+        ]
       },
       {
         id: 'finale',
-        start: 135,
-        end: 150,
+        start: 104,
+        end: 120,
         title: 'Executive Partnership & Next Steps',
-        script: "HRL International and Rohan Corporation. Together, we are establishing the benchmark for luxury living and smart real estate in Coastal Karnataka. The future of living begins today."
+        script: "HRL International and Rohan Corporation. Together, we are establishing the benchmark for luxury living and smart real estate in Coastal Karnataka. The future of living begins today.",
+        cues: [
+          { start: 0.0, end: 8.6, text: "HRL International & Rohan Corporation: establishing the benchmark for luxury living and smart real estate in Coastal Karnataka." },
+          { start: 8.6, end: 12.0, text: "The future of living begins today." }
+        ]
       }
     ];
 
     this.currentSceneIndex = 0;
     this.currentVoiceSceneIndex = -1;
-    this.currentNarrator = 'daniel'; // 'daniel' | 'samantha' | 'rishi'
+    this.currentNarrator = 'samantha'; // Default to polite, warm female executive voice
     this.currentActiveAudio = null;
     this.narratorPool = {
       daniel: [],
@@ -303,8 +328,8 @@ class MasterMotionGraphicsEngine {
     this.currentNarrator = narratorName;
 
     const labels = {
+      samantha: 'Studio Master: Samantha (Polite Female Narration)',
       daniel: 'Studio Master: Daniel (UK Executive)',
-      samantha: 'Studio Master: Samantha (US Keynote)',
       rishi: 'Studio Master: Rishi (IN Executive)'
     };
 
@@ -322,6 +347,12 @@ class MasterMotionGraphicsEngine {
     const badge = document.getElementById('activeVoiceBadge');
     if (badge) {
       badge.textContent = labels[this.currentNarrator];
+    }
+
+    const speakerTag = document.querySelector('.sub-speaker-tag');
+    if (speakerTag) {
+      const speakerNames = { samantha: 'Samantha', daniel: 'Daniel', rishi: 'Rishi' };
+      speakerTag.textContent = speakerNames[this.currentNarrator] || 'Samantha';
     }
 
     // Immediately switch narration to selected persona
@@ -511,7 +542,30 @@ class MasterMotionGraphicsEngine {
 
     const currentScene = this.scenes[this.currentSceneIndex];
     if (currentScene && this.captionText) {
-      this.captionText.textContent = currentScene.script;
+      // Calculate precise audio playback offset within current scene
+      let elapsedInScene = this.currentTime - currentScene.start;
+      if (this.currentActiveAudio && !this.currentActiveAudio.paused && !this.currentActiveAudio.ended) {
+        elapsedInScene = this.currentActiveAudio.currentTime;
+      }
+
+      // Auto-sync sentence by sentence with the narrator
+      if (currentScene.cues && currentScene.cues.length > 0) {
+        const activeCue = currentScene.cues.find(c => elapsedInScene >= c.start && elapsedInScene < c.end);
+        const ccBox = document.getElementById('ccBox');
+
+        if (activeCue) {
+          this.captionText.textContent = activeCue.text;
+          if (ccBox && this.ccEnabled) ccBox.style.opacity = '1';
+        } else if (elapsedInScene >= currentScene.cues[currentScene.cues.length - 1].end) {
+          // Graceful hold on final sentence of current chapter
+          this.captionText.textContent = currentScene.cues[currentScene.cues.length - 1].text;
+          if (ccBox && this.ccEnabled) ccBox.style.opacity = '0.55';
+        } else {
+          this.captionText.textContent = currentScene.cues[0].text;
+        }
+      } else {
+        this.captionText.textContent = currentScene.script;
+      }
     }
   }
 
@@ -571,7 +625,14 @@ class MasterMotionGraphicsEngine {
     this.lastFrameTime = now;
 
     if (this.isPlaying) {
-      this.currentTime += delta;
+      const scene = this.scenes[this.currentSceneIndex];
+      // Hardware-lock timeline directly to studio narration audio clock for 100% frame sync
+      if (this.currentActiveAudio && !this.currentActiveAudio.paused && !this.currentActiveAudio.ended) {
+        this.currentTime = scene.start + this.currentActiveAudio.currentTime;
+      } else {
+        this.currentTime += delta;
+      }
+
       if (this.currentTime >= this.duration) {
         if (this.autoRun) {
           this.currentTime = 0;
@@ -640,15 +701,17 @@ class MasterMotionGraphicsEngine {
     const ctx = this.ctx;
     const t = this.currentTime;
 
-    // Soft panoramic ambient backdrop (preserving 2.37:1 ratio)
+    // Clean luxury ambient backdrop (preserving 2.37:1 ratio)
     ctx.save();
-    ctx.globalAlpha = 0.22;
+    ctx.globalAlpha = 0.12;
     if (this.assets.city.complete) {
       this.drawImageNativeRatio(ctx, this.assets.city, 200, 120, 1520, 24);
     }
-    const vignette = ctx.createRadialGradient(960, 540, 200, 960, 540, 900);
-    vignette.addColorStop(0, 'rgba(0, 0, 0, 0.7)');
-    vignette.addColorStop(1, 'rgba(0, 0, 0, 0.98)');
+    // Deep center radial mask to completely eliminate background photo text overlap
+    const vignette = ctx.createRadialGradient(960, 540, 120, 960, 540, 850);
+    vignette.addColorStop(0, 'rgba(8, 8, 12, 0.96)');
+    vignette.addColorStop(0.45, 'rgba(8, 8, 12, 0.92)');
+    vignette.addColorStop(1, 'rgba(2, 2, 4, 0.98)');
     ctx.fillStyle = vignette;
     ctx.fillRect(0, 0, 1920, 1080);
     ctx.restore();
