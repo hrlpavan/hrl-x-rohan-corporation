@@ -783,6 +783,47 @@ body::before {
   position: relative;
 }
 
+/* CAD Model View Selector (3D Interior CAD vs Tower Exterior) */
+.cad-view-selector {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  background: rgba(14, 14, 18, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 3px;
+  border-radius: var(--apple-radius-pill);
+  border: 1px solid rgba(223, 183, 108, 0.32);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(223, 183, 108, 0.15);
+}
+
+.cad-tab-btn {
+  background: transparent;
+  border: none;
+  color: #86868b;
+  font-family: var(--apple-font);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: var(--apple-radius-pill);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  white-space: nowrap;
+}
+
+.cad-tab-btn:hover {
+  color: #ffffff;
+}
+
+.cad-tab-btn.active {
+  background: rgba(223, 183, 108, 0.24);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
 #twinCanvas {
   width: 100%;
   height: 340px;

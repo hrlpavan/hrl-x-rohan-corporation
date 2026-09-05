@@ -474,8 +474,13 @@ function initCanvasSimulator() {
   const simSunsetBtn = document.getElementById('simSunsetBtn');
   const simNightBtn = document.getElementById('simNightBtn');
 
+  // CAD Model View Switcher (3D Interior CAD Suite vs Exterior Structural Twin)
+  const cadViewInteriorBtn = document.getElementById('cadViewInteriorBtn');
+  const cadViewExteriorBtn = document.getElementById('cadViewExteriorBtn');
+
   let mode = 'day'; // day, sunset, night
-  let rotAngle = 0.2;
+  let cadView = 'interior'; // 'interior' is active by default for advanced CAD interior demo
+  let rotAngle = 0.22;
   let mouseOffset = { x: 0, y: 0 };
   let targetMouse = { x: 0, y: 0 };
   let frameCount = 0;
@@ -494,37 +499,72 @@ function initCanvasSimulator() {
     targetMouse.y = 0;
   });
 
+  function updateTelemetryText() {
+    if (!sunlightText) return;
+    if (cadView === 'interior') {
+      if (mode === 'day') {
+        sunlightText.textContent = 'CAD Solar Simulation: 145° Midday Azimuth • Balcony Daylight Penetration: 3.8m • Lux: 84,000';
+      } else if (mode === 'sunset') {
+        sunlightText.textContent = 'CAD Sunset Vector: 260° Golden Hour • Direct Living Room Coastal Ray Path • Sea Breeze: 14 kts';
+      } else {
+        sunlightText.textContent = 'CAD Smart Lighting: 3000K Recessed Ceiling Downlights • Concealed LED Cove • 48 dB Acoustic Rating';
+      }
+    } else {
+      if (mode === 'day') {
+        sunlightText.textContent = 'Solar Azimuth: 145° (Midday Daylight • Balcony Lux Level: 92,000)';
+      } else if (mode === 'sunset') {
+        sunlightText.textContent = 'Golden Hour Azimuth: 260° (Sea Breeze Vector: 14 knots West)';
+      } else {
+        sunlightText.textContent = 'Night Smart Grid: LED Facade Illumination & 38% Energy Savings';
+      }
+    }
+  }
+
   function setMode(newMode) {
     mode = newMode;
-    [simDayBtn, simSunsetBtn, simNightBtn].forEach(b => b.classList.remove('active'));
-    if (mode === 'day') {
-      simDayBtn.classList.add('active');
-      if (sunlightText) sunlightText.textContent = 'Solar Azimuth: 145° (Midday Daylight • Balcony Lux Level: 92,000)';
-    } else if (mode === 'sunset') {
-      simSunsetBtn.classList.add('active');
-      if (sunlightText) sunlightText.textContent = 'Golden Hour Azimuth: 260° (Sea Breeze Vector: 14 knots West)';
-    } else if (mode === 'night') {
-      simNightBtn.classList.add('active');
-      if (sunlightText) sunlightText.textContent = 'Night Smart Grid: LED Facade Illumination & 38% Energy Savings';
+    [simDayBtn, simSunsetBtn, simNightBtn].forEach(b => {
+      if (b) b.classList.remove('active');
+    });
+    if (mode === 'day' && simDayBtn) simDayBtn.classList.add('active');
+    else if (mode === 'sunset' && simSunsetBtn) simSunsetBtn.classList.add('active');
+    else if (mode === 'night' && simNightBtn) simNightBtn.classList.add('active');
+    updateTelemetryText();
+  }
+
+  function setCadView(newView) {
+    cadView = newView;
+    if (cadViewInteriorBtn && cadViewExteriorBtn) {
+      if (cadView === 'interior') {
+        cadViewInteriorBtn.classList.add('active');
+        cadViewExteriorBtn.classList.remove('active');
+      } else {
+        cadViewExteriorBtn.classList.add('active');
+        cadViewInteriorBtn.classList.remove('active');
+      }
     }
+    updateTelemetryText();
   }
 
   if (simDayBtn) simDayBtn.addEventListener('click', () => setMode('day'));
   if (simSunsetBtn) simSunsetBtn.addEventListener('click', () => setMode('sunset'));
   if (simNightBtn) simNightBtn.addEventListener('click', () => setMode('night'));
 
+  if (cadViewInteriorBtn) cadViewInteriorBtn.addEventListener('click', () => setCadView('interior'));
+  if (cadViewExteriorBtn) cadViewExteriorBtn.addEventListener('click', () => setCadView('exterior'));
+
   // 3D Isometric Projection Helper
   function project(x, y, z, cx, cy) {
     const cos30 = 0.8660254;
-    const sin30 = 0.5;
-    const cosR = Math.cos(rotAngle + mouseOffset.x * 0.15);
-    const sinR = Math.sin(rotAngle + mouseOffset.x * 0.15);
+    const rot = rotAngle + mouseOffset.x * 0.20;
+    const cosR = Math.cos(rot);
+    const sinR = Math.sin(rot);
 
     const rx = x * cosR - y * sinR;
     const ry = x * sinR + y * cosR;
 
+    const pitch = 0.52 + mouseOffset.y * 0.08;
     const px = cx + (rx - ry) * cos30;
-    const py = cy + (rx + ry) * sin30 - z + mouseOffset.y * 12;
+    const py = cy + (rx + ry) * pitch - z;
     return { x: px, y: py };
   }
 
@@ -577,6 +617,524 @@ function initCanvasSimulator() {
     ctx.stroke();
   }
 
+  /* -------------------------------------------------------------------------- */
+  /* Advanced 3D Interior Architectural CAD Suite Demo                          */
+  /* -------------------------------------------------------------------------- */
+  function drawInteriorCAD(cx, cy, now) {
+    let wallColor, floorColor, floorLineColor, rugColor, rugBorder;
+    let sofaBody, sofaShade, sofaTop, sofaWire;
+    let marbleTop;
+
+    if (mode === 'day') {
+      wallColor = 'rgba(24, 30, 42, 0.95)';
+      floorColor = 'rgba(20, 26, 38, 0.9)';
+      floorLineColor = 'rgba(223, 183, 108, 0.16)';
+      rugColor = 'rgba(38, 48, 68, 0.85)';
+      rugBorder = 'rgba(223, 183, 108, 0.6)';
+      sofaBody = 'rgba(42, 54, 76, 0.92)';
+      sofaShade = 'rgba(28, 38, 56, 0.95)';
+      sofaTop = 'rgba(54, 70, 98, 0.9)';
+      sofaWire = 'rgba(223, 183, 108, 0.35)';
+      marbleTop = 'rgba(240, 245, 252, 0.92)';
+    } else if (mode === 'sunset') {
+      wallColor = 'rgba(42, 22, 30, 0.95)';
+      floorColor = 'rgba(32, 18, 24, 0.92)';
+      floorLineColor = 'rgba(255, 180, 80, 0.22)';
+      rugColor = 'rgba(64, 32, 42, 0.85)';
+      rugBorder = 'rgba(255, 190, 90, 0.7)';
+      sofaBody = 'rgba(68, 36, 46, 0.92)';
+      sofaShade = 'rgba(48, 24, 32, 0.95)';
+      sofaTop = 'rgba(88, 48, 60, 0.9)';
+      sofaWire = 'rgba(255, 180, 90, 0.4)';
+      marbleTop = 'rgba(255, 235, 215, 0.95)';
+    } else { // night
+      wallColor = 'rgba(12, 16, 24, 0.98)';
+      floorColor = 'rgba(8, 12, 18, 0.96)';
+      floorLineColor = 'rgba(41, 151, 255, 0.14)';
+      rugColor = 'rgba(18, 24, 36, 0.9)';
+      rugBorder = 'rgba(223, 183, 108, 0.45)';
+      sofaBody = 'rgba(22, 30, 44, 0.94)';
+      sofaShade = 'rgba(14, 20, 30, 0.96)';
+      sofaTop = 'rgba(32, 44, 64, 0.92)';
+      sofaWire = 'rgba(41, 151, 255, 0.35)';
+      marbleTop = 'rgba(215, 225, 240, 0.88)';
+    }
+
+    // 1. Structural Sub-Floor Foundation Slab
+    drawIsoBlock(-82, -62, -5, 164, 140, 5, cx, cy, '#0d1117', '#080c10', '#040608', 'rgba(255, 255, 255, 0.1)');
+
+    // 2. Main Living Room Polished Italian Statuario Marble Floor
+    drawIsoBlock(-80, -60, 0, 160, 100, 1, cx, cy, floorColor, '#0a0d13', '#06080d', 'rgba(255,255,255,0.08)');
+
+    // Precision CAD Marble Tile Grid (Joint lines every 20 units)
+    ctx.lineWidth = 0.8;
+    ctx.strokeStyle = floorLineColor;
+    for (let x = -80; x <= 80; x += 20) {
+      const p1 = project(x, -60, 1, cx, cy);
+      const p2 = project(x, 40, 1, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+    }
+    for (let y = -60; y <= 40; y += 20) {
+      const p1 = project(-80, y, 1, cx, cy);
+      const p2 = project(80, y, 1, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+    }
+
+    // 3. Cantilevered Balcony Timber Decking (+40 to +75 on Y, step-down of 1 unit)
+    drawIsoBlock(-80, 40, -1, 160, 36, 1, cx, cy, '#1c1510', '#100c08', '#080604', 'rgba(223, 183, 108, 0.2)');
+    ctx.strokeStyle = 'rgba(160, 110, 50, 0.35)';
+    ctx.lineWidth = 0.8;
+    for (let by = 44; by <= 74; by += 6) {
+      const bp1 = project(-80, by, 0, cx, cy);
+      const bp2 = project(80, by, 0, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(bp1.x, bp1.y);
+      ctx.lineTo(bp2.x, bp2.y);
+      ctx.stroke();
+    }
+
+    // 4. Rear Wall (North Wall): Fluted Acoustic Wood Panel & Feature TV Wall
+    drawIsoBlock(-80, -64, 0, 160, 4, 82, cx, cy, '#151922', wallColor, '#0a0d13', 'rgba(223, 183, 108, 0.25)');
+
+    // Vertical fluted timber acoustic grooves
+    ctx.strokeStyle = mode === 'sunset' ? 'rgba(255, 180, 80, 0.18)' : (mode === 'night' ? 'rgba(41, 151, 255, 0.12)' : 'rgba(223, 183, 108, 0.15)');
+    ctx.lineWidth = 0.8;
+    for (let fx = -76; fx <= 76; fx += 5) {
+      const w1 = project(fx, -60, 2, cx, cy);
+      const w2 = project(fx, -60, 80, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(w1.x, w1.y);
+      ctx.lineTo(w2.x, w2.y);
+      ctx.stroke();
+    }
+
+    // Left Wall (East Wall): Modern Architectural Cutaway with Accent Niche
+    drawIsoBlock(-84, -60, 0, 4, 100, 82, cx, cy, '#151922', '#0a0d13', wallColor, 'rgba(223, 183, 108, 0.25)');
+
+    // Inset Accent Niche on Left Wall
+    drawIsoBlock(-82, -25, 26, 2, 45, 36, cx, cy, '#080b10', '#05070a', '#10141c', '#dfb76c');
+    const artTL = project(-80.5, -20, 56, cx, cy);
+    const artBR = project(-80.5, 15, 30, cx, cy);
+    ctx.fillStyle = mode === 'sunset' ? 'rgba(223, 183, 108, 0.4)' : 'rgba(41, 151, 255, 0.35)';
+    ctx.fillRect(artTL.x, artTL.y, artBR.x - artTL.x, artBR.y - artTL.y);
+
+    // 5. Center Marble TV Feature Slab & Backlight Glow
+    if (mode === 'night') {
+      const tvGlowCenter = project(0, -59, 44, cx, cy);
+      const tvGlow = ctx.createRadialGradient(tvGlowCenter.x, tvGlowCenter.y, 10, tvGlowCenter.x, tvGlowCenter.y, 85);
+      tvGlow.addColorStop(0, 'rgba(223, 183, 108, 0.55)');
+      tvGlow.addColorStop(0.5, 'rgba(223, 183, 108, 0.2)');
+      tvGlow.addColorStop(1, 'transparent');
+      ctx.fillStyle = tvGlow;
+      ctx.beginPath();
+      ctx.arc(tvGlowCenter.x, tvGlowCenter.y, 85, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Inset Statuario Marble Panel on TV Wall
+    drawIsoBlock(-38, -59.5, 18, 76, 1.5, 48, cx, cy, marbleTop, '#e2e7ef', '#ccd3e0', 'rgba(223, 183, 108, 0.45)');
+
+    // 75" 4K OLED Ultra-Thin Display Panel
+    drawIsoBlock(-26, -58.5, 26, 52, 1, 32, cx, cy, '#020305', '#020305', '#05070a', '#dfb76c');
+
+    // Screen Digital Twin Telemetry Graphics
+    const tvTL = project(-24, -58, 54, cx, cy);
+    const tvBR = project(24, -58, 28, cx, cy);
+    const tvW = Math.abs(tvBR.x - tvTL.x);
+    const tvH = Math.abs(tvBR.y - tvTL.y);
+    ctx.fillStyle = 'rgba(6, 10, 16, 0.95)';
+    ctx.fillRect(tvTL.x, tvTL.y, tvW, tvH);
+    ctx.strokeStyle = '#2997ff';
+    ctx.lineWidth = 0.9;
+    ctx.beginPath();
+    ctx.moveTo(tvTL.x + 8, tvTL.y + tvH * 0.6);
+    ctx.lineTo(tvTL.x + tvW * 0.35, tvTL.y + tvH * 0.4);
+    ctx.lineTo(tvTL.x + tvW * 0.6, tvTL.y + tvH * 0.65);
+    ctx.lineTo(tvTL.x + tvW - 8, tvTL.y + tvH * 0.3);
+    ctx.stroke();
+
+    // Floating Media Console Credenza
+    drawIsoBlock(-34, -58, 8, 68, 10, 9, cx, cy, '#18202d', '#101520', '#0a0d14', 'rgba(223, 183, 108, 0.4)');
+
+    // 6. Panoramic Floor-to-Ceiling Balcony Sliding Portal (at Y = 40)
+    drawIsoBlock(-80, 39, 0, 3, 2, 78, cx, cy, '#444c5a', '#2a3240', '#181e28', '#86868b');
+    drawIsoBlock(77, 39, 0, 3, 2, 78, cx, cy, '#444c5a', '#2a3240', '#181e28', '#86868b');
+    drawIsoBlock(-80, 39, 76, 160, 2, 3, cx, cy, '#444c5a', '#2a3240', '#181e28', '#86868b');
+    drawIsoBlock(-1, 39, 0, 2, 2, 76, cx, cy, '#444c5a', '#2a3240', '#181e28', '#86868b');
+
+    // Acoustic Double Glazed Glass Panes (Semi-transparent)
+    const glassP1 = project(-77, 40, 2, cx, cy);
+    const glassP2 = project(77, 40, 2, cx, cy);
+    const glassP3 = project(77, 40, 75, cx, cy);
+    const glassP4 = project(-77, 40, 75, cx, cy);
+    ctx.fillStyle = mode === 'day' ? 'rgba(120, 200, 255, 0.12)' : (mode === 'sunset' ? 'rgba(255, 180, 90, 0.15)' : 'rgba(41, 151, 255, 0.08)');
+    ctx.beginPath();
+    ctx.moveTo(glassP1.x, glassP1.y);
+    ctx.lineTo(glassP2.x, glassP2.y);
+    ctx.lineTo(glassP3.x, glassP3.y);
+    ctx.lineTo(glassP4.x, glassP4.y);
+    ctx.closePath();
+    ctx.fill();
+
+    // Specular diagonal reflection on glass
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    const gRefl1 = project(-30, 40, 15, cx, cy);
+    const gRefl2 = project(20, 40, 68, cx, cy);
+    ctx.moveTo(gRefl1.x, gRefl1.y);
+    ctx.lineTo(gRefl2.x, gRefl2.y);
+    ctx.stroke();
+
+    // 7. Cantilevered Glass Balustrade on Balcony Perimeter (at Y = 75)
+    const balP1 = project(-80, 75, 0, cx, cy);
+    const balP2 = project(80, 75, 0, cx, cy);
+    const balP3 = project(80, 75, 28, cx, cy);
+    const balP4 = project(-80, 75, 28, cx, cy);
+    ctx.fillStyle = 'rgba(100, 210, 255, 0.16)';
+    ctx.beginPath();
+    ctx.moveTo(balP1.x, balP1.y);
+    ctx.lineTo(balP2.x, balP2.y);
+    ctx.lineTo(balP3.x, balP3.y);
+    ctx.lineTo(balP4.x, balP4.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#dfb76c';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(balP4.x, balP4.y);
+    ctx.lineTo(balP3.x, balP3.y);
+    ctx.stroke();
+
+    // Outdoor Balcony Lounger / Sunbed
+    drawIsoBlock(30, 46, 0, 36, 18, 7, cx, cy, '#45352c', '#2e211a', '#1a120e', 'rgba(223, 183, 108, 0.4)');
+    drawIsoBlock(56, 46, 7, 10, 18, 5, cx, cy, '#dfb76c', '#b8944d', '#7d6129', '#ffe5a3');
+
+    // 8. Luxury Designer Area Rug
+    const rugP1 = project(-48, -34, 1.2, cx, cy);
+    const rugP2 = project(36, -34, 1.2, cx, cy);
+    const rugP3 = project(36, 26, 1.2, cx, cy);
+    const rugP4 = project(-48, 26, 1.2, cx, cy);
+    ctx.fillStyle = rugColor;
+    ctx.beginPath();
+    ctx.moveTo(rugP1.x, rugP1.y);
+    ctx.lineTo(rugP2.x, rugP2.y);
+    ctx.lineTo(rugP3.x, rugP3.y);
+    ctx.lineTo(rugP4.x, rugP4.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = rugBorder;
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    // 9. L-Shaped Sectional Lounge Sofa
+    drawIsoBlock(-42, -26, 1.5, 68, 20, 11, cx, cy, sofaTop, sofaBody, sofaShade, sofaWire);
+    drawIsoBlock(-42, -6, 1.5, 22, 28, 11, cx, cy, sofaTop, sofaBody, sofaShade, sofaWire);
+
+    // Seating Cushions
+    drawIsoBlock(-41, -25, 12.5, 66, 18, 3.5, cx, cy, sofaTop, sofaBody, sofaShade, 'rgba(223, 183, 108, 0.4)');
+    drawIsoBlock(-41, -7, 12.5, 20, 26, 3.5, cx, cy, sofaTop, sofaBody, sofaShade, 'rgba(223, 183, 108, 0.4)');
+
+    // Backrests with Soft Piping Lines
+    drawIsoBlock(-44, -28, 12.5, 72, 5, 16, cx, cy, sofaTop, sofaBody, sofaShade, sofaWire);
+    drawIsoBlock(-44, -28, 12.5, 5, 50, 16, cx, cy, sofaTop, sofaBody, sofaShade, sofaWire);
+
+    // Decorative Accent Cushions
+    drawIsoBlock(-14, -24, 16, 10, 3, 9, cx, cy, '#dfb76c', '#b8944d', '#7d6129', '#ffe5a3');
+    drawIsoBlock(8, -24, 16, 10, 3, 9, cx, cy, '#2c3545', '#1e2430', '#12161e', 'rgba(255,255,255,0.3)');
+    drawIsoBlock(-41, 6, 16, 3, 10, 9, cx, cy, '#dfb76c', '#b8944d', '#7d6129', '#ffe5a3');
+
+    // 10. Sculptural Dual Coffee Table (Italian Statuario Marble + Smoked Bronze Glass)
+    drawIsoBlock(-6, -4, 1.5, 26, 16, 9.5, cx, cy, marbleTop, '#ccd3df', '#aeb7c6', '#dfb76c');
+    drawIsoBlock(-7, -5, 10, 28, 18, 1.2, cx, cy, '#dfb76c', '#b8944d', '#7d6129', '#ffe5a3');
+    drawIsoBlock(14, 10, 1.5, 18, 18, 6.5, cx, cy, 'rgba(100, 180, 220, 0.5)', '#1e2e3e', '#121c26', '#dfb76c');
+
+    // Accessories: Architectural Monograph
+    drawIsoBlock(-1, 0, 11.2, 9, 7, 1.2, cx, cy, '#dfb76c', '#9e7e38', '#5e481c', '#ffe5a3');
+
+    // 11. Minimalist Architectural Arc Floor Lamp
+    drawIsoBlock(-66, -48, 1.5, 8, 8, 2.5, cx, cy, '#dfb76c', '#b8944d', '#7d6129', '#ffe5a3');
+    const lampB = project(-62, -44, 4, cx, cy);
+    const lampTop = project(-48, -32, 70, cx, cy);
+    const lampHead = project(-28, -16, 52, cx, cy);
+    ctx.strokeStyle = '#dfb76c';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(lampB.x, lampB.y);
+    ctx.quadraticCurveTo(lampTop.x, lampTop.y, lampHead.x, lampHead.y);
+    ctx.stroke();
+    ctx.fillStyle = '#dfb76c';
+    ctx.beginPath();
+    ctx.arc(lampHead.x, lampHead.y, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 12. Architectural Indoor Planter (Monstera Foliage)
+    drawIsoBlock(64, -48, 1.5, 12, 12, 18, cx, cy, '#28303e', '#1c222c', '#10141b', '#dfb76c');
+    const pCenter = project(70, -42, 22, cx, cy);
+    ctx.fillStyle = mode === 'sunset' ? '#5a823e' : '#30d158';
+    [-12, -4, 6, 14].forEach((deg, i) => {
+      ctx.beginPath();
+      ctx.ellipse(pCenter.x + deg, pCenter.y - i * 3 - 6, 8, 14, deg * Math.PI / 180, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // 13. Dynamic Lighting Physics Overlays
+    if (mode === 'day') {
+      const s1 = project(-70, 40, 0, cx, cy);
+      const s2 = project(70, 40, 0, cx, cy);
+      const s3 = project(45, -15, 0, cx, cy);
+      const s4 = project(-45, -5, 0, cx, cy);
+      ctx.fillStyle = 'rgba(255, 250, 220, 0.16)';
+      ctx.beginPath();
+      ctx.moveTo(s1.x, s1.y);
+      ctx.lineTo(s2.x, s2.y);
+      ctx.lineTo(s3.x, s3.y);
+      ctx.lineTo(s4.x, s4.y);
+      ctx.closePath();
+      ctx.fill();
+    } else if (mode === 'sunset') {
+      const s1 = project(-80, 40, 0, cx, cy);
+      const s2 = project(80, 40, 0, cx, cy);
+      const s3 = project(20, -50, 0, cx, cy);
+      const s4 = project(-80, -30, 0, cx, cy);
+      ctx.fillStyle = 'rgba(255, 160, 60, 0.28)';
+      ctx.beginPath();
+      ctx.moveTo(s1.x, s1.y);
+      ctx.lineTo(s2.x, s2.y);
+      ctx.lineTo(s3.x, s3.y);
+      ctx.lineTo(s4.x, s4.y);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      const spot1 = project(0, 0, 0, cx, cy);
+      const spotGrad = ctx.createRadialGradient(spot1.x, spot1.y, 4, spot1.x, spot1.y, 55);
+      spotGrad.addColorStop(0, 'rgba(255, 230, 180, 0.35)');
+      spotGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = spotGrad;
+      ctx.beginPath();
+      ctx.arc(spot1.x, spot1.y, 55, 0, Math.PI * 2);
+      ctx.fill();
+
+      const lampPool = project(-28, -16, 0, cx, cy);
+      const lampGrad = ctx.createRadialGradient(lampPool.x, lampPool.y, 4, lampPool.x, lampPool.y, 42);
+      lampGrad.addColorStop(0, 'rgba(223, 183, 108, 0.4)');
+      lampGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = lampGrad;
+      ctx.beginPath();
+      ctx.arc(lampPool.x, lampPool.y, 42, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 14. Architectural CAD Dimension Lines with Metric Arrows
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#dfb76c';
+    ctx.fillStyle = '#dfb76c';
+    ctx.font = '600 8.5px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+
+    // Room Width Dimension Line
+    const dimW1 = project(-80, -66, 0, cx, cy);
+    const dimW2 = project(80, -66, 0, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(dimW1.x, dimW1.y);
+    ctx.lineTo(dimW2.x, dimW2.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(dimW1.x, dimW1.y, 2, 0, Math.PI * 2);
+    ctx.arc(dimW2.x, dimW2.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.textAlign = 'center';
+    ctx.fillText('↔ 5.40m [LIVING AXIS]', (dimW1.x + dimW2.x) / 2, (dimW1.y + dimW2.y) / 2 - 5);
+
+    // Room Depth Dimension Line
+    const dimD1 = project(86, -60, 0, cx, cy);
+    const dimD2 = project(86, 40, 0, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(dimD1.x, dimD1.y);
+    ctx.lineTo(dimD2.x, dimD2.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(dimD1.x, dimD1.y, 2, 0, Math.PI * 2);
+    ctx.arc(dimD2.x, dimD2.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.textAlign = 'left';
+    ctx.fillText('↕ 4.20m [DEPTH]', dimD2.x + 6, (dimD1.y + dimD2.y) / 2);
+
+    // Balcony Depth Dimension Line
+    const dimB1 = project(86, 40, 0, cx, cy);
+    const dimB2 = project(86, 75, 0, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(dimB1.x, dimB1.y);
+    ctx.lineTo(dimB2.x, dimB2.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(dimB1.x, dimB1.y, 2, 0, Math.PI * 2);
+    ctx.arc(dimB2.x, dimB2.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillText('↕ 2.10m [TERRACE]', dimB2.x + 6, (dimB1.y + dimB2.y) / 2);
+
+    // Clear Ceiling Height Dimension Line
+    const dimH1 = project(-86, -60, 0, cx, cy);
+    const dimH2 = project(-86, -60, 80, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(dimH1.x, dimH1.y);
+    ctx.lineTo(dimH2.x, dimH2.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(dimH1.x, dimH1.y, 2, 0, Math.PI * 2);
+    ctx.arc(dimH2.x, dimH2.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.textAlign = 'right';
+    ctx.fillText('↑ 3.15m CLEAR', dimH1.x - 6, (dimH1.y + dimH2.y) / 2);
+
+    // 15. Technical Architectural HUD Headers
+    ctx.font = '600 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+    ctx.fillStyle = 'rgba(223, 183, 108, 0.95)';
+    ctx.textAlign = 'left';
+    ctx.fillText('ROHAN CITY INTERIOR CAD • 12°52\'N 74°50\'E', 16, 22);
+
+    ctx.font = '400 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fillText('SUITE 1402 (3BHK MASTER LIVING & BALCONY) | SCALE 1:50', 16, 36);
+
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#30d158';
+    ctx.fillText(`${fps} FPS`, canvas.width - 16, 22);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.fillText('ACOUSTIC: 48 dB | THERMAL: 94.2%', canvas.width - 16, 36);
+
+    // Bottom telemetry
+    const deg = Math.round((rotAngle + mouseOffset.x * 0.20) * 180 / Math.PI);
+    const pitchDeg = Math.round((0.52 + mouseOffset.y * 0.08) * 100);
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(223, 183, 108, 0.7)';
+    ctx.fillText(`ORBIT: ${deg}° | PITCH: ${pitchDeg}% | MOVE CURSOR TO ROTATE 3D CAD`, 16, canvas.height - 14);
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* Structural Tower Exterior Digital Twin Rendering                           */
+  /* -------------------------------------------------------------------------- */
+  function drawExteriorTwin(cx, cy, now) {
+    // Ground Grid
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = mode === 'sunset' ? 'rgba(223, 183, 108, 0.12)' : (mode === 'night' ? 'rgba(41, 151, 255, 0.12)' : 'rgba(255, 255, 255, 0.07)');
+    const gridSize = 160;
+    const step = 20;
+    for (let gx = -gridSize; gx <= gridSize; gx += step) {
+      const pA = project(gx, -gridSize, 0, cx, cy);
+      const pB = project(gx, gridSize, 0, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(pA.x, pA.y);
+      ctx.lineTo(pB.x, pB.y);
+      ctx.stroke();
+    }
+    for (let gy = -gridSize; gy <= gridSize; gy += step) {
+      const pA = project(-gridSize, gy, 0, cx, cy);
+      const pB = project(gridSize, gy, 0, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(pA.x, pA.y);
+      ctx.lineTo(pB.x, pB.y);
+      ctx.stroke();
+    }
+
+    let colTop, colLeft, colRight, wireCol;
+    if (mode === 'day') {
+      colTop = 'rgba(235, 240, 250, 0.22)';
+      colLeft = 'rgba(56, 130, 210, 0.45)';
+      colRight = 'rgba(20, 35, 60, 0.85)';
+      wireCol = 'rgba(223, 183, 108, 0.35)';
+    } else if (mode === 'sunset') {
+      colTop = 'rgba(250, 230, 190, 0.3)';
+      colLeft = 'rgba(220, 120, 40, 0.5)';
+      colRight = 'rgba(40, 18, 30, 0.9)';
+      wireCol = 'rgba(250, 210, 120, 0.45)';
+    } else { // night
+      colTop = 'rgba(30, 45, 75, 0.4)';
+      colLeft = 'rgba(20, 30, 50, 0.7)';
+      colRight = 'rgba(10, 15, 25, 0.95)';
+      wireCol = 'rgba(41, 151, 255, 0.4)';
+    }
+
+    // 1. Commercial Podium Base
+    drawIsoBlock(-90, -70, 0, 180, 140, 26, cx, cy, colTop, colLeft, colRight, wireCol);
+
+    // 2. Tower A (Rohan City North Tower - 24 Storeys)
+    drawIsoBlock(-70, -50, 26, 60, 55, 140, cx, cy, colTop, colLeft, colRight, wireCol);
+
+    // Cantilever Balcony Bands on Tower A
+    for (let f = 36; f < 160; f += 16) {
+      drawIsoBlock(-73, -53, f, 66, 6, 2, cx, cy, 'rgba(223, 183, 108, 0.4)', 'rgba(223, 183, 108, 0.5)', 'rgba(223, 183, 108, 0.2)', 'rgba(223, 183, 108, 0.5)');
+    }
+
+    // 3. Tower B (Rohan City South Tower - Commercial Suites)
+    drawIsoBlock(10, -35, 26, 65, 60, 110, cx, cy, colTop, colLeft, colRight, wireCol);
+    for (let f = 36; f < 130; f += 14) {
+      drawIsoBlock(8, -37, f, 6, 64, 2, cx, cy, 'rgba(223, 183, 108, 0.4)', 'rgba(223, 183, 108, 0.5)', 'rgba(223, 183, 108, 0.2)', 'rgba(223, 183, 108, 0.5)');
+    }
+
+    // 4. Rooftop Architectural Spire & Beacon
+    const spireTop = project(-40, -22, 178, cx, cy);
+    const spireBase = project(-40, -22, 166, cx, cy);
+    ctx.strokeStyle = '#dfb76c';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(spireBase.x, spireBase.y);
+    ctx.lineTo(spireTop.x, spireTop.y);
+    ctx.stroke();
+
+    const pulse = (Math.sin(now * 0.005) + 1) * 0.5;
+    ctx.fillStyle = `rgba(255, 69, 58, ${0.4 + pulse * 0.6})`;
+    ctx.beginPath();
+    ctx.arc(spireTop.x, spireTop.y, 2.5 + pulse * 1.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Solar Azimuth Vector Ray Projection
+    const sunAngle = mode === 'day' ? 145 * Math.PI / 180 : (mode === 'sunset' ? 260 * Math.PI / 180 : 0);
+    if (mode !== 'night') {
+      const sunDist = 180;
+      const sunHeight = mode === 'day' ? 160 : 40;
+      const sunPos = project(Math.cos(sunAngle) * sunDist, Math.sin(sunAngle) * sunDist, sunHeight, cx, cy);
+
+      const flareGrad = ctx.createRadialGradient(sunPos.x, sunPos.y, 2, sunPos.x, sunPos.y, 40);
+      flareGrad.addColorStop(0, mode === 'day' ? 'rgba(255, 250, 220, 0.9)' : 'rgba(255, 180, 80, 0.9)');
+      flareGrad.addColorStop(0.3, mode === 'day' ? 'rgba(255, 220, 140, 0.3)' : 'rgba(255, 120, 50, 0.3)');
+      flareGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = flareGrad;
+      ctx.beginPath();
+      ctx.arc(sunPos.x, sunPos.y, 40, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = mode === 'day' ? 'rgba(255, 235, 180, 0.25)' : 'rgba(255, 160, 60, 0.35)';
+      ctx.setLineDash([3, 5]);
+      ctx.beginPath();
+      ctx.moveTo(sunPos.x, sunPos.y);
+      ctx.lineTo(cx - 30, cy - 60);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Technical Architectural HUD Overlays
+    ctx.font = '600 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+    ctx.fillStyle = 'rgba(223, 183, 108, 0.85)';
+    ctx.textAlign = 'left';
+    ctx.fillText('ROHAN CITY DIGITAL TWIN • 12°52\'N 74°50\'E', 16, 22);
+
+    ctx.font = '400 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.fillText('STRUCTURAL GRID: 8.4m × 8.4m | ELEVATION: 22m MSL', 16, 36);
+
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#30d158';
+    ctx.fillText(`${fps} FPS`, canvas.width - 16, 22);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.fillText('HARDWARE ACCELERATED', canvas.width - 16, 36);
+  }
+
   function draw() {
     frameCount++;
     const now = performance.now();
@@ -611,125 +1169,13 @@ function initCanvasSimulator() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const cx = canvas.width / 2;
-    const cy = canvas.height / 2 + 35;
+    const cy = canvas.height / 2 + 30;
 
-    // Architectural Ground Grid (3D Projected Isometric Matrix)
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = mode === 'sunset' ? 'rgba(223, 183, 108, 0.12)' : (mode === 'night' ? 'rgba(41, 151, 255, 0.12)' : 'rgba(255, 255, 255, 0.07)');
-    const gridSize = 160;
-    const step = 20;
-    for (let gx = -gridSize; gx <= gridSize; gx += step) {
-      const pA = project(gx, -gridSize, 0, cx, cy);
-      const pB = project(gx, gridSize, 0, cx, cy);
-      ctx.beginPath();
-      ctx.moveTo(pA.x, pA.y);
-      ctx.lineTo(pB.x, pB.y);
-      ctx.stroke();
+    if (cadView === 'interior') {
+      drawInteriorCAD(cx, cy, now);
+    } else {
+      drawExteriorTwin(cx, cy, now);
     }
-    for (let gy = -gridSize; gy <= gridSize; gy += step) {
-      const pA = project(-gridSize, gy, 0, cx, cy);
-      const pB = project(gridSize, gy, 0, cx, cy);
-      ctx.beginPath();
-      ctx.moveTo(pA.x, pA.y);
-      ctx.lineTo(pB.x, pB.y);
-      ctx.stroke();
-    }
-
-    // Palette per mode
-    let colTop, colLeft, colRight, wireCol;
-    if (mode === 'day') {
-      colTop = 'rgba(235, 240, 250, 0.22)';
-      colLeft = 'rgba(56, 130, 210, 0.45)';
-      colRight = 'rgba(20, 35, 60, 0.85)';
-      wireCol = 'rgba(223, 183, 108, 0.35)';
-    } else if (mode === 'sunset') {
-      colTop = 'rgba(250, 230, 190, 0.3)';
-      colLeft = 'rgba(220, 120, 40, 0.5)';
-      colRight = 'rgba(40, 18, 30, 0.9)';
-      wireCol = 'rgba(250, 210, 120, 0.45)';
-    } else { // night
-      colTop = 'rgba(30, 45, 75, 0.4)';
-      colLeft = 'rgba(20, 30, 50, 0.7)';
-      colRight = 'rgba(10, 15, 25, 0.95)';
-      wireCol = 'rgba(41, 151, 255, 0.4)';
-    }
-
-    // 1. Commercial Podium Base (Rohan City Ground & Retail Plaza)
-    drawIsoBlock(-90, -70, 0, 180, 140, 26, cx, cy, colTop, colLeft, colRight, wireCol);
-
-    // 2. Tower A (Rohan City North Tower - 24 Storeys)
-    drawIsoBlock(-70, -50, 26, 60, 55, 140, cx, cy, colTop, colLeft, colRight, wireCol);
-
-    // Cantilever Balcony Bands on Tower A
-    for (let f = 36; f < 160; f += 16) {
-      drawIsoBlock(-73, -53, f, 66, 6, 2, cx, cy, 'rgba(223, 183, 108, 0.4)', 'rgba(223, 183, 108, 0.5)', 'rgba(223, 183, 108, 0.2)', 'rgba(223, 183, 108, 0.5)');
-    }
-
-    // 3. Tower B (Rohan City South Tower - Commercial Suites)
-    drawIsoBlock(10, -35, 26, 65, 60, 110, cx, cy, colTop, colLeft, colRight, wireCol);
-    for (let f = 36; f < 130; f += 14) {
-      drawIsoBlock(8, -37, f, 6, 64, 2, cx, cy, 'rgba(223, 183, 108, 0.4)', 'rgba(223, 183, 108, 0.5)', 'rgba(223, 183, 108, 0.2)', 'rgba(223, 183, 108, 0.5)');
-    }
-
-    // 4. Rooftop Architectural Spire & Solar Node
-    const spireTop = project(-40, -22, 178, cx, cy);
-    const spireBase = project(-40, -22, 166, cx, cy);
-    ctx.strokeStyle = '#dfb76c';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(spireBase.x, spireBase.y);
-    ctx.lineTo(spireTop.x, spireTop.y);
-    ctx.stroke();
-
-    // Beacon Pulse
-    const pulse = (Math.sin(now * 0.005) + 1) * 0.5;
-    ctx.fillStyle = `rgba(255, 69, 58, ${0.4 + pulse * 0.6})`;
-    ctx.beginPath();
-    ctx.arc(spireTop.x, spireTop.y, 2.5 + pulse * 1.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Solar Azimuth Vector Ray Projection
-    const sunAngle = mode === 'day' ? 145 * Math.PI / 180 : (mode === 'sunset' ? 260 * Math.PI / 180 : 0);
-    if (mode !== 'night') {
-      const sunDist = 180;
-      const sunHeight = mode === 'day' ? 160 : 40;
-      const sunPos = project(Math.cos(sunAngle) * sunDist, Math.sin(sunAngle) * sunDist, sunHeight, cx, cy);
-
-      // Sun flare
-      const flareGrad = ctx.createRadialGradient(sunPos.x, sunPos.y, 2, sunPos.x, sunPos.y, 40);
-      flareGrad.addColorStop(0, mode === 'day' ? 'rgba(255, 250, 220, 0.9)' : 'rgba(255, 180, 80, 0.9)');
-      flareGrad.addColorStop(0.3, mode === 'day' ? 'rgba(255, 220, 140, 0.3)' : 'rgba(255, 120, 50, 0.3)');
-      flareGrad.addColorStop(1, 'transparent');
-      ctx.fillStyle = flareGrad;
-      ctx.beginPath();
-      ctx.arc(sunPos.x, sunPos.y, 40, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Light vector lines toward towers
-      ctx.strokeStyle = mode === 'day' ? 'rgba(255, 235, 180, 0.25)' : 'rgba(255, 160, 60, 0.35)';
-      ctx.setLineDash([3, 5]);
-      ctx.beginPath();
-      ctx.moveTo(sunPos.x, sunPos.y);
-      ctx.lineTo(cx - 30, cy - 60);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
-
-    // Technical Architectural HUD Overlays
-    ctx.font = '600 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
-    ctx.fillStyle = 'rgba(223, 183, 108, 0.85)';
-    ctx.textAlign = 'left';
-    ctx.fillText('ROHAN CITY DIGITAL TWIN • 12°52\'N 74°50\'E', 16, 22);
-
-    ctx.font = '400 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-    ctx.fillText('STRUCTURAL GRID: 8.4m × 8.4m | ELEVATION: 22m MSL', 16, 36);
-
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#30d158';
-    ctx.fillText(`${fps} FPS`, canvas.width - 16, 22);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-    ctx.fillText('HARDWARE ACCELERATED', canvas.width - 16, 36);
 
     if (isCanvasVisible) {
       animationFrameId = requestAnimationFrame(draw);
