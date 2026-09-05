@@ -19,6 +19,8 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `HEAD` | `feat(ticker)` | Ultra-premium market ticker tape redesign with ambient multi-spectral AI wash, pill badges, and arrow direction synchronization. |
+| `baf07c6` | `docs` | Update TODAYS_WORK and documentation for Milestone 12 PnL ledger redesign. |
 | `41bae5a` | `style(pnl)` | Elevate audited ledger to luxury institutional terminal with pill badges, card encapsulation, and refined typography. |
 | `c31cd3a` | `fix(cad)`  | Resolve 3D perspective projection, solid face rendering, 3D foliage, and dimension badge collisions. |
 | `048b9d6` | `feat(cad)`  | Upgrade CAD workstation to executive obsidian-gold UI with Retina HiDPI, marble veining, TV blueprint wireframe, and critical inline styles. |
@@ -173,6 +175,23 @@ Over the course of this single-day sprint, the platform was elevated from an ear
   - Applied `.pnl-cell-val` and `.pnl-cell-sub` components to separate primary currency values from secondary percentage badges with clean typographic distinction.
   - Formatted the EBITDA hero values (`₹ 756.1 Cr` in bold champagne gold with text glow) and added glowing status bullets.
   - Enforced `white-space: nowrap;` and explicit column widths to prevent awkward wrapping across all viewport sizes.
+
+### Milestone 13: Ultra-Premium Market Ticker Tape Redesign & Ambient AI Wash System
+- **Root-Cause Resolution of User Snapshot Defect (`media_1788630977884.png`):**
+  - **Arrow Contradiction Bug Fixed:** Diagnosed critical logic bug where delta arrows (`▲`/`▼`) were determined by micro-tick direction rather than daily net change, resulting in green `+0.69% ▼` and red `-0.77% ▲`. Aligned arrows, signs, and classes strictly with net day percentage change.
+  - **Marquee Seam Clipping Resolved:** Added `.ticker-fade-apron` and 48px dual-ended gradient mask to prevent truncated characters (e.g. `27 +0.11% ▼`) from clipping abruptly beside the live badge.
+  - **Continuous Clone Desynchronization Fixed:** Replaced single-element `getElementById` lookups with `querySelectorAll` classes (`.tick-p-${id}`, `.tick-d-${id}`) so both halves of the marquee loop update in real time.
+- **Ambient Multi-Spectral AI Wash Luminescence:**
+  - **`.ticker-ai-wash-aura`:** Flowing multi-spectral ambient gradient wash combining Champagne Gold (`rgba(223, 183, 108, 0.08)`), Violet/Orchid (`rgba(168, 85, 247, 0.09)`), and Cyber Cyan (`rgba(56, 189, 248, 0.07)`).
+  - **`.ticker-ai-wash-edge`:** Razor-sharp 1px top specular hairline with 8-second continuous chromatic sweep.
+  - **Dual-Ring AI Pulse Core:** Replaced plain static dot with an emerald LED beacon (`#10b981`) and animated outer radar ripple ring (`.ticker-pulse-ring`).
+  - **Jewel-Grade AI Wash Tag:** Created `.ticker-ai-pill` with rotating micro-sparkle (`✦`) and vibrant lilac-cyan gradient.
+- **Streaming AI Capital Telemetry Injected:**
+  - Interleaved live AI Yield, NRI Escrow Arbitrage, 4D BIM Telemetry, and Sovereign Capital Inflow updates into the ticker tape, styled with bespoke iridescent pill cards (`.ticker-ai-item`).
+- **Terminal AI Wash Strip:**
+  - Added `.terminal-ai-wash-strip` to the Universal Stock Market Terminal (`#stockmarket`) displaying real-time FII Risk-On scores, NRI Escrow Arbitrage spreads, and RE-VOS AI Yield expansion telemetry.
+- **Brand Logo & Clearance Refinements:**
+  - Standardized `.rohan-brand-logo-top` to `height: 40px` with 8px vertical padding in the 56px navbar, completely eliminating top-edge bleeding into the ticker tape.
 
 ---
 

@@ -156,7 +156,7 @@ body::before {
 }
 
 .rohan-brand-logo-top {
-  height: 48px;
+  height: 40px;
   width: auto;
   aspect-ratio: 105 / 155;
   object-fit: contain;
@@ -2671,58 +2671,179 @@ input[type="range"]::-webkit-slider-thumb:hover {
   top: 56px;
   left: 0;
   width: 100%;
-  height: 32px;
+  height: 38px;
   z-index: 9998;
-  background: linear-gradient(90deg, rgba(8, 8, 12, 0.96) 0%, rgba(18, 18, 25, 0.94) 50%, rgba(8, 8, 12, 0.96) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(9, 10, 15, 0.94);
+  backdrop-filter: saturate(190%) blur(24px);
+  -webkit-backdrop-filter: saturate(190%) blur(24px);
   border-bottom: 1px solid rgba(223, 183, 108, 0.22);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 0 rgba(223, 183, 108, 0.12);
   display: flex;
   align-items: center;
   overflow: hidden;
 }
 
+/* Ambient AI Wash Aura (Flowing multi-spectral luminescence) */
+.ticker-ai-wash-aura {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(223, 183, 108, 0.08) 0%,
+    rgba(168, 85, 247, 0.09) 25%,
+    rgba(56, 189, 248, 0.07) 50%,
+    rgba(223, 183, 108, 0.08) 75%,
+    rgba(168, 85, 247, 0.09) 100%
+  );
+  background-size: 200% 100%;
+  animation: aiWashDrift 16s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+@keyframes aiWashDrift {
+  0% { background-position: 0% 50%; opacity: 0.65; }
+  50% { background-position: 100% 50%; opacity: 0.95; }
+  100% { background-position: 0% 50%; opacity: 0.65; }
+}
+
+/* Razor-sharp Specular AI Wash Top Hairline */
+.ticker-ai-wash-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(223, 183, 108, 0.4) 15%,
+    rgba(168, 85, 247, 0.7) 35%,
+    rgba(56, 189, 248, 0.7) 65%,
+    rgba(223, 183, 108, 0.4) 85%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: aiWashSweep 8s linear infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@keyframes aiWashSweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Institutional Terminal Live Badge */
 .ticker-live-badge {
-  display: flex;
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 0 16px;
+  gap: 8px;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  border-right: 1px solid rgba(223, 183, 108, 0.2);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--gold-champagne);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  flex-shrink: 0;
-  z-index: 2;
+  padding: 0 16px 0 20px;
+  background: linear-gradient(90deg, rgba(10, 11, 16, 0.98) 0%, rgba(16, 17, 24, 0.96) 80%, rgba(16, 17, 24, 0.85) 100%);
+  border-right: 1px solid rgba(223, 183, 108, 0.28);
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.6);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ticker-live-badge:hover {
-  color: #ffffff;
-  background: rgba(223, 183, 108, 0.12);
+  background: linear-gradient(90deg, rgba(18, 20, 30, 1) 0%, rgba(24, 26, 38, 0.98) 100%);
+  border-right-color: rgba(223, 183, 108, 0.5);
+}
+
+/* Pulsating Dual-Ring AI Core Beacon */
+.ticker-pulse-container {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ticker-pulse-dot {
   width: 6px;
   height: 6px;
-  background: #30d158;
+  background: #10b981;
   border-radius: 50%;
-  box-shadow: 0 0 8px #30d158;
-  animation: pulseDot 2s infinite ease-in-out;
+  box-shadow: 0 0 10px #10b981, 0 0 4px #ffffff;
+  z-index: 2;
 }
 
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+.ticker-pulse-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(16, 185, 129, 0.7);
+  animation: aiPulseRing 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
 }
 
+@keyframes aiPulseRing {
+  0% { transform: scale(0.7); opacity: 0.95; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.ticker-badge-label {
+  font-family: var(--apple-font);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-champagne);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+
+/* Jewel-grade AI Wash Tag */
+.ticker-ai-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.22) 0%, rgba(56, 189, 248, 0.16) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  color: #f3e8ff;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+  white-space: nowrap;
+}
+
+.ticker-ai-sparkle {
+  color: #c084fc;
+  font-size: 9px;
+  animation: aiSparkleSpin 4s ease-in-out infinite alternate;
+}
+
+@keyframes aiSparkleSpin {
+  0% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 2px #c084fc); }
+  100% { transform: rotate(45deg) scale(1.15); filter: drop-shadow(0 0 6px #38bdf8); }
+}
+
+/* Soft Fade Apron to Prevent Hard Character Clipping */
+.ticker-fade-apron {
+  position: absolute;
+  left: 200px;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  background: linear-gradient(90deg, rgba(16, 17, 24, 0.95) 0%, transparent 100%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Viewport with Smooth Vignette Masks on Both Sides */
 .ticker-viewport {
   flex: 1;
   overflow: hidden;
@@ -2730,16 +2851,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
   height: 100%;
   display: flex;
   align-items: center;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%);
+  z-index: 2;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 48px, black calc(100% - 48px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 48px, black calc(100% - 48px), transparent 100%);
 }
 
 .ticker-track {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
   will-change: transform;
-  animation: tickerMarquee 48s linear infinite;
+  animation: tickerMarquee 54s linear infinite;
   white-space: nowrap;
 }
 
@@ -2752,6 +2874,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   100% { transform: translateX(-50%); }
 }
 
+/* Instrument Ticker Item */
 .ticker-item {
   display: inline-flex;
   align-items: center;
@@ -2760,46 +2883,116 @@ input[type="range"]::-webkit-slider-thumb:hover {
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: background 0.15s ease;
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ticker-item:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(223, 183, 108, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .ticker-symbol {
+  font-family: var(--apple-font);
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.02em;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.04em;
 }
 
 .ticker-price {
   font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
   font-weight: 600;
+  font-size: 11px;
   color: #ffffff;
   font-variant-numeric: tabular-nums;
-  transition: color 0.3s ease;
+  padding: 1px 4px;
+  border-radius: 4px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* Frosted Luxury Pill Delta Badges */
 .ticker-delta {
   font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
   font-size: 10px;
-  font-weight: 600;
-  padding: 1px 5px;
-  border-radius: 3px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
   font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
 }
 
 .delta-up {
-  color: #30d158;
-  background: rgba(48, 209, 88, 0.12);
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.32);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.15);
 }
 
 .delta-down {
-  color: #ff453a;
-  background: rgba(255, 69, 58, 0.12);
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.32);
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.15);
+}
+
+/* Subtle Champagne Separator */
+.ticker-sep {
+  color: rgba(223, 183, 108, 0.3);
+  font-size: 9px;
+  user-select: none;
+  padding: 0 2px;
+}
+
+/* Streaming AI Capital Telemetry Items in Ticker Tape */
+.ticker-ai-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(56, 189, 248, 0.12) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.38);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.18);
+  white-space: nowrap;
+}
+
+.ticker-ai-item:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.28) 0%, rgba(56, 189, 248, 0.22) 100%);
+  border-color: rgba(168, 85, 247, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+}
+
+.ticker-ai-tag {
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #f3e8ff;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ticker-ai-text {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 0.02em;
+}
+
+.ticker-ai-highlight {
+  color: var(--gold-champagne);
+  font-weight: 700;
 }
 
 /* Tick flash animations */
@@ -2812,12 +3005,12 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 @keyframes flashGreen {
-  0% { background: rgba(48, 209, 88, 0.35); color: #30d158; }
+  0% { background: rgba(52, 211, 153, 0.4); color: #34d399; }
   100% { background: transparent; color: inherit; }
 }
 
 @keyframes flashRed {
-  0% { background: rgba(255, 69, 58, 0.35); color: #ff453a; }
+  0% { background: rgba(248, 113, 113, 0.4); color: #f87171; }
   100% { background: transparent; color: inherit; }
 }
 
@@ -2862,6 +3055,106 @@ input[type="range"]::-webkit-slider-thumb:hover {
   right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent 0%, rgba(255, 245, 215, 0.45) 30%, rgba(223, 183, 108, 0.6) 50%, rgba(255, 245, 215, 0.45) 70%, transparent 100%);
+}
+
+/* Terminal AI Capital Synthesis Wash Bar */
+.terminal-ai-wash-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.1) 0%, rgba(56, 189, 248, 0.08) 50%, rgba(223, 183, 108, 0.08) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: var(--apple-radius-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.ai-wash-strip-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-wash-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.35) 0%, rgba(56, 189, 248, 0.25) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.55);
+  color: #f3e8ff;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
+}
+
+.ai-wash-pulse {
+  width: 6px;
+  height: 6px;
+  background: #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: pulseDot 1.8s infinite ease-in-out;
+}
+
+.ai-wash-title {
+  font-family: var(--apple-font);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 0.02em;
+}
+
+.ai-wash-metrics {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ai-wash-metric {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.ai-metric-lbl {
+  color: var(--apple-text-secondary);
+}
+
+.ai-metric-val {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10.5px;
+}
+
+.ai-metric-val.positive {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.ai-metric-val.gold {
+  color: #ffe5a3;
+  background: rgba(223, 183, 108, 0.14);
+  border: 1px solid rgba(223, 183, 108, 0.35);
+}
+
+.ai-metric-val.emerald {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.3);
 }
 
 /* World Financial Centers Bar */
