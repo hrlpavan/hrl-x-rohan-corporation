@@ -19,7 +19,8 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
-| `HEAD` | `style(apple)` | Purge AI-generated themes and neon washes; enforce authentic Apple Premium UI/UX design system across market ticker and terminal. |
+| `HEAD` | `style(squircle)` | Transform running header live badge and ticker deltas into authentic Apple squircle chips (continuous curvature, 8px/6px radius, frosted dark glass, gold champagne rim, zero boxy boundaries). |
+| `2e62ff8` | `style(apple)` | Purge AI-generated themes and neon washes; enforce authentic Apple Premium UI/UX design system across market ticker and terminal. |
 | `303d98b` | `feat(ticker)` | Ultra-premium market ticker tape redesign with pill badges and arrow direction synchronization. |
 | `baf07c6` | `docs` | Update TODAYS_WORK and documentation for Milestone 12 PnL ledger redesign. |
 | `41bae5a` | `style(pnl)` | Elevate audited ledger to luxury institutional terminal with pill badges, card encapsulation, and refined typography. |
@@ -196,6 +197,21 @@ Over the course of this single-day sprint, the platform was elevated from an ear
   - **Strictly Signed Directional Arrows:** Decoupled instantaneous tick flashes from net day performance; positive changes strictly render `+X.XX% ▲` and negative render `-X.XX% ▼`.
   - **Zero Character Clipping:** 40px fade apron and 36px dual-ended gradient mask prevent truncated numbers at marquee seams.
   - **Brand Logo Centering:** Rescaled `.rohan-brand-logo-top` to `height: 40px` with 8px vertical padding in the 56px navbar, completely eliminating top-edge bleeding.
+
+### Milestone 14: Version 3.7 — Authentic Apple Squircle Design for Running Header & Delta Badges
+- **Root-Cause Diagnosis of User Snapshot (`media_1788631870031.png`):**
+  - The live indicator badge (`.ticker-live-badge`) previously had `height: 100%`, `border-right: 1px solid rgba(255, 255, 255, 0.08)`, and zero `border-radius`. It rendered as an unstyled, boxy 90-degree spreadsheet cell spanning the full height of the bar.
+- **Floating Apple Squircle Chip Architecture (`.ticker-live-badge`):**
+  - Transformed into a standalone, floating Apple squircle chip centered vertically at `height: 26px` within the 36px ticker tape.
+  - **Curvature:** Authentic continuous superellipse curvature with `border-radius: 8px` (desktop) and `border-radius: 6px` (mobile).
+  - **Materials:** High-attenuation dark frosted obsidian (`rgba(22, 22, 28, 0.94)` with `backdrop-filter: blur(16px)` and `-webkit-backdrop-filter: blur(16px)`).
+  - **Specular Lighting & Elevation:** Hairline champagne gold border (`1px solid rgba(223, 183, 108, 0.28)`), top specular inset light edge (`inset 0 1px 0 rgba(255, 255, 255, 0.1)`), and soft elevation drop shadow (`box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45)`).
+  - **Purged Boxy Divider:** Completely eliminated `border-right: 1px solid ...`, allowing the badge to float gracefully as an independent Apple control widget.
+  - **Micro-Hover Interaction:** Smooth 0.25s cubic-bezier lift (`transform: translateY(-0.5px)`), border glow (`0 0 12px rgba(223, 183, 108, 0.2)`), and specular brightening.
+- **Matching Squircle Deltas & Seamless Alpha Edge Vignette:**
+  - Upgraded `.ticker-delta` to matching Apple squircle curvature (`border-radius: 6px;`).
+  - Replaced hardcoded absolute fade apron with dynamic hardware-accelerated bilateral alpha gradient mask (`-webkit-mask-image: linear-gradient(90deg, transparent 0%, black 28px, black calc(100% - 28px), transparent 100%)`) on `.ticker-viewport`, ensuring marquee text dissolves seamlessly right behind the squircle chip without visual collision or clipping.
+  - Bumped portal cache busters to `?v=20260905_squircle_v8` across all 6 portal pages.
 
 ---
 

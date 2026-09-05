@@ -2695,25 +2695,38 @@ input[type="range"]::-webkit-slider-thumb:hover {
   z-index: 5;
 }
 
-/* Institutional Terminal Live Badge */
+/* Institutional Terminal Live Badge (Apple Squircle Pill) */
 .ticker-live-badge {
   position: relative;
   z-index: 4;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 100%;
-  padding: 0 16px 0 20px;
-  background: rgba(12, 12, 16, 0.95);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  height: 26px;
+  margin: 5px 12px 5px 16px;
+  padding: 0 12px;
+  border-radius: 8px; /* Authentic Apple squircle curvature */
+  background: rgba(22, 22, 28, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(223, 183, 108, 0.28);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   text-decoration: none;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.2s ease, opacity 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ticker-live-badge:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(30, 30, 38, 0.98);
+  border-color: rgba(223, 183, 108, 0.55);
+  transform: translateY(-0.5px);
+  box-shadow: 
+    0 4px 14px rgba(0, 0, 0, 0.6),
+    0 0 12px rgba(223, 183, 108, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 .ticker-pulse-dot {
@@ -2721,8 +2734,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
   height: 6px;
   background: #30d158;
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(48, 209, 88, 0.6);
+  box-shadow: 0 0 8px rgba(48, 209, 88, 0.7);
   animation: applePulseDot 2s infinite ease-in-out;
+  flex-shrink: 0;
 }
 
 @keyframes applePulseDot {
@@ -2742,14 +2756,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 /* Soft Fade Apron to Prevent Hard Character Clipping */
 .ticker-fade-apron {
-  position: absolute;
-  left: 175px;
-  top: 0;
-  bottom: 0;
-  width: 40px;
-  background: linear-gradient(90deg, rgba(12, 12, 16, 0.95) 0%, transparent 100%);
-  z-index: 3;
-  pointer-events: none;
+  display: none;
 }
 
 /* Viewport with Smooth Vignette Masks on Both Sides */
@@ -2820,13 +2827,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transition: background 0.3s ease;
 }
 
-/* Apple Stocks Minimalist Rounded Pill Delta Badges */
+/* Apple Stocks Minimalist Rounded Squircle Delta Badges */
 .ticker-delta {
   font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
   font-size: 10px;
   font-weight: 600;
   padding: 2px 7px;
-  border-radius: 980px;
+  border-radius: 6px; /* Apple squircle curvature */
   font-variant-numeric: tabular-nums;
   display: inline-flex;
   align-items: center;
@@ -3307,5 +3314,19 @@ input[type="range"]::-webkit-slider-thumb:hover {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+@media (max-width: 640px) {
+  .ticker-live-badge {
+    margin: 5px 8px 5px 10px;
+    padding: 0 8px;
+    gap: 6px;
+    height: 24px;
+    border-radius: 6px;
+  }
+  .ticker-badge-label {
+    font-size: 9px;
+  }
+}
+
 
 
