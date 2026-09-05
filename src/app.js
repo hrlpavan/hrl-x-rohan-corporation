@@ -591,7 +591,7 @@ function initCanvasSimulator() {
   }
 
   // Draw an isometric 3D box with architectural lighting
-  function drawIsoBlock(x, y, z, w, d, h, cx, cy, topColor, leftColor, rightColor, strokeColor) {
+  function drawIsoBlock(x, y, z, w, d, h, cx, cy, topColor, frontColor, sideColor, strokeColor) {
     const p000 = project(x, y, z, cx, cy);
     const p100 = project(x + w, y, z, cx, cy);
     const p110 = project(x + w, y + d, z, cx, cy);
@@ -605,38 +605,83 @@ function initCanvasSimulator() {
     ctx.lineWidth = 1;
     ctx.strokeStyle = strokeColor || 'rgba(223, 183, 108, 0.2)';
 
-    // Left Face
-    ctx.fillStyle = leftColor;
+    // Front Face (+Y)
+    if (frontColor) {
+      ctx.fillStyle = frontColor;
+      ctx.beginPath();
+      ctx.moveTo(p010.x, p010.y);
+      ctx.lineTo(p110.x, p110.y);
+      ctx.lineTo(p111.x, p111.y);
+      ctx.lineTo(p011.x, p011.y);
+      ctx.closePath();
+      ctx.fill();
+      if (strokeColor) ctx.stroke();
+    }
+
+    // Side Face (+X)
+    if (sideColor) {
+      ctx.fillStyle = sideColor;
+      ctx.beginPath();
+      ctx.moveTo(p100.x, p100.y);
+      ctx.lineTo(p110.x, p110.y);
+      ctx.lineTo(p111.x, p111.y);
+      ctx.lineTo(p101.x, p101.y);
+      ctx.closePath();
+      ctx.fill();
+      if (strokeColor) ctx.stroke();
+    }
+
+    // Top Face (+Z)
+    if (topColor) {
+      ctx.fillStyle = topColor;
+      ctx.beginPath();
+      ctx.moveTo(p001.x, p001.y);
+      ctx.lineTo(p101.x, p101.y);
+      ctx.lineTo(p111.x, p111.y);
+      ctx.lineTo(p011.x, p011.y);
+      ctx.closePath();
+      ctx.fill();
+      if (strokeColor) ctx.stroke();
+    }
+  }
+
+  // Draw high-precision frosted glass architectural CAD label badge
+  function drawCADBadge(text, x, y, align = 'center') {
+    ctx.save();
+    ctx.font = '600 8px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
+    ctx.textAlign = align;
+    ctx.textBaseline = 'middle';
+    const metrics = ctx.measureText(text);
+    const padX = 7;
+    const padY = 4;
+    const w = metrics.width + padX * 2;
+    const h = 15;
+    let bx = x;
+    if (align === 'center') bx = x - w / 2;
+    else if (align === 'right') bx = x - w;
+    else if (align === 'left') bx = x;
+    const by = y - h / 2;
+
+    // Frosted dark pill background
+    ctx.fillStyle = 'rgba(8, 12, 18, 0.92)';
     ctx.beginPath();
-    ctx.moveTo(p000.x, p000.y);
-    ctx.lineTo(p100.x, p100.y);
-    ctx.lineTo(p101.x, p101.y);
-    ctx.lineTo(p001.x, p001.y);
-    ctx.closePath();
+    if (ctx.roundRect) {
+      ctx.roundRect(bx, by, w, h, 3);
+    } else {
+      ctx.rect(bx, by, w, h);
+    }
     ctx.fill();
+
+    // High precision CAD border
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.75)';
+    ctx.lineWidth = 0.8;
     ctx.stroke();
 
-    // Right Face
-    ctx.fillStyle = rightColor;
-    ctx.beginPath();
-    ctx.moveTo(p100.x, p100.y);
-    ctx.lineTo(p110.x, p110.y);
-    ctx.lineTo(p111.x, p111.y);
-    ctx.lineTo(p101.x, p101.y);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-
-    // Top Face
-    ctx.fillStyle = topColor;
-    ctx.beginPath();
-    ctx.moveTo(p001.x, p001.y);
-    ctx.lineTo(p101.x, p101.y);
-    ctx.lineTo(p111.x, p111.y);
-    ctx.lineTo(p011.x, p011.y);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+    // Text
+    ctx.fillStyle = '#dfb76c';
+    const textX = align === 'center' ? x : (align === 'right' ? bx + w - padX : bx + padX);
+    ctx.fillText(text, textX, y);
+    ctx.restore();
   }
 
   /* -------------------------------------------------------------------------- */
@@ -759,66 +804,195 @@ function initCanvasSimulator() {
     drawIsoBlock(-84, -60, 0, 4, 100, 82, cx, cy, '#151922', '#0a0d13', wallColor, 'rgba(223, 183, 108, 0.25)');
 
     // Inset Accent Niche on Left Wall
-    drawIsoBlock(-82, -25, 26, 2, 45, 36, cx, cy, '#080b10', '#05070a', '#10141c', '#dfb76c');
-    const artTL = project(-80.5, -20, 56, cx, cy);
-    const artBR = project(-80.5, 15, 30, cx, cy);
-    ctx.fillStyle = mode === 'sunset' ? 'rgba(223, 183, 108, 0.4)' : 'rgba(41, 151, 255, 0.35)';
-    ctx.fillRect(artTL.x, artTL.y, artBR.x - artTL.x, artBR.y - artTL.y);
+    drawIsoBlock(-83.8, -25, 26, 3.8, 45, 36, cx, cy, '#080b10', '#05070a', '#10141c', '#dfb76c');
 
-    // 5. Center Marble TV Feature Slab & Backlight Glow
+    // 3D Projected Contemporary Architectural Art on Left Wall (plane x = -79.9)
+    function artPoint(u, v) {
+      return project(-79.9, -21 + 38 * u, 29 + 30 * v, cx, cy);
+    }
+    const aBL = artPoint(0, 0);
+    const aBR = artPoint(1, 0);
+    const aTR = artPoint(1, 1);
+    const aTL = artPoint(0, 1);
+
+    ctx.fillStyle = mode === 'sunset' ? 'rgba(38, 20, 26, 0.95)' : 'rgba(12, 18, 28, 0.95)';
+    ctx.beginPath();
+    ctx.moveTo(aBL.x, aBL.y);
+    ctx.lineTo(aBR.x, aBR.y);
+    ctx.lineTo(aTR.x, aTR.y);
+    ctx.lineTo(aTL.x, aTL.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#dfb76c';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Geometric Modernist Art Composition inside frame
+    const artDiag1 = artPoint(0.15, 0.15);
+    const artDiag2 = artPoint(0.85, 0.85);
+    ctx.strokeStyle = mode === 'sunset' ? 'rgba(255, 180, 80, 0.5)' : 'rgba(41, 151, 255, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(artDiag1.x, artDiag1.y);
+    ctx.lineTo(artDiag2.x, artDiag2.y);
+    ctx.stroke();
+
+    const artCircle = artPoint(0.5, 0.5);
+    ctx.strokeStyle = '#dfb76c';
+    ctx.beginPath();
+    ctx.arc(artCircle.x, artCircle.y, 6, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 5. Center Marble TV Feature Slab & Concealed Architectural Cove Lighting
     if (mode === 'night') {
-      const tvGlowCenter = project(0, -59, 44, cx, cy);
-      const tvGlow = ctx.createRadialGradient(tvGlowCenter.x, tvGlowCenter.y, 10, tvGlowCenter.x, tvGlowCenter.y, 85);
-      tvGlow.addColorStop(0, 'rgba(223, 183, 108, 0.55)');
-      tvGlow.addColorStop(0.5, 'rgba(223, 183, 108, 0.2)');
-      tvGlow.addColorStop(1, 'transparent');
-      ctx.fillStyle = tvGlow;
+      // Linear Cove wash above TV onto fluted timber wall
+      const glowTopL = project(-32, -59.5, 78, cx, cy);
+      const glowTopR = project(32, -59.5, 78, cx, cy);
+      const glowBotR = project(32, -59.5, 58, cx, cy);
+      const glowBotL = project(-32, -59.5, 58, cx, cy);
+      const coveGradTop = ctx.createLinearGradient(
+        (glowBotL.x + glowBotR.x) / 2, (glowBotL.y + glowBotR.y) / 2,
+        (glowTopL.x + glowTopR.x) / 2, (glowTopL.y + glowTopR.y) / 2
+      );
+      coveGradTop.addColorStop(0, 'rgba(223, 183, 108, 0.45)');
+      coveGradTop.addColorStop(0.5, 'rgba(223, 183, 108, 0.18)');
+      coveGradTop.addColorStop(1, 'transparent');
+      ctx.fillStyle = coveGradTop;
       ctx.beginPath();
-      ctx.arc(tvGlowCenter.x, tvGlowCenter.y, 85, 0, Math.PI * 2);
+      ctx.moveTo(glowBotL.x, glowBotL.y);
+      ctx.lineTo(glowBotR.x, glowBotR.y);
+      ctx.lineTo(glowTopR.x, glowTopR.y);
+      ctx.lineTo(glowTopL.x, glowTopL.y);
+      ctx.closePath();
+      ctx.fill();
+
+      // Linear Cove wash below TV onto credenza
+      const coveBotL = project(-30, -59.5, 26, cx, cy);
+      const coveBotR = project(30, -59.5, 26, cx, cy);
+      const coveLowR = project(30, -59.5, 17, cx, cy);
+      const coveLowL = project(-30, -59.5, 17, cx, cy);
+      const coveGradBot = ctx.createLinearGradient(
+        (coveBotL.x + coveBotR.x) / 2, (coveBotL.y + coveBotR.y) / 2,
+        (coveLowL.x + coveLowR.x) / 2, (coveLowL.y + coveLowR.y) / 2
+      );
+      coveGradBot.addColorStop(0, 'rgba(223, 183, 108, 0.35)');
+      coveGradBot.addColorStop(1, 'transparent');
+      ctx.fillStyle = coveGradBot;
+      ctx.beginPath();
+      ctx.moveTo(coveBotL.x, coveBotL.y);
+      ctx.lineTo(coveBotR.x, coveBotR.y);
+      ctx.lineTo(coveLowR.x, coveLowR.y);
+      ctx.lineTo(coveLowL.x, coveLowL.y);
+      ctx.closePath();
       ctx.fill();
     }
 
     // Inset Statuario Marble Panel on TV Wall
     drawIsoBlock(-38, -59.5, 18, 76, 1.5, 48, cx, cy, marbleTop, '#e2e7ef', '#ccd3e0', 'rgba(223, 183, 108, 0.45)');
 
-    // 75" 4K OLED Ultra-Thin Display Panel
-    drawIsoBlock(-26, -58.5, 26, 52, 1, 32, cx, cy, '#020305', '#020305', '#05070a', '#dfb76c');
+    // 75" 4K OLED Ultra-Thin Display Panel Bezel
+    drawIsoBlock(-26, -58.2, 26, 52, 1.2, 32, cx, cy, '#020305', '#020305', '#05070a', '#dfb76c');
 
-    // Screen Digital Twin Telemetry Graphics & BIM Blueprint
-    const tvTL = project(-24, -58, 54, cx, cy);
-    const tvBR = project(24, -58, 28, cx, cy);
-    const tvW = Math.abs(tvBR.x - tvTL.x);
-    const tvH = Math.abs(tvBR.y - tvTL.y);
-    ctx.fillStyle = 'rgba(4, 7, 12, 0.98)';
-    ctx.fillRect(tvTL.x, tvTL.y, tvW, tvH);
+    // 3D Parametric OLED Display Surface (mounted on front face y = -57.0)
+    function tvPoint(u, v) {
+      return project(-25 + 50 * u, -57.0, 27 + 30 * v, cx, cy);
+    }
+    const scrBL = tvPoint(0, 0);
+    const scrBR = tvPoint(1, 0);
+    const scrTR = tvPoint(1, 1);
+    const scrTL = tvPoint(0, 1);
 
-    // Miniature BIM CAD Blueprint Grid on OLED Display
-    ctx.strokeStyle = 'rgba(41, 151, 255, 0.18)';
-    ctx.lineWidth = 0.5;
-    for (let gy = tvTL.y + 4; gy < tvTL.y + tvH - 4; gy += 5) {
+    ctx.fillStyle = '#03060a';
+    ctx.beginPath();
+    ctx.moveTo(scrBL.x, scrBL.y);
+    ctx.lineTo(scrBR.x, scrBR.y);
+    ctx.lineTo(scrTR.x, scrTR.y);
+    ctx.lineTo(scrTL.x, scrTL.y);
+    ctx.closePath();
+    ctx.fill();
+
+    // 3D Projected BIM Blueprint Grid on OLED Screen
+    ctx.strokeStyle = 'rgba(41, 151, 255, 0.22)';
+    ctx.lineWidth = 0.6;
+    for (let v = 0.2; v <= 0.85; v += 0.2) {
+      const p1 = tvPoint(0.04, v);
+      const p2 = tvPoint(0.96, v);
       ctx.beginPath();
-      ctx.moveTo(tvTL.x + 4, gy);
-      ctx.lineTo(tvTL.x + tvW - 4, gy);
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
       ctx.stroke();
     }
-    // Blueprint Wall Vectors
-    ctx.strokeStyle = '#2997ff';
-    ctx.lineWidth = 0.9;
-    ctx.strokeRect(tvTL.x + 6, tvTL.y + 5, tvW - 12, tvH - 10);
-    ctx.strokeStyle = '#dfb76c';
-    ctx.strokeRect(tvTL.x + 10, tvTL.y + 8, tvW * 0.45, tvH * 0.45);
+    for (let u = 0.2; u <= 0.85; u += 0.2) {
+      const p1 = tvPoint(u, 0.05);
+      const p2 = tvPoint(u, 0.95);
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+    }
 
-    // Mini Telemetry Indicator
-    ctx.fillStyle = '#30d158';
+    // 3D Projected BIM Blueprint Floorplan Diagram on Screen
+    ctx.strokeStyle = '#2997ff';
+    ctx.lineWidth = 1;
+    const bp1 = tvPoint(0.12, 0.16);
+    const bp2 = tvPoint(0.88, 0.16);
+    const bp3 = tvPoint(0.88, 0.82);
+    const bp4 = tvPoint(0.12, 0.82);
     ctx.beginPath();
-    ctx.arc(tvTL.x + 10, tvTL.y + tvH - 7, 2, 0, Math.PI * 2);
+    ctx.moveTo(bp1.x, bp1.y);
+    ctx.lineTo(bp2.x, bp2.y);
+    ctx.lineTo(bp3.x, bp3.y);
+    ctx.lineTo(bp4.x, bp4.y);
+    ctx.closePath();
+    ctx.stroke();
+
+    // Inner suite subdivision vectors
+    ctx.strokeStyle = '#dfb76c';
+    ctx.lineWidth = 0.8;
+    const sub1 = tvPoint(0.12, 0.52);
+    const sub2 = tvPoint(0.60, 0.52);
+    const sub3 = tvPoint(0.60, 0.16);
+    ctx.beginPath();
+    ctx.moveTo(sub1.x, sub1.y);
+    ctx.lineTo(sub2.x, sub2.y);
+    ctx.lineTo(sub3.x, sub3.y);
+    ctx.stroke();
+
+    // Telemetry Pulsing Status Indicator on Screen
+    const tPulse = (Math.sin(now * 0.006) + 1) * 0.5;
+    const tLed = tvPoint(0.14, 0.90);
+    ctx.fillStyle = `rgba(48, 209, 88, ${0.6 + tPulse * 0.4})`;
+    ctx.beginPath();
+    ctx.arc(tLed.x, tLed.y, 2, 0, Math.PI * 2);
     ctx.fill();
+
     ctx.font = '600 6.5px -apple-system, BlinkMacSystemFont, "SF Mono", monospace';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-    ctx.fillText('BIM v4.2 LIVE', tvTL.x + 15, tvTL.y + tvH - 5);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+    ctx.textAlign = 'left';
+    ctx.fillText('BIM v4.2 LIVE CAD', tLed.x + 6, tLed.y + 2);
 
     // Floating Media Console Credenza
     drawIsoBlock(-34, -58, 8, 68, 10, 9, cx, cy, '#18202d', '#101520', '#0a0d14', 'rgba(223, 183, 108, 0.4)');
+
+    // Under-Credenza Ambient Soft Floor Pool
+    if (mode === 'night') {
+      const ugL = project(-32, -54, 0.5, cx, cy);
+      const ugR = project(32, -54, 0.5, cx, cy);
+      const ugGrad = ctx.createLinearGradient(ugL.x, ugL.y, ugR.x, ugR.y);
+      ugGrad.addColorStop(0, 'rgba(223, 183, 108, 0.12)');
+      ugGrad.addColorStop(0.5, 'rgba(223, 183, 108, 0.32)');
+      ugGrad.addColorStop(1, 'rgba(223, 183, 108, 0.12)');
+      ctx.fillStyle = ugGrad;
+      const ugF1 = project(-32, -48, 0.5, cx, cy);
+      const ugF2 = project(32, -48, 0.5, cx, cy);
+      ctx.beginPath();
+      ctx.moveTo(ugL.x, ugL.y);
+      ctx.lineTo(ugR.x, ugR.y);
+      ctx.lineTo(ugF2.x, ugF2.y);
+      ctx.lineTo(ugF1.x, ugF1.y);
+      ctx.closePath();
+      ctx.fill();
+    }
 
     // 6. Panoramic Floor-to-Ceiling Balcony Sliding Portal (at Y = 40)
     drawIsoBlock(-80, 39, 0, 3, 2, 78, cx, cy, '#444c5a', '#2a3240', '#181e28', '#86868b');
@@ -937,19 +1111,66 @@ function initCanvasSimulator() {
     ctx.moveTo(lampB.x, lampB.y);
     ctx.quadraticCurveTo(lampTop.x, lampTop.y, lampHead.x, lampHead.y);
     ctx.stroke();
+
+    // 3D Lamp Head Dome Shade
     ctx.fillStyle = '#dfb76c';
     ctx.beginPath();
-    ctx.arc(lampHead.x, lampHead.y, 5, 0, Math.PI * 2);
+    ctx.arc(lampHead.x, lampHead.y, 6, Math.PI, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#ffe5a3';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 240, 200, 0.9)';
+    ctx.beginPath();
+    ctx.ellipse(lampHead.x, lampHead.y, 6, 2.5, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // 12. Architectural Indoor Planter (Monstera Foliage)
+    // 12. Architectural Indoor Planter (Monstera Foliage in 3D)
     drawIsoBlock(64, -48, 1.5, 12, 12, 18, cx, cy, '#28303e', '#1c222c', '#10141b', '#dfb76c');
-    const pCenter = project(70, -42, 22, cx, cy);
-    ctx.fillStyle = mode === 'sunset' ? '#5a823e' : '#30d158';
-    [-12, -4, 6, 14].forEach((deg, i) => {
+    drawIsoBlock(65, -47, 19, 10, 10, 0.5, cx, cy, '#15110c', '#0d0a07', '#080604', 'transparent');
+
+    const plantRoot = project(70, -42, 19.5, cx, cy);
+    const leaves = [
+      { tipX: 62, tipY: -36, tipZ: 33, w: 5, col: mode === 'sunset' ? '#4d7034' : '#289e47' },
+      { tipX: 74, tipY: -34, tipZ: 37, w: 6, col: mode === 'sunset' ? '#5a823e' : '#30d158' },
+      { tipX: 77, tipY: -44, tipZ: 32, w: 5, col: mode === 'sunset' ? '#3d5c28' : '#23823c' },
+      { tipX: 64, tipY: -50, tipZ: 28, w: 4, col: mode === 'sunset' ? '#355022' : '#1e6e32' },
+      { tipX: 70, tipY: -40, tipZ: 42, w: 6, col: mode === 'sunset' ? '#689447' : '#36db62' }
+    ];
+
+    leaves.forEach(leaf => {
+      const tip = project(leaf.tipX, leaf.tipY, leaf.tipZ, cx, cy);
+      const midX = (70 + leaf.tipX) / 2;
+      const midY = (-42 + leaf.tipY) / 2;
+      const midZ = (19.5 + leaf.tipZ) / 2 + 4;
+      const mid = project(midX, midY, midZ, cx, cy);
+
+      ctx.strokeStyle = '#23592d';
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
-      ctx.ellipse(pCenter.x + deg, pCenter.y - i * 3 - 6, 8, 14, deg * Math.PI / 180, 0, Math.PI * 2);
+      ctx.moveTo(plantRoot.x, plantRoot.y);
+      ctx.quadraticCurveTo(mid.x, mid.y, tip.x, tip.y);
+      ctx.stroke();
+
+      const leafLeft = { x: mid.x - leaf.w, y: mid.y };
+      const leafRight = { x: mid.x + leaf.w, y: mid.y };
+
+      ctx.fillStyle = leaf.col;
+      ctx.beginPath();
+      ctx.moveTo(mid.x, mid.y - leaf.w * 0.5);
+      ctx.lineTo(leafRight.x, leafRight.y);
+      ctx.lineTo(tip.x, tip.y);
+      ctx.lineTo(leafLeft.x, leafLeft.y);
+      ctx.closePath();
       ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      ctx.moveTo(mid.x, mid.y - leaf.w * 0.5);
+      ctx.lineTo(tip.x, tip.y);
+      ctx.stroke();
     });
 
     // 13. Dynamic Lighting Physics Overlays
@@ -1003,89 +1224,156 @@ function initCanvasSimulator() {
       spotGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = spotGrad;
       ctx.beginPath();
-      ctx.arc(spot1.x, spot1.y, 55, 0, Math.PI * 2);
+      ctx.ellipse(spot1.x, spot1.y, 55, 28, -0.25, 0, Math.PI * 2);
       ctx.fill();
 
       const lampPool = project(-28, -16, 0, cx, cy);
-      const lampGrad = ctx.createRadialGradient(lampPool.x, lampPool.y, 4, lampPool.x, lampPool.y, 42);
-      lampGrad.addColorStop(0, 'rgba(223, 183, 108, 0.4)');
+      const lampGrad = ctx.createRadialGradient(lampPool.x, lampPool.y, 4, lampPool.x, lampPool.y, 40);
+      lampGrad.addColorStop(0, 'rgba(223, 183, 108, 0.38)');
       lampGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = lampGrad;
       ctx.beginPath();
-      ctx.arc(lampPool.x, lampPool.y, 42, 0, Math.PI * 2);
+      ctx.ellipse(lampPool.x, lampPool.y, 40, 20, -0.3, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // 14. Architectural CAD Dimension Lines with Metric Arrows
+    // 14. Architectural CAD Dimension Lines with Frosted Glass Badges (Zero Collisions)
     ctx.lineWidth = 1;
     ctx.strokeStyle = '#dfb76c';
     ctx.fillStyle = '#dfb76c';
-    ctx.font = '600 8.5px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
 
-    // Room Width Dimension Line
-    const dimW1 = project(-80, -66, 0, cx, cy);
-    const dimW2 = project(80, -66, 0, cx, cy);
+    // A. Room Width Dimension Line (Living Axis) - Placed in Clean Front Margin (y = 86)
+    const dimW1 = project(-80, 86, 0, cx, cy);
+    const dimW2 = project(80, 86, 0, cx, cy);
     ctx.beginPath();
     ctx.moveTo(dimW1.x, dimW1.y);
     ctx.lineTo(dimW2.x, dimW2.y);
     ctx.stroke();
+
+    // Witness Extension Ticks
+    const dimW1_Ext = project(-80, 78, 0, cx, cy);
+    const dimW2_Ext = project(80, 78, 0, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(dimW1_Ext.x, dimW1_Ext.y);
+    ctx.lineTo(dimW1.x, dimW1.y);
+    ctx.moveTo(dimW2_Ext.x, dimW2_Ext.y);
+    ctx.lineTo(dimW2.x, dimW2.y);
+    ctx.stroke();
+
     ctx.beginPath();
     ctx.arc(dimW1.x, dimW1.y, 2, 0, Math.PI * 2);
     ctx.arc(dimW2.x, dimW2.y, 2, 0, Math.PI * 2);
     ctx.fill();
-    ctx.textAlign = 'center';
-    ctx.fillText('↔ 5.40m [LIVING AXIS]', (dimW1.x + dimW2.x) / 2, (dimW1.y + dimW2.y) / 2 - 5);
 
-    // Room Depth Dimension Line
-    const dimD1 = project(86, -60, 0, cx, cy);
-    const dimD2 = project(86, 40, 0, cx, cy);
+    drawCADBadge('↔ 5.40m [LIVING AXIS]', (dimW1.x + dimW2.x) / 2, (dimW1.y + dimW2.y) / 2 + 12, 'center');
+
+    // B. Room Depth Dimension Line - In Clean Right Margin (x = 94, y = -60 to 40)
+    const dimD1 = project(94, -60, 0, cx, cy);
+    const dimD2 = project(94, 40, 0, cx, cy);
     ctx.beginPath();
     ctx.moveTo(dimD1.x, dimD1.y);
     ctx.lineTo(dimD2.x, dimD2.y);
     ctx.stroke();
+
+    const dimD1_Ext = project(82, -60, 0, cx, cy);
+    const dimD2_Ext = project(82, 40, 0, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(dimD1_Ext.x, dimD1_Ext.y);
+    ctx.lineTo(dimD1.x, dimD1.y);
+    ctx.moveTo(dimD2_Ext.x, dimD2_Ext.y);
+    ctx.lineTo(dimD2.x, dimD2.y);
+    ctx.stroke();
+
     ctx.beginPath();
     ctx.arc(dimD1.x, dimD1.y, 2, 0, Math.PI * 2);
     ctx.arc(dimD2.x, dimD2.y, 2, 0, Math.PI * 2);
     ctx.fill();
-    ctx.textAlign = 'left';
-    ctx.fillText('↕ 4.20m [DEPTH]', dimD2.x + 6, (dimD1.y + dimD2.y) / 2);
 
-    // Balcony Depth Dimension Line
-    const dimB1 = project(86, 40, 0, cx, cy);
-    const dimB2 = project(86, 75, 0, cx, cy);
+    drawCADBadge('↕ 4.20m [DEPTH]', (dimD1.x + dimD2.x) / 2 + 38, (dimD1.y + dimD2.y) / 2, 'center');
+
+    // C. Balcony Depth Dimension Line - In Right Margin (x = 94, y = 40 to 75)
+    const dimB1 = project(94, 40, 0, cx, cy);
+    const dimB2 = project(94, 75, 0, cx, cy);
     ctx.beginPath();
     ctx.moveTo(dimB1.x, dimB1.y);
     ctx.lineTo(dimB2.x, dimB2.y);
     ctx.stroke();
+
+    const dimB2_Ext = project(82, 75, 0, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(dimB2_Ext.x, dimB2_Ext.y);
+    ctx.lineTo(dimB2.x, dimB2.y);
+    ctx.stroke();
+
     ctx.beginPath();
     ctx.arc(dimB1.x, dimB1.y, 2, 0, Math.PI * 2);
     ctx.arc(dimB2.x, dimB2.y, 2, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillText('↕ 2.10m [TERRACE]', dimB2.x + 6, (dimB1.y + dimB2.y) / 2);
 
-    // Clear Ceiling Height Dimension Line
-    const dimH1 = project(-86, -60, 0, cx, cy);
-    const dimH2 = project(-86, -60, 80, cx, cy);
+    drawCADBadge('↕ 2.10m [TERRACE]', (dimB1.x + dimB2.x) / 2 + 42, (dimB1.y + dimB2.y) / 2, 'center');
+
+    // D. Clear Ceiling Height Dimension Line - In Left Margin (x = -96, y = -60, z = 0 to 82)
+    const dimH1 = project(-96, -60, 0, cx, cy);
+    const dimH2 = project(-96, -60, 82, cx, cy);
     ctx.beginPath();
     ctx.moveTo(dimH1.x, dimH1.y);
     ctx.lineTo(dimH2.x, dimH2.y);
     ctx.stroke();
+
+    const dimH1_Ext = project(-86, -60, 0, cx, cy);
+    const dimH2_Ext = project(-86, -60, 82, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(dimH1_Ext.x, dimH1_Ext.y);
+    ctx.lineTo(dimH1.x, dimH1.y);
+    ctx.moveTo(dimH2_Ext.x, dimH2_Ext.y);
+    ctx.lineTo(dimH2.x, dimH2.y);
+    ctx.stroke();
+
     ctx.beginPath();
     ctx.arc(dimH1.x, dimH1.y, 2, 0, Math.PI * 2);
     ctx.arc(dimH2.x, dimH2.y, 2, 0, Math.PI * 2);
     ctx.fill();
-    ctx.textAlign = 'right';
-    ctx.fillText('↑ 3.15m CLEAR', dimH1.x - 6, (dimH1.y + dimH2.y) / 2);
 
-    // Floating Architectural Material Flags
-    ctx.font = '600 7.5px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
-    ctx.fillStyle = 'rgba(223, 183, 108, 0.85)';
-    const tag1 = project(-55, 15, 2, cx, cy);
-    ctx.fillText('[M-01: STATUARIO MARBLE]', tag1.x, tag1.y);
-    const tag2 = project(-70, -60, 48, cx, cy);
-    ctx.fillText('[W-02: FLUTED WALNUT]', tag2.x, tag2.y);
-    const tag3 = project(24, 75, 14, cx, cy);
-    ctx.fillText('[G-01: LOW-E DGU]', tag3.x, tag3.y);
+    drawCADBadge('↑ 3.15m CLEAR', dimH1.x - 38, (dimH1.y + dimH2.y) / 2, 'center');
+
+    // E. Material Specification Callouts with Clean Leader Lines
+    // Tag 1: Statuario Marble Floor
+    const tagFloorTarget = project(-45, 12, 1, cx, cy);
+    const tagFloorBadgePos = project(-68, 30, 1, cx, cy);
+    ctx.strokeStyle = 'rgba(223, 183, 108, 0.6)';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(tagFloorTarget.x, tagFloorTarget.y);
+    ctx.lineTo(tagFloorBadgePos.x, tagFloorBadgePos.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(tagFloorTarget.x, tagFloorTarget.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    drawCADBadge('[M-01: STATUARIO MARBLE]', tagFloorBadgePos.x - 4, tagFloorBadgePos.y, 'right');
+
+    // Tag 2: Fluted Walnut Acoustic Wall (above wall to prevent overlap)
+    const tagWallTarget = project(-65, -60, 68, cx, cy);
+    const tagWallBadgePos = project(-65, -60, 88, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(tagWallTarget.x, tagWallTarget.y);
+    ctx.lineTo(tagWallBadgePos.x, tagWallBadgePos.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(tagWallTarget.x, tagWallTarget.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    drawCADBadge('[W-02: FLUTED WALNUT]', tagWallBadgePos.x, tagWallBadgePos.y - 8, 'center');
+
+    // Tag 3: Low-E DGU Balcony Glass
+    const tagGlassTarget = project(20, 40, 50, cx, cy);
+    const tagGlassBadgePos = project(35, 40, 72, cx, cy);
+    ctx.beginPath();
+    ctx.moveTo(tagGlassTarget.x, tagGlassTarget.y);
+    ctx.lineTo(tagGlassBadgePos.x, tagGlassBadgePos.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(tagGlassTarget.x, tagGlassTarget.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    drawCADBadge('[G-01: LOW-E DGU GLASS]', tagGlassBadgePos.x, tagGlassBadgePos.y - 8, 'center');
 
     // 15. Technical Architectural HUD Headers
     ctx.font = '600 9px -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace';
