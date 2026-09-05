@@ -2487,63 +2487,76 @@ function initPnlProfile() {
       tableBody.innerHTML = `
         <tr>
           <td><strong>Gross Sales Realization (Base Portfolio GDV)</strong></td>
-          <td style="text-align: right;">₹ ${cr.toFixed(1)} Cr</td>
-          <td style="text-align: right; color: #ffffff;">₹ ${cr.toFixed(1)} Cr</td>
-          <td style="text-align: right;"><span class="pnl-alpha-dash">—</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val">₹ ${cr.toFixed(1)} Cr</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ffffff;">₹ ${cr.toFixed(1)} Cr</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-alpha-dash">—</span></td>
         </tr>
         <tr>
           <td>Algorithmic Dynamic Pricing (+14.2% AI Tranche Lift)</td>
-          <td style="text-align: right; color: rgba(255,255,255,0.4);">₹ 0.0 Cr (Flat)</td>
-          <td style="text-align: right; color: var(--gold-primary);">+₹ ${gdvGain.toFixed(1)} Cr</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${gdvGain.toFixed(1)} Cr (+14.2%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: rgba(255,255,255,0.45);">₹ 0.0 Cr</span> <span class="pnl-cell-sub">(Flat)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: var(--gold-primary);">+₹ ${gdvGain.toFixed(1)} Cr</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${gdvGain.toFixed(1)} Cr (+14.2%)</span></td>
         </tr>
         <tr>
           <td>NRI Direct Forex Settlement (+3.7% Arbitrage Hedged)</td>
-          <td style="text-align: right; color: #ff453a;">-₹ ${forexGain.toFixed(1)} Cr (Leakage)</td>
-          <td style="text-align: right; color: #30d158;">+₹ ${forexGain.toFixed(1)} Cr (Recaptured)</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${forexGain.toFixed(1)} Cr (Protected)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${forexGain.toFixed(1)} Cr</span> <span class="pnl-cell-sub" style="color: #ff6961;">(Leakage)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #30d158;">+₹ ${forexGain.toFixed(1)} Cr</span> <span class="pnl-cell-sub green">(Recaptured)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${forexGain.toFixed(1)} Cr (Protected)</span></td>
         </tr>
         <tr class="pnl-row-subtotal">
           <td><strong>Subtotal: Effective Gross Revenue</strong></td>
-          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${grossRevLegacy.toFixed(1)} Cr</td>
-          <td style="text-align: right; color: var(--gold-champagne);"><strong>₹ ${grossRevHrl.toFixed(1)} Cr</strong></td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(grossRevHrl - grossRevLegacy).toFixed(1)} Cr (+${(((grossRevHrl - grossRevLegacy) / grossRevLegacy) * 100).toFixed(1)}%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: rgba(255,255,255,0.75);">₹ ${grossRevLegacy.toFixed(1)} Cr</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: var(--gold-champagne); font-weight: 700;">₹ ${grossRevHrl.toFixed(1)} Cr</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(grossRevHrl - grossRevLegacy).toFixed(1)} Cr (+${(((grossRevHrl - grossRevLegacy) / grossRevLegacy) * 100).toFixed(1)}%)</span></td>
         </tr>
         <tr>
           <td>Civil & Structural EPC Hard Costs (MIVAN / IoT Precast)</td>
-          <td style="text-align: right; color: #ff453a;">-₹ ${epcLegacy.toFixed(1)} Cr (44.0%)</td>
-          <td style="text-align: right; color: #ff6961;">-₹ ${epcHrl.toFixed(1)} Cr (41.5%)</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(epcLegacy - epcHrl).toFixed(1)} Cr (-2.5% Optimized)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${epcLegacy.toFixed(1)} Cr</span> <span class="pnl-cell-sub">(44.0%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${epcHrl.toFixed(1)} Cr</span> <span class="pnl-cell-sub">(41.5%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(epcLegacy - epcHrl).toFixed(1)} Cr (-2.5% Opt.)</span></td>
         </tr>
         <tr>
           <td>Land Acquisition, Entitlements & Fast-Track RERA</td>
-          <td style="text-align: right; color: #ff453a;">-₹ ${landLegacy.toFixed(1)} Cr (20.0%)</td>
-          <td style="text-align: right; color: #ff6961;">-₹ ${landHrl.toFixed(1)} Cr (18.0%)</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(landLegacy - landHrl).toFixed(1)} Cr (-2.0% Expedited)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${landLegacy.toFixed(1)} Cr</span> <span class="pnl-cell-sub">(20.0%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${landHrl.toFixed(1)} Cr</span> <span class="pnl-cell-sub">(18.0%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(landLegacy - landHrl).toFixed(1)} Cr (-2.0% Fast)</span></td>
         </tr>
         <tr>
           <td>Sales, Institutional Marketing & Broker Commission</td>
-          <td style="text-align: right; color: #ff453a;">-₹ ${salesLegacy.toFixed(1)} Cr (5.5%)</td>
-          <td style="text-align: right; color: #ff6961;">-₹ ${salesHrl.toFixed(1)} Cr (2.2%)</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(salesLegacy - salesHrl).toFixed(1)} Cr (AI Concierge -60%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${salesLegacy.toFixed(1)} Cr</span> <span class="pnl-cell-sub">(5.5%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${salesHrl.toFixed(1)} Cr</span> <span class="pnl-cell-sub">(2.2%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(salesLegacy - salesHrl).toFixed(1)} Cr (AI Concierge)</span></td>
         </tr>
         <tr>
           <td>Construction Finance & Escrow Holdback Carrying Cost</td>
-          <td style="text-align: right; color: #ff453a;">-₹ ${financeLegacy.toFixed(1)} Cr (8.0%)</td>
-          <td style="text-align: right; color: #ff6961;">-₹ ${financeHrl.toFixed(1)} Cr (4.5%)</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(financeLegacy - financeHrl).toFixed(1)} Cr (21-Day Turnaround)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${financeLegacy.toFixed(1)} Cr</span> <span class="pnl-cell-sub">(8.0%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${financeHrl.toFixed(1)} Cr</span> <span class="pnl-cell-sub">(4.5%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(financeLegacy - financeHrl).toFixed(1)} Cr (21-Day Escrow)</span></td>
         </tr>
         <tr class="pnl-row-subtotal">
           <td><strong>Total Capital Outflows / COGS</strong></td>
-          <td style="text-align: right; color: #ff453a;"><strong>-₹ ${outflowsLegacy.toFixed(1)} Cr</strong></td>
-          <td style="text-align: right; color: #ff6961;"><strong>-₹ ${outflowsHrl.toFixed(1)} Cr</strong></td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(outflowsLegacy - outflowsHrl).toFixed(1)} Cr Saved</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961; font-weight: 700;">-₹ ${outflowsLegacy.toFixed(1)} Cr</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961; font-weight: 700;">-₹ ${outflowsHrl.toFixed(1)} Cr</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(outflowsLegacy - outflowsHrl).toFixed(1)} Cr Saved</span></td>
         </tr>
         <tr class="pnl-row-net">
-          <td><strong>Net Developer Operating Margin (EBITDA)</strong></td>
-          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${ebitdaLegacy.toFixed(1)} Cr (${marginLegacy.toFixed(1)}%)</td>
-          <td style="text-align: right; color: var(--gold-primary);"><strong>₹ ${ebitdaHrl.toFixed(1)} Cr (${marginHrl.toFixed(1)}%)</strong></td>
-          <td style="text-align: right;"><span class="pnl-tag-alpha">+${marginLift.toFixed(1)}% Alpha Expansion</span></td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 7px; height: 7px; background: var(--gold-primary); border-radius: 50%; box-shadow: 0 0 8px var(--gold-primary); flex-shrink: 0;"></span>
+              <strong>Net Developer Operating Margin (EBITDA)</strong>
+            </div>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <span class="pnl-cell-val" style="color: rgba(255,255,255,0.75);">₹ ${ebitdaLegacy.toFixed(1)} Cr</span>
+            <span class="pnl-cell-sub">(${marginLegacy.toFixed(1)}%)</span>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <span class="pnl-cell-val pnl-val-hero">₹ ${ebitdaHrl.toFixed(1)} Cr</span>
+            <span class="pnl-cell-sub gold">(${marginHrl.toFixed(1)}%)</span>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <span class="pnl-pill-alpha">+${marginLift.toFixed(1)}% Alpha Expansion</span>
+          </td>
         </tr>
       `;
     }
@@ -2591,51 +2604,62 @@ function initPnlProfile() {
       tableBody.innerHTML = `
         <tr>
           <td><strong>Gross Annual Rental Inflow</strong></td>
-          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${rentalLegacy.toFixed(2)} Lakhs (3.2%)</td>
-          <td style="text-align: right; color: #30d158;">₹ ${rentalHrl.toFixed(2)} Lakhs (5.0%)</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(rentalHrl - rentalLegacy).toFixed(2)}L / yr (+56%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: rgba(255,255,255,0.75);">₹ ${rentalLegacy.toFixed(2)} Lakhs</span> <span class="pnl-cell-sub">(3.2%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #30d158; font-weight: 700;">₹ ${rentalHrl.toFixed(2)} Lakhs</span> <span class="pnl-cell-sub green">(5.0%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(rentalHrl - rentalLegacy).toFixed(2)}L / yr (+56%)</span></td>
         </tr>
         <tr>
           <td>Capital Appreciation (1-Year Projected CAGR)</td>
-          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${appreciationLegacy.toFixed(2)} Lakhs (5.5%)</td>
-          <td style="text-align: right; color: var(--gold-primary);">₹ ${appreciationHrl.toFixed(2)} Lakhs (8.0%)</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(appreciationHrl - appreciationLegacy).toFixed(2)}L / yr Lift</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: rgba(255,255,255,0.75);">₹ ${appreciationLegacy.toFixed(2)} Lakhs</span> <span class="pnl-cell-sub">(5.5%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: var(--gold-primary); font-weight: 700;">₹ ${appreciationHrl.toFixed(2)} Lakhs</span> <span class="pnl-cell-sub gold">(8.0%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(appreciationHrl - appreciationLegacy).toFixed(2)}L / yr Lift</span></td>
         </tr>
         <tr class="pnl-row-subtotal">
           <td><strong>Subtotal: Gross Wealth Accumulation</strong></td>
-          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${(rentalLegacy + appreciationLegacy).toFixed(2)} Lakhs</td>
-          <td style="text-align: right; color: var(--gold-champagne);"><strong>₹ ${(rentalHrl + appreciationHrl).toFixed(2)} Lakhs</strong></td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${((rentalHrl + appreciationHrl) - (rentalLegacy + appreciationLegacy)).toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: rgba(255,255,255,0.75);">₹ ${(rentalLegacy + appreciationLegacy).toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: var(--gold-champagne); font-weight: 700;">₹ ${(rentalHrl + appreciationHrl).toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${((rentalHrl + appreciationHrl) - (rentalLegacy + appreciationLegacy)).toFixed(2)} Lakhs</span></td>
         </tr>
         <tr>
           <td>Mortgage Interest Deductions (Section 24b)</td>
-          <td style="text-align: right; color: #ff453a;">-₹ ${interestLegacy.toFixed(2)} Lakhs (${rate}%)</td>
-          <td style="text-align: right; color: #ff6961;">-₹ ${interestHrl.toFixed(2)} Lakhs (${(rate - 0.5).toFixed(1)}%)</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(interestLegacy - interestHrl).toFixed(2)}L (Preferential Rate)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${interestLegacy.toFixed(2)} Lakhs</span> <span class="pnl-cell-sub">(${rate}%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${interestHrl.toFixed(2)} Lakhs</span> <span class="pnl-cell-sub">(${(rate - 0.5).toFixed(1)}%)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(interestLegacy - interestHrl).toFixed(2)}L (Pref. Rate)</span></td>
         </tr>
         <tr>
           <td>Society Maintenance & Micro-Grid Solar Energy</td>
-          <td style="text-align: right; color: #ff453a;">-₹ ${maintLegacy.toFixed(2)} Lakhs</td>
-          <td style="text-align: right; color: #ff6961;">-₹ ${maintHrl.toFixed(2)} Lakhs</td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${(maintLegacy - maintHrl).toFixed(2)}L (-32% Saved)</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${maintLegacy.toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${maintHrl.toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${(maintLegacy - maintHrl).toFixed(2)}L (-32% Saved)</span></td>
         </tr>
         <tr>
           <td>Municipal Property Taxes (MCC E-Khata Sync)</td>
-          <td style="text-align: right; color: #ff453a;">-₹ ${tax.toFixed(2)} Lakhs</td>
-          <td style="text-align: right; color: #ff6961;">-₹ ${tax.toFixed(2)} Lakhs</td>
-          <td style="text-align: right;"><span class="pnl-alpha-dash">Instant E-Khata</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${tax.toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961;">-₹ ${tax.toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-alpha-dash">Instant E-Khata</span></td>
         </tr>
         <tr class="pnl-row-subtotal">
           <td><strong>Total Annual Carrying Costs</strong></td>
-          <td style="text-align: right; color: #ff453a;"><strong>-₹ ${(interestLegacy + maintLegacy + tax).toFixed(2)} Lakhs</strong></td>
-          <td style="text-align: right; color: #ff6961;"><strong>-₹ ${(interestHrl + maintHrl + tax).toFixed(2)} Lakhs</strong></td>
-          <td style="text-align: right;"><span class="pnl-credit">+₹ ${((interestLegacy + maintLegacy + tax) - (interestHrl + maintHrl + tax)).toFixed(2)}L Saved</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961; font-weight: 700;">-₹ ${(interestLegacy + maintLegacy + tax).toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-cell-val" style="color: #ff6961; font-weight: 700;">-₹ ${(interestHrl + maintHrl + tax).toFixed(2)} Lakhs</span></td>
+          <td style="text-align: right; white-space: nowrap;"><span class="pnl-credit">+₹ ${((interestLegacy + maintLegacy + tax) - (interestHrl + maintHrl + tax)).toFixed(2)}L Saved</span></td>
         </tr>
         <tr class="pnl-row-net">
-          <td><strong>Net Annual Wealth Created (Cashflow + Equity)</strong></td>
-          <td style="text-align: right; color: rgba(255,255,255,0.7);">₹ ${totalWealthLegacy.toFixed(2)} Lakhs</td>
-          <td style="text-align: right; color: #30d158;"><strong>₹ ${totalWealthHrl.toFixed(2)} Lakhs / Yr</strong></td>
-          <td style="text-align: right;"><span class="pnl-tag-alpha">+₹ ${wealthLift.toFixed(2)}L / Yr Alpha</span></td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 7px; height: 7px; background: #30d158; border-radius: 50%; box-shadow: 0 0 8px #30d158; flex-shrink: 0;"></span>
+              <strong>Net Annual Wealth Created (Cashflow + Equity)</strong>
+            </div>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <span class="pnl-cell-val" style="color: rgba(255,255,255,0.75);">₹ ${totalWealthLegacy.toFixed(2)} Lakhs</span>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <span class="pnl-cell-val" style="color: #30d158; font-size: 15px; font-weight: 800; text-shadow: 0 0 14px rgba(48,209,88,0.35);">₹ ${totalWealthHrl.toFixed(2)} Lakhs / Yr</span>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <span class="pnl-pill-alpha" style="background: linear-gradient(135deg, rgba(48, 209, 88, 0.25) 0%, rgba(48, 209, 88, 0.15) 100%); border-color: rgba(48, 209, 88, 0.55); color: #30d158; box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 14px rgba(48,209,88,0.2);">+₹ ${wealthLift.toFixed(2)}L / Yr Alpha</span>
+          </td>
         </tr>
       `;
     }

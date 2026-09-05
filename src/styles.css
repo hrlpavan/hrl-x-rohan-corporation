@@ -2400,77 +2400,228 @@ input[type="range"]::-webkit-slider-thumb:hover {
   opacity: 0.6;
 }
 
+.pnl-ledger-box {
+  background: linear-gradient(180deg, rgba(20, 20, 26, 0.85) 0%, rgba(12, 12, 16, 0.96) 100%);
+  border: 1px solid rgba(223, 183, 108, 0.22);
+  border-radius: var(--apple-radius-card);
+  padding: 24px;
+  box-shadow: 
+    0 16px 40px -10px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.pnl-ledger-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(223, 183, 108, 0.55) 50%, transparent 100%);
+  opacity: 0.8;
+}
+
+.pnl-ledger-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-champagne);
+  background: rgba(223, 183, 108, 0.1);
+  border: 1px solid rgba(223, 183, 108, 0.28);
+  border-radius: 9999px;
+  padding: 4px 11px;
+}
+
+.pnl-ledger-dot {
+  width: 5px;
+  height: 5px;
+  background: #30d158;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #30d158;
+}
+
 .pnl-table-wrap {
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(223, 183, 108, 0.3) transparent;
+}
+
+.pnl-table-wrap::-webkit-scrollbar {
+  height: 5px;
+}
+
+.pnl-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(223, 183, 108, 0.35);
+  border-radius: 4px;
 }
 
 .pnl-table {
   width: 100%;
-  border-collapse: collapse;
+  min-width: 680px;
+  border-collapse: separate;
+  border-spacing: 0;
   font-family: var(--apple-font);
   font-size: 13px;
-}
-
-.pnl-table th:nth-child(3),
-.pnl-table td:nth-child(3) {
-  background: linear-gradient(180deg, rgba(223, 183, 108, 0.08) 0%, rgba(223, 183, 108, 0.03) 100%);
-  border-left: 1px solid rgba(223, 183, 108, 0.2);
-  border-right: 1px solid rgba(223, 183, 108, 0.2);
+  margin-top: 4px;
 }
 
 .pnl-table th {
   text-align: left;
-  padding: 10px 12px;
-  font-size: 11px;
+  padding: 12px 14px;
+  font-size: 10.5px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--apple-text-secondary);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(223, 183, 108, 0.9);
+  border-bottom: 1px solid rgba(223, 183, 108, 0.2);
+  font-weight: 700;
+  background: rgba(14, 15, 20, 0.7);
+  white-space: nowrap;
 }
 
 .pnl-table td {
-  padding: 11px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 13px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   color: #ffffff;
+  vertical-align: middle;
+  transition: background 0.15s ease;
 }
 
 .pnl-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(223, 183, 108, 0.035);
 }
 
-.pnl-table .pnl-num {
-  text-align: right;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
-  font-variant-numeric: tabular-nums;
+/* Hero column: HRL Venture Architecture */
+.pnl-table th:nth-child(3),
+.pnl-table td:nth-child(3) {
+  background: rgba(223, 183, 108, 0.035);
+  border-left: 1px solid rgba(223, 183, 108, 0.12);
+  border-right: 1px solid rgba(223, 183, 108, 0.12);
 }
 
-.pnl-credit {
-  color: #30d158;
-}
-
-.pnl-debit {
-  color: #ff453a;
-}
-
-.pnl-highlight {
-  color: var(--gold-champagne);
-  font-weight: 600;
+.pnl-table tr:hover td:nth-child(3) {
+  background: rgba(223, 183, 108, 0.065);
 }
 
 .pnl-row-subtotal td {
-  border-top: 1px solid rgba(223, 183, 108, 0.3);
-  border-bottom: 1px solid rgba(223, 183, 108, 0.3);
+  border-top: 1px solid rgba(223, 183, 108, 0.25);
+  border-bottom: 1px solid rgba(223, 183, 108, 0.25);
   font-weight: 600;
   background: rgba(223, 183, 108, 0.05);
 }
 
+.pnl-row-subtotal td:nth-child(3) {
+  background: rgba(223, 183, 108, 0.09);
+}
+
+/* Executive Net Margin / EBITDA Total Row */
 .pnl-row-net td {
-  border-top: 2px solid var(--gold-primary);
-  border-bottom: 2px solid var(--gold-primary);
+  border-top: 1px solid rgba(223, 183, 108, 0.55);
+  border-bottom: 1px solid rgba(223, 183, 108, 0.55);
   font-weight: 700;
-  font-size: 14px;
-  background: rgba(223, 183, 108, 0.08);
+  font-size: 13.5px;
+  background: linear-gradient(90deg, rgba(223, 183, 108, 0.12) 0%, rgba(223, 183, 108, 0.18) 50%, rgba(223, 183, 108, 0.12) 100%);
+  padding: 16px 14px;
+}
+
+.pnl-row-net td:first-child {
+  border-bottom-left-radius: 8px;
+}
+
+.pnl-row-net td:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+.pnl-row-net td:nth-child(3) {
+  background: rgba(223, 183, 108, 0.24);
+  border-left: 1px solid rgba(223, 183, 108, 0.3);
+  border-right: 1px solid rgba(223, 183, 108, 0.3);
+}
+
+/* Cell Numeric & Secondary Subtext Components */
+.pnl-cell-val {
+  display: inline-block;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pnl-cell-sub {
+  display: inline-block;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 5px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.pnl-cell-sub.gold {
+  color: #ffe5a3;
+  font-weight: 600;
+}
+
+.pnl-cell-sub.green {
+  color: #30d158;
+  font-weight: 600;
+}
+
+.pnl-val-hero {
+  color: #ffe5a3;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 14px rgba(223, 183, 108, 0.35);
+}
+
+/* Institutional Alpha Expansion Pill Badge */
+.pnl-pill-alpha {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(223, 183, 108, 0.28) 0%, rgba(255, 229, 163, 0.16) 100%);
+  border: 1px solid rgba(223, 183, 108, 0.55);
+  color: #ffe5a3;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 14px rgba(223, 183, 108, 0.2);
+}
+
+.pnl-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  background: rgba(48, 209, 88, 0.12);
+  border: 1px solid rgba(48, 209, 88, 0.28);
+  color: #30d158;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pnl-alpha-dash {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Menlo, monospace;
+  font-size: 11px;
 }
 
 .pnl-tag {
@@ -2483,15 +2634,25 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .pnl-tag-alpha {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
   background: rgba(223, 183, 108, 0.2);
   color: var(--gold-champagne);
   border: 1px solid rgba(223, 183, 108, 0.35);
+  white-space: nowrap;
 }
 
 .pnl-tag-rec {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
   background: rgba(48, 209, 88, 0.15);
   color: #30d158;
   border: 1px solid rgba(48, 209, 88, 0.3);
+  white-space: nowrap;
 }
 
 @media (max-width: 992px) {
