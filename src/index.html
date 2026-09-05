@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HRL International × Rohan Corporation</title>
   <meta name="description" content="Civil grandeur meets computational intelligence. The official joint PropTech platform uniting HRL International and Rohan Corporation.">
-  <link rel="stylesheet" href="styles.css?v=20260906_calc_balanced_v11">
+  <link rel="stylesheet" href="styles.css?v=20260906_calc_affordability_v12">
   <!-- Critical CAD Workstation Obsidian-Gold Styles (Guaranteed Zero-Cache Failure) -->
   <style id="cad-workstation-critical-css">
     .cad-workstation-box {
@@ -1309,37 +1309,39 @@
             </div>
           </div>
 
-          <div class="apple-field">
-            <div class="apple-field-header">
-              <label class="apple-field-label" for="priceRange">Property Value</label>
-              <span class="apple-field-val" id="priceVal">₹ 85 Lakhs</span>
-            </div>
-            <input type="range" id="priceRange" min="30" max="400" step="5" value="85">
-          </div>
-
-          <div class="apple-field">
-            <div class="apple-field-header">
-              <label class="apple-field-label" for="downRange">Down Payment</label>
-              <span class="apple-field-val" id="downVal">20% (₹ 17 Lakhs)</span>
-            </div>
-            <input type="range" id="downRange" min="10" max="60" step="5" value="20">
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="calc-inputs-group">
             <div class="apple-field">
               <div class="apple-field-header">
-                <label class="apple-field-label" for="tenureRange">Tenure</label>
-                <span class="apple-field-val" id="tenureVal">20 Years</span>
+                <label class="apple-field-label" for="priceRange">Property Value</label>
+                <span class="apple-field-val" id="priceVal">₹ 85 Lakhs</span>
               </div>
-              <input type="range" id="tenureRange" min="5" max="30" step="1" value="20">
+              <input type="range" id="priceRange" min="30" max="400" step="5" value="85">
             </div>
 
             <div class="apple-field">
               <div class="apple-field-header">
-                <label class="apple-field-label" for="rateRange">Interest Rate</label>
-                <span class="apple-field-val" id="rateVal">8.5%</span>
+                <label class="apple-field-label" for="downRange">Down Payment</label>
+                <span class="apple-field-val" id="downVal">20% (₹ 17 Lakhs)</span>
               </div>
-              <input type="range" id="rateRange" min="7.0" max="12.0" step="0.1" value="8.5">
+              <input type="range" id="downRange" min="10" max="60" step="5" value="20">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="apple-field">
+                <div class="apple-field-header">
+                  <label class="apple-field-label" for="tenureRange">Tenure</label>
+                  <span class="apple-field-val" id="tenureVal">20 Years</span>
+                </div>
+                <input type="range" id="tenureRange" min="5" max="30" step="1" value="20">
+              </div>
+
+              <div class="apple-field">
+                <div class="apple-field-header">
+                  <label class="apple-field-label" for="rateRange">Interest Rate</label>
+                  <span class="apple-field-val" id="rateVal">8.5%</span>
+                </div>
+                <input type="range" id="rateRange" min="7.0" max="12.0" step="0.1" value="8.5">
+              </div>
             </div>
           </div>
 
@@ -1381,6 +1383,35 @@
               <span>Amortization Basis: <strong style="color: #ffffff;">Reducing Balance</strong></span>
             </div>
           </div>
+
+          <!-- Banking Consortium Pre-Approval & Affordability Bar -->
+          <div class="calc-eligibility-card">
+            <div class="calc-eligibility-header">
+              <div class="calc-eligibility-title">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color: var(--gold-primary);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Consortium Loan Pre-Approval & Affordability
+              </div>
+              <span class="calc-eligibility-badge">40% DTI Benchmark</span>
+            </div>
+
+            <div class="calc-eligibility-grid">
+              <div class="calc-eligibility-item">
+                <span class="calc-tax-lbl">Min. Monthly Income</span>
+                <div class="calc-eligibility-val" id="calcMinIncomeVal">₹ 1.48 Lakhs / mo</div>
+                <span class="calc-tax-sub" id="calcMinIncomeSub">Recommended for ₹ 59,045 EMI</span>
+              </div>
+              <div class="calc-eligibility-item">
+                <span class="calc-tax-lbl">Sanction Velocity</span>
+                <div class="calc-eligibility-val" style="color: #30d158;">72-Hr Fast Track</div>
+                <span class="calc-tax-sub">HDFC • SBI • ICICI Direct Bridge</span>
+              </div>
+            </div>
+
+            <div class="calc-eligibility-footer">
+              <span>Credit Benchmark: <strong style="color: #ffffff;">750+ Prime CIBIL</strong></span>
+              <span>NRI Escrow: <strong style="color: #30d158;">FEMA A2 Instant</strong></span>
+            </div>
+          </div>
         </div>
 
         <!-- Display Column (Apple Card UI) -->
@@ -1392,7 +1423,7 @@
           </div>
 
           <!-- Interactive Financial Visualization Card -->
-          <div class="chart-container-apple" style="margin: 10px 0 20px 0;">
+          <div class="chart-container-apple" style="margin: 8px 0 14px 0;">
             <div class="chart-header-bar">
               <span class="chart-title-tag" id="mortgageChartTitle">Equity Amortization Curve</span>
               <div class="chart-segmented-control">
@@ -1401,7 +1432,7 @@
                 <button class="chart-segment-btn" id="chartViewPnl" type="button">Annual P&L</button>
               </div>
             </div>
-            <div class="chart-canvas-wrap" style="height: 180px;">
+            <div class="chart-canvas-wrap" style="height: 155px;">
               <canvas id="mortgageChartCanvas"></canvas>
             </div>
             <!-- Principal vs Interest Split Bar -->
@@ -1894,6 +1925,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=20260906_calc_balanced_v11"></script>
+  <script src="app.js?v=20260906_calc_affordability_v12"></script>
 </body>
 </html>

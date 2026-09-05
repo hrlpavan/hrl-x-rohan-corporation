@@ -93,6 +93,10 @@ function initCalculator() {
   const calcLtvVal = document.getElementById('calcLtvVal');
   const presetPills = document.querySelectorAll('.calc-preset-pill');
 
+  // Banking Consortium Pre-Approval & Affordability Elements
+  const calcMinIncomeVal = document.getElementById('calcMinIncomeVal');
+  const calcMinIncomeSub = document.getElementById('calcMinIncomeSub');
+
   // Chart UI Elements
   const chartCanvas = document.getElementById('mortgageChartCanvas');
   const chartTitle = document.getElementById('mortgageChartTitle');
@@ -189,6 +193,11 @@ function initCalculator() {
     if (calcTaxMoSub) calcTaxMoSub.textContent = `-₹ ${Math.round(taxSavingsMonthly).toLocaleString('en-IN')} / mo deduction`;
     if (calcNetEmiVal) calcNetEmiVal.textContent = `₹ ${Math.round(netEffectiveEmi).toLocaleString('en-IN')}`;
     if (calcLtvVal) calcLtvVal.textContent = `${ltvRatio}% Bank Funded`;
+
+    // Calculate Banking Consortium Pre-Approval & Affordability Metrics
+    const minMonthlyIncome = emi / 0.40; // 40% FOIR / DTI benchmark
+    if (calcMinIncomeVal) calcMinIncomeVal.textContent = `${formatCurrency(minMonthlyIncome)} / mo`;
+    if (calcMinIncomeSub) calcMinIncomeSub.textContent = `Recommended for ₹ ${Math.round(emi).toLocaleString('en-IN')} EMI`;
 
     // Update Principal vs Interest Split Bar
     const totalOutflow = principal + totalInterest;
