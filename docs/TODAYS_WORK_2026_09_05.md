@@ -19,6 +19,7 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 
 | Commit SHA | Scope | Description |
 |:---|:---|:---|
+| `c31cd3a` | `fix(cad)`  | Resolve 3D perspective projection, solid face rendering, 3D foliage, and dimension badge collisions. |
 | `048b9d6` | `feat(cad)`  | Upgrade CAD workstation to executive obsidian-gold UI with Retina HiDPI, marble veining, TV blueprint wireframe, and critical inline styles. |
 | `29ff239` | `feat(cad)`  | Integrate advanced 3D interior CAD suite demo with furniture meshes, architectural dimensions, and multi-mode lighting physics. |
 | `438dda4` | `feat(video)`| Decouple captions from video canvas into dedicated standalone caption footer to prevent covering information tray. |
@@ -141,16 +142,16 @@ Over the course of this single-day sprint, the platform was elevated from an ear
 - **Hardware-Accelerated Retina HiDPI Display:**
   - Automated `devicePixelRatio` 2x/3x scaling via `ctx.setTransform(dpr, 0, 0, dpr, 0, 0)`.
   - Guarantees pin-sharp, anti-aliased CAD vectors and typography on 4K/Retina displays.
-- **Precision CAD Geometry & Materials:**
-  - Structural sub-floor foundation slab and Italian Statuario marble floor with organic stone veining curves and metric tile joint grid.
-  - Cantilevered terrace balcony with teak plank decking, step-down, frameless structural glass balustrade, and coastal sea sightline horizon gradient.
-  - Rear acoustic fluted dark timber wall with vertical CAD grooves and inset Statuario marble feature panel.
-  - Wall-mounted 75" OLED display with live mini BIM CAD blueprint wireframe floorplan.
-  - Panoramic acoustic sliding glass balcony portal with diagonal specular reflections.
-  - Precision isometric furniture meshes: L-shaped sectional lounge sofa with cushions, dual sculptural cocktail tables (marble + nested bronze glass), architectural arc floor lamp, and indoor botanical planter.
-- **Architectural CAD Dimension Lines & Material Chips:**
-  - Metric dimension arrows and clear height labels: `↔ 5.40m [LIVING AXIS]`, `↕ 4.20m [DEPTH]`, `↕ 2.10m [TERRACE]`, `↑ 3.15m CLEAR`.
-  - Floating CAD BIM material specification chips: `[M-01: STATUARIO MARBLE]`, `[W-02: FLUTED WALNUT]`, `[G-01: LOW-E DGU]`.
+- **Precision CAD Geometry & Realistic Solid Face Rendering:**
+  - **Front Face (+Y) Geometric Correction in `drawIsoBlock`:** Fixed critical perspective bug where the back face was being rendered instead of the front face. Now accurately renders front face (`p010 -> p110 -> p111 -> p011`), side face (`p100 -> p110 -> p111 -> p101`), and top face (`p001 -> p101 -> p111 -> p011`), rendering all furniture (sectional sofa cushions, plinth, dual coffee table, outdoor lounger) and walls completely solid and opaque with zero hollow wireframe artifacts.
+  - **True 3D Parametric Plane Projection for TV & Wall Niche:** Replaced flat 2D `fillRect` calls with parametric 3D quad coordinates (`tvPoint(u, v)` and `artPoint(u, v)`), ensuring the 75" OLED display, CAD blueprint grid, and left-wall modernist art sit flush upon their respective 3D wall planes with zero perspective skewing.
+  - **Architectural Linear LED Cove Wash:** Replaced flat 2D circular gradient with authentic directional cove light washes along the fluted acoustic wall (upward wash above TV and downward wash onto credenza), plus soft under-console floor ambient wash.
+  - **3D Branching Architectural Foliage:** Replaced 2D flat ellipses with 3D architectural Monstera foliage featuring curved stems, realistic polygon leaf geometry (`tipX/Y/Z`), and central rib vein details.
+  - **Isometric Photometric Lighting Pools:** Converted circular floor downlights to perspective-true ellipses matching the floor angle (`pitch`).
+- **Zero-Collision Architectural CAD Dimension Strings & Frosted Badges:**
+  - **Leader Lines & Clean Margins:** Relocated Room Width (`↔ 5.40m [LIVING AXIS]`) to the front exterior margin (`y = 86`), Room Depth (`↕ 4.20m [DEPTH]`) and Balcony (`↕ 2.10m [TERRACE]`) to the right margin (`x = 94`), and Clear Height (`↑ 3.15m CLEAR`) to the left margin (`x = -96`).
+  - **Frosted Glass Pill Badges (`drawCADBadge`):** Rendered every label inside a frosted dark glass pill (`rgba(8, 12, 18, 0.92)`) with a 1px champagne gold CAD border, ensuring 100% legibility and zero visual collision with wall slats, floor grids, or geometry.
+  - **Precision Material Flags:** `[M-01: STATUARIO MARBLE]`, `[W-02: FLUTED WALNUT]`, and `[G-01: LOW-E DGU GLASS]` equipped with precision leader lines and non-overlapping anchor points.
 - **Dynamic Physical Lighting Simulation:**
   - **Daylight (5600K):** 145° midday sunbeam shaft, crisp geometric floor shadow projections, ambient natural light.
   - **Golden Hour (3200K):** 260° low-angle golden sunset flood across balcony and living room floor.
