@@ -276,6 +276,27 @@ Over the course of this single-day sprint, the platform was elevated from an ear
   - **Portal Cache Busters:**
     - Bumped to `?v=20260906_calc_balanced_v11` across all 6 portal pages (`index.html`, `rohan-estate.html`, `rohan-square.html`, `rohan-city.html`, `rohan-marina-one.html`, `video.html`).
 
+### Milestone 18: Version 4.0 — Zero-Void Column Baseline Alignment & Banking Consortium Affordability Suite
+- **Root-Cause Diagnosis of User Snapshot Defect (`media_1788636576443.png`):**
+  - Following the introduction of `.calc-tax-card`, the user uploaded snapshot `media_1788636576443.png` indicating:
+    > *"below some space you can see."*
+  - Analysis revealed that while `.calc-tax-card` consumed ~210px, the right column (`.calc-display-col`) was ~670px tall. Because `.calc-sliders-col` lacked vertical distribution (`justify-content: space-between`), its elements stopped at ~450px, leaving an **empty ~220px dark void below `.calc-tax-card`** before the bottom of the card.
+- **Architectural & Spatial Baseline Solutions:**
+  - **Banking Consortium Pre-Approval & Affordability Bar (`.calc-eligibility-card`):**
+    - Added an institutional loan eligibility bento module pinned to the bottom of the left column:
+      - **Min. Qualifying Monthly Household Income (`calcMinIncomeVal`):** Models Indian banking 40% FOIR (Fixed Obligation to Income Ratio) benchmark (`minIncome = emi / 0.40`). Displays `₹ 1.48 Lakhs / mo` for Rohan City (`₹59,045` EMI) and updates dynamically with live subtitle `calcMinIncomeSub`.
+      - **Sanction Velocity:** `72-Hr Fast Track` via direct API bridge with HDFC, SBI, and ICICI Bank consortium.
+      - **Underwriting Badges:** `40% DTI Benchmark`, `750+ Prime CIBIL`, and `FEMA A2 Instant Escrow Clearance`.
+  - **Tightly Grouped Control Hierarchy (`.calc-inputs-group`):**
+    - Enclosed the 3 slider rows within `.calc-inputs-group` (`gap: 12px;`) to prevent slider controls from awkward vertical stretching.
+  - **Dual-Column Space-Between Alignment:**
+    - Configured both `.calc-sliders-col` and `.calc-display-col` with `display: flex; flex-direction: column; justify-content: space-between; padding: 32px 34px;`.
+    - Both columns now sit on the **exact same bottom horizontal baseline**, with `.calc-eligibility-card` on the left flush with `Inquire for Terms` CTA button on the right.
+  - **Right-Column Proportional Tightening:**
+    - Reduced chart canvas height from 180px to 155px, tightened stats grid padding to 12px, and reduced hero EMI font to 44px, matching left-column natural height at ~610px with zero wasted space.
+  - **Portal Cache Busters:**
+    - Bumped to `?v=20260906_calc_affordability_v12` across all 6 portal pages.
+
 ---
 
 ## 4. Documentation Repository Updates
