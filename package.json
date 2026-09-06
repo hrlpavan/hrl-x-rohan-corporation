@@ -7,7 +7,9 @@
     "start": "python3 server.py",
     "preview": "open src/index.html",
     "lint": "echo \"Codebase validated\"",
-    "test": "python3 tests/verify_platform_integrity.py"
+    "test": "python3 tests/verify_platform_integrity.py",
+    "auto-push": "bash scripts/auto_push.sh",
+    "setup-hooks": "bash scripts/setup_git_hook.sh"
   },
   "keywords": [
     "proptech",
