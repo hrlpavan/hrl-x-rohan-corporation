@@ -74,6 +74,22 @@ The sprint addressed critical user and stakeholder feedback regarding unutilized
 
 ---
 
+
+### Milestone 20: Version 4.1.1 — Auto-Push Automation Pipeline & Git Post-Commit Hooks
+* **Problem Solved**: Manual multi-step verification and commit synchronization to GitHub created friction and risk of desynchronization between local development and the remote master repository.
+* **Architectural Deliverables**:
+  1. **Automated CI/CD Script (`scripts/auto_push.sh`)**:
+     * Auto-runs the mathematical model & platform verification suite (`tests/verify_platform_integrity.py`).
+     * Automatically stages modified and newly created repository assets (`git add -A`).
+     * Creates standard timestamped conventional commits or accepts custom commit messages.
+     * Pushes cleanly to remote `origin main` using resolved GitHub IP endpoints.
+  2. **Native Git Post-Commit Hook (`.git/hooks/post-commit`)**:
+     * Automatically triggers a remote push upon every local `git commit` invocation.
+  3. **NPM Integration (`package.json`)**:
+     * Integrated `npm run auto-push` and `npm run setup-hooks` scripts for single-command developer ergonomics.
+
+---
+
 ## 3. Sprint Metrics & Quality Standards
 
 | Metric | Target | Realized Performance | Status |
