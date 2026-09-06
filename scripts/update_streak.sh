@@ -20,7 +20,7 @@ now_time = datetime.now().strftime("%H:%M:%S IST")
 
 data = {
     "developer": "hrlpavan",
-    "email": "hrlinternationalprivatelimited@gmail.com",
+    "email": "pavankcet@gmail.com",
     "repository": "hrlpavan/hrl-x-rohan-corporation",
     "current_streak_days": 3,
     "last_contribution_date": now_date,
