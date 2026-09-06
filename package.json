@@ -1,12 +1,13 @@
 {
   "name": "hrl-x-rohan-corporation",
-  "version": "1.0.0",
+  "version": "4.1.0",
   "description": "Next-Generation PropTech, Smart Real Estate & Digital Architecture Platform uniting HRL International and Rohan Corporation.",
   "main": "src/index.html",
   "scripts": {
     "start": "python3 server.py",
     "preview": "open src/index.html",
-    "lint": "echo \"Codebase validated\""
+    "lint": "echo \"Codebase validated\"",
+    "test": "python3 tests/verify_platform_integrity.py"
   },
   "keywords": [
     "proptech",
