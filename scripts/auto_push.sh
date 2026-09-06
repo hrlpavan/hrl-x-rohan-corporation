@@ -43,7 +43,7 @@ if [ -n "$STATUS" ]; then
     fi
 
     echo "✍️  Creating commit: "$COMMIT_MSG""
-    GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 git -c user.name="Pavankumar S" -c user.email="pavankumars@google.com" commit -m "$COMMIT_MSG"
+    GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 git -c user.name="hrlpavan" -c user.email="hrlinternationalprivatelimited@gmail.com" commit -m "$COMMIT_MSG"
 fi
 
 # 4. Push to remote main with resolved GitHub endpoint

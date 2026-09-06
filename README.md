@@ -5,6 +5,7 @@
 [![RERA Karnataka](https://img.shields.io/badge/Statutory-RERA_Karnataka_Compliant-10b981?style=for-the-badge)](https://rera.karnataka.gov.in)
 [![GitHub Pages](https://img.shields.io/badge/Deployment-GitHub_Pages-38bdf8?style=for-the-badge)](https://hrlpavan.github.io/hrl-x-rohan-corporation/)
 [![License](https://img.shields.io/badge/License-Proprietary_IP-a855f7?style=for-the-badge)](#statutory-governance--intellectual-property)
+[![Contribution Streak](https://img.shields.io/badge/Contribution_Streak-Active_⚡-30d158?style=for-the-badge&logo=github)](docs/CONTRIBUTION_STREAK.md)
 
 Official technological platform and strategic joint initiative uniting **HRL International Private Limited** (visual computing, edge artificial intelligence, and software systems) and **Rohan Corporation** (premier real estate conglomerate and urban infrastructure builder in Mangaluru, Karnataka).
 

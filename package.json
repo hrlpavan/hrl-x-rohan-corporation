@@ -9,7 +9,8 @@
     "lint": "echo \"Codebase validated\"",
     "test": "python3 tests/verify_platform_integrity.py",
     "auto-push": "bash scripts/auto_push.sh",
-    "setup-hooks": "bash scripts/setup_git_hook.sh"
+    "setup-hooks": "bash scripts/setup_git_hook.sh",
+    "streak": "bash scripts/update_streak.sh"
   },
   "keywords": [
     "proptech",
